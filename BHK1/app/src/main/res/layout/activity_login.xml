@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context=".activity.LoginActivity">
+
+    <com.curry.bhk.bhk.view.CircleImageView
+        android:id="@+id/login_img_head"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/default_head" />
+
+    <EditText
+        android:id="@+id/login_et_username"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/login_img_head"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/et_change"
+        android:hint="Username or Email"
+        android:imeOptions="actionNext"
+        android:inputType="text" />
+
+
+    <!--<Spinner-->
+    <!--android:id="@+id/login_spinner"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_below="@id/login_img_head"-->
+    <!--android:layout_marginTop="30dp" />-->
+
+    <EditText
+        android:id="@+id/login_et_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/login_et_username"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/et_change"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:maxLength="16" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_et_password"
+        android:gravity="center_vertical"
+
+        android:orientation="horizontal">
+
+        <!--<com.gc.materialdesign.views.CheckBox-->
+        <!--android:id="@+id/login_checkBox"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="#1E88E5" />-->
+
+        <CheckBox
+            android:id="@+id/login_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remeber me?"
+            android:textColor="#FF0033"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/login_btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:background="#1E88E5"
+        android:onClick="clickInLoginActivity"
+        android:padding="6dp"
+        android:text="LOGIN" />
+
+    <com.gc.materialdesign.views.ButtonFlat
+        android:id="@+id/login_btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/login_btn_login"
+        android:layout_centerInParent="true"
+        android:onClick="clickInLoginActivity"
+        android:text="now regist ?"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Version 1.0" />
+
+
+</RelativeLayout>

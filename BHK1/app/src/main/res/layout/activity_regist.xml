@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.curry.bhk.bhk.activity.RegistActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/regist_img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_change"
+            android:onClick="clickInRegistActivity" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="22sp"
+            android:text="Regist" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/title_layout"
+        android:background="#0000ff" />
+
+    <com.curry.bhk.bhk.view.CircleImageView
+        android:id="@+id/regist_img_choose"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/title_layout"
+        android:layout_marginTop="10dp"
+        android:onClick="clickInRegistActivity"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/default_head" />
+
+    <EditText
+        android:id="@+id/regist_et_email"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/regist_img_choose"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_change"
+        android:hint="email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/regist_et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/regist_et_email"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_change"
+        android:hint="nickname"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/regist_et_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/regist_et_nickname"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_change"
+        android:hint="password"
+        android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/regist_et_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/regist_et_password"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_change"
+        android:hint="confirm password"
+        android:inputType="textPassword" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/regist_btn_complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/regist_et_confirm_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="#1E88E5"
+        android:onClick="clickInRegistActivity"
+        android:text="Complete" />
+
+</RelativeLayout>
