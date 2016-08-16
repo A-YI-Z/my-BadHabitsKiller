@@ -1,30 +1,149 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.curry.bhk.bhk.view.DragLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context="com.curry.bhk.bhk.activity.MainActivity">
 
-    <com.curry.bhk.bhk.view.SlideMenu
-        android:id="@+id/slide_menu"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <include layout="@layout/layout_menu" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:layout_width="254dp"
+            android:layout_height="match_parent"
+            android:background="#99ccFF"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <com.curry.bhk.bhk.view.CircleImageView
+                android:id="@+id/menu_head_img"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/default_head" />
+
+            <TextView
+                android:id="@+id/menu_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/menu_head_img"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="username"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/menu_username"
+                android:layout_marginTop="6dp"
+                android:background="#f2f9ff" />
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/menu_username"
+                android:scrollbars="none"
+                android:layout_marginTop="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/menu_new"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="New"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/menu_pending"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="Pending"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/menu_on_Hold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="On Hold"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/menu_Resolved"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="Resolved"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/menu_Profiled"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="Profiled"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/menu_About"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:onClick="menu_onClick"
+                        android:text="About"
+                        android:textColor="#ffffff"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.curry.bhk.bhk.view.MyRelativeLayout
+        android:id="@+id/myrl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#d7e2ef">
+
             <include
                 android:id="@+id/include"
                 layout="@layout/layout_title_bar" />
+
             <FrameLayout
                 android:id="@+id/fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/include"/>
+                android:layout_below="@id/include" />
         </RelativeLayout>
-    </com.curry.bhk.bhk.view.SlideMenu>
-
-</RelativeLayout>
+    </com.curry.bhk.bhk.view.MyRelativeLayout>
+</com.curry.bhk.bhk.view.DragLayout>

@@ -69,7 +69,6 @@ public class BaseActivity extends Activity {
             delayHandler.sendEmptyMessageDelayed(0, 2000);
             exit_flag = true;
         } else {
-            finishActivity();
             System.exit(0);
         }
     }

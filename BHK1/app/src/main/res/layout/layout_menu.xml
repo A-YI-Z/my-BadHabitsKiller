@@ -24,7 +24,6 @@
         android:textColor="#ffffff"
         android:textSize="16sp" />
 
-    <include layout="@layout/divider" />
 
     <ScrollView
         android:id="@+id/scrollView"

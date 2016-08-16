@@ -21,6 +21,7 @@
         android:layout_below="@id/login_img_head"
         android:layout_marginTop="30dp"
         android:background="@drawable/et_change"
+        android:cursorVisible="false"
         android:hint="Username or Email"
         android:imeOptions="actionNext"
         android:inputType="text" />

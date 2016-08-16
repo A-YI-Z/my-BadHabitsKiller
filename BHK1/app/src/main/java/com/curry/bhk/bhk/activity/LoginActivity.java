@@ -102,10 +102,19 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFocusChange(View v, boolean isFocused) {
+
                 if (!isFocused) {
 //                    toastSomething(LoginActivity.this, "onFocusChange");
                     matchHead();
                 }
+            }
+        });
+
+        login_et_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //                android:cursorVisible
+                login_et_username.setCursorVisible(true);
             }
         });
     }
