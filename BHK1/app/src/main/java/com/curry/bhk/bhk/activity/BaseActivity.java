@@ -14,6 +14,7 @@ public class BaseActivity extends Activity {
     String TAG = "curry";
     boolean exit_flag = false;
 
+    public static int staticId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

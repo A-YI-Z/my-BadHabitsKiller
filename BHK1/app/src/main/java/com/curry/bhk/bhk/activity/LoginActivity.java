@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
@@ -28,12 +29,11 @@ public class LoginActivity extends BaseActivity {
     //    private CheckBox mLoginCheckBoxView;
     private android.widget.CheckBox mCheck;
 
-    private String username = "";
+    private String mloginusername = "";
     private String db_password = "";// sqlite
     private String input_password = "";// password now
     private String input_username = "";// username now
     private String input_email = "";// email now
-
     private String ago_username = "";
 
     //    private String mLoginHeadPicture = "";
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity {
 
     private List<UserBean> userbean_list;
 
-    private UserdbOperator userdbOperator = new UserdbOperator();
+    private UserdbOperator userdbOperator = new UserdbOperator(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +72,12 @@ public class LoginActivity extends BaseActivity {
 
     private void dataInit() {
         /*
-        get  username data
+            get  username  from RegistActivity
          */
         SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
-        username = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
-        login_et_username.setText(username);
+        mloginusername = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
+        login_et_username.setText(mloginusername);
+
 
          /*
         get head picture by username
@@ -123,13 +124,13 @@ public class LoginActivity extends BaseActivity {
      * match true head pic according to username or email
      */
     private void matchHead() {
-        username = login_et_username.getText().toString();
-        if (!ago_username.equals(username)) {
+        mloginusername = login_et_username.getText().toString();
+        if (!ago_username.equals(mloginusername)) {
             login_et_password.setText("");
         }
         UserBean userBean = new UserBean();
-        userBean.setUsername(username);
-        userbean_list = userdbOperator.queryUser(LoginActivity.this, 2, userBean);
+        userBean.setUsername(mloginusername);
+        userbean_list = userdbOperator.queryUser( 2, userBean);
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
                 login_head_img_view.setImageResource(R.drawable.defult_img);
@@ -199,11 +200,14 @@ public class LoginActivity extends BaseActivity {
 
         if (input_username.equals("") || input_username == null) {
             toastSomething(LoginActivity.this, "Your username is null!");
-        } else if (!userdbOperator.isExist(LoginActivity.this, 1, userbean) && !userdbOperator.isExist(LoginActivity.this, 2, userbean)) {
+        } else if (!userdbOperator.isExist(1, userbean) && !userdbOperator.isExist(2, userbean)) {
             toastSomething(LoginActivity.this, "The username or Email is not exist!");
         } else if (input_password.equals("") || input_password == null) {
             toastSomething(LoginActivity.this, "Please input your password!");
         } else if (input_password.equals(db_password)) {
+            // static
+            BadHabitsKillerApplication.mUsername = input_username;
+
             startActivity(new Intent().setClass(LoginActivity.this, MainActivity.class));
             finish();
         } else {

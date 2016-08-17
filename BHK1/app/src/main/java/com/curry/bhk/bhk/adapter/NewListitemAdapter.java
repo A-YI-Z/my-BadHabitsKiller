@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
-import com.curry.bhk.bhk.bean.NewBean;
+import com.curry.bhk.bhk.bean.EventBean;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class NewListitemAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
-    List<NewBean> myList;
+    List<EventBean> myList;
 
-    public NewListitemAdapter(Context context, List<NewBean> outList) {
+    public NewListitemAdapter(Context context, List<EventBean> outList) {
         layoutInflater = LayoutInflater.from(context);
         myList = outList;
     }
@@ -41,14 +41,29 @@ public class NewListitemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = layoutInflater.inflate(R.layout.list_item, null);
-        TextView tv_name = (TextView) view.findViewById(R.id.tv_title);
-        TextView tv_author = (TextView) view.findViewById(R.id.tv_author);
-        TextView tv_date = (TextView) view.findViewById(R.id.tv_date);
-
-        myList.get(i).setAuthor(tv_name.getText().toString());
-        myList.get(i).setAuthor(tv_author.getText().toString());
-        myList.get(i).setAuthor(tv_date.getText().toString());
+        ViewHolder mViewHolder;
+        if (view == null) {
+            mViewHolder = new ViewHolder();
+            view = layoutInflater.inflate(R.layout.list_item, null);
+            mViewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
+            mViewHolder.tv_author = (TextView) view.findViewById(R.id.tv_author);
+            mViewHolder.tv_time = (TextView) view.findViewById(R.id.tv_time);
+            mViewHolder.tv_description = (TextView) view.findViewById(R.id.tv_description);
+            view.setTag(mViewHolder);
+        } else {
+            mViewHolder = (ViewHolder) view.getTag();
+        }
+        mViewHolder.tv_title.setText(myList.get(i).getTitle());
+        mViewHolder.tv_author.setText(myList.get(i).getAuthor());
+        mViewHolder.tv_time.setText(myList.get(i).getTime());
+        mViewHolder.tv_description.setText(myList.get(i).getDescription());
         return view;
+    }
+
+    static class ViewHolder {
+        public TextView tv_title;
+        public TextView tv_author;
+        public TextView tv_time;
+        public TextView tv_description;
     }
 }

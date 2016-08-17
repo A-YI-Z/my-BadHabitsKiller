@@ -113,15 +113,18 @@ public class RegistActivity extends BaseActivity {
         password = regist_et_password.getText().toString();
         confirm_password = regist_et_confirm_password.getText().toString();
 
+        //password is num and English letters and length more than 8 while less than 16.
+        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+
         input_isnot_legal = true;
         if (username.equals("") || email.equals("") || password.equals("") || confirm_password.equals("")) {
             toastSomething(RegistActivity.this, "Please be sure to complete.");
         } else if (!email.equals("") && !isEmail(email)) {
             toastSomething(RegistActivity.this, "Is not a true email.");
-        } else if (!username.matches("[a-zA-Z]+")) {// judge strings is  all English letters
-            toastSomething(RegistActivity.this, "Nickname must English letters.");
-        } else if (password.length() < 8) {
-            toastSomething(RegistActivity.this, "The password is too short");
+        } else if (username.length()>10) {// judge strings is  all English letters
+            toastSomething(RegistActivity.this, "Nickname is too long.");
+        } else if (!password.matches(regex)) {
+            toastSomething(RegistActivity.this, "The password is wrong.");
         } else if (!confirm_password.equals(password)) {
             toastSomething(RegistActivity.this, "The two passwords don't match,please input again.");
         } else if (mHeadImageUrl.equals("")) {
@@ -142,7 +145,6 @@ public class RegistActivity extends BaseActivity {
         String str = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(email);
-
         return m.matches();
     }
 
@@ -158,13 +160,13 @@ public class RegistActivity extends BaseActivity {
         userBean.setStatus(1);
         userBean.setPic_url(mHeadImageUrl);
 
-        UserdbOperator userdbOperator = new UserdbOperator();
+        UserdbOperator userdbOperator = new UserdbOperator(RegistActivity.this);
 
 //            List<UserBean> userbean_list = userdbOperator.queryUser(RegistActivity.this, 0, null);
 //            if (userbean_list.size() != 0) {
 //                for (int i = 0; i < userbean_list.size(); i++) {
 //                    if (!email.equals(userbean_list.get(i).getEmail())) {
-        userdbOperator.insertUser(RegistActivity.this, userBean);
+        userdbOperator.insertUser(userBean);
 
         SharedPreferences.Editor edit = getSharedPreferences(
                 PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();

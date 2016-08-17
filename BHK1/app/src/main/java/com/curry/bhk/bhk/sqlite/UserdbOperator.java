@@ -15,13 +15,19 @@ import java.util.List;
  */
 public class UserdbOperator {
 
-    private boolean isExist ;
+    private boolean isExist;
+    private BhkSqliteOpenHelper dBhelper;
+    private SQLiteDatabase db;
 
-    public List<UserBean> queryUser(Context context, int mode, UserBean outbean) {
+    public UserdbOperator(Context context) {
+        dBhelper = new BhkSqliteOpenHelper(context);
+
+    }
+
+    public List<UserBean> queryUser(int mode, UserBean outbean) {
         List<UserBean> myList = new ArrayList<UserBean>();
-
-        UserSqliteOpenHelper dBhelper = new UserSqliteOpenHelper(context);
-        SQLiteDatabase db = dBhelper.getReadableDatabase();
+//        dBhelper = new BhkSqliteOpenHelper(context);
+        db = dBhelper.getWritableDatabase();
         Cursor cursor = null;
         try {
             switch (mode) {
@@ -70,23 +76,22 @@ public class UserdbOperator {
             e.printStackTrace();
         } finally {
             cursor.close();
-            db.close();
-            dBhelper.close();
+            closeAll();
         }
         return myList;
     }
 
     /**
      * judge data is exist or not
-     * @param context
+     *
      * @param mode
      * @param outbean
      * @return
      */
-    public boolean isExist(Context context, int mode, UserBean outbean) {
+    public boolean isExist(int mode, UserBean outbean) {
 
-        UserSqliteOpenHelper dBhelper = new UserSqliteOpenHelper(context);
-        SQLiteDatabase db = dBhelper.getReadableDatabase();
+//        dBhelper = new BhkSqliteOpenHelper(context);
+        db = dBhelper.getReadableDatabase();
         Cursor cursor = null;
         try {
             switch (mode) {
@@ -104,15 +109,14 @@ public class UserdbOperator {
             }
             if (cursor != null) {
                 isExist = true;
-            }else{
+            } else {
                 isExist = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             cursor.close();
-            db.close();
-            dBhelper.close();
+            closeAll();
         }
 
         return isExist;
@@ -125,12 +129,11 @@ public class UserdbOperator {
     /**
      * insert data into user_bhk.db
      *
-     * @param context
      * @param outBean
      */
-    public void insertUser(Context context, UserBean outBean) {
-        UserSqliteOpenHelper dBhelper = new UserSqliteOpenHelper(context);
-        SQLiteDatabase sqldb = dBhelper.getWritableDatabase();
+    public void insertUser(UserBean outBean) {
+//        BhkSqliteOpenHelper dBhelper = new BhkSqliteOpenHelper(context);
+        db = dBhelper.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put("username", outBean.getUsername());
@@ -139,20 +142,19 @@ public class UserdbOperator {
             contentValues.put("pic_url", outBean.getPic_url());
             contentValues.put("status", outBean.getStatus());
 
-            sqldb.insert("user_bhk", null, contentValues);
+            db.insert("user_bhk", null, contentValues);
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            sqldb.close();
-            dBhelper.close();
+            closeAll();
         }
 
     }
 
-    public void updateUser(Context context, UserBean outBean) {
-        UserSqliteOpenHelper dBhelper = new UserSqliteOpenHelper(context);
-        SQLiteDatabase db = dBhelper.getWritableDatabase();
+    public void updateUser(UserBean outBean) {
+//        BhkSqliteOpenHelper dBhelper = new BhkSqliteOpenHelper(context);
+        db = dBhelper.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put("username", outBean.getUsername());
@@ -162,15 +164,14 @@ public class UserdbOperator {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
-            dBhelper.close();
+            closeAll();
         }
     }
 
 
-    public void deleteUser(Context context, int mode, UserBean outBean) {
-        UserSqliteOpenHelper dBhelper = new UserSqliteOpenHelper(context);
-        SQLiteDatabase db = dBhelper.getReadableDatabase();
+    public void deleteUser(int mode, UserBean outBean) {
+//        BhkSqliteOpenHelper dBhelper = new BhkSqliteOpenHelper(context);
+//        SQLiteDatabase db = dBhelper.getReadableDatabase();
         try {
             switch (mode) {
                 case 0:
@@ -192,10 +193,14 @@ public class UserdbOperator {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
-            dBhelper.close();
+            closeAll();
         }
 
+    }
+
+    private void closeAll() {
+        db.close();
+        dBhelper.close();
     }
 }
 

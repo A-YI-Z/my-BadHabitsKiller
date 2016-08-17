@@ -162,7 +162,6 @@ public class DragLayout extends FrameLayout {
 		width = vg_left.getMeasuredWidth();
 		height = vg_left.getMeasuredHeight();
 
-		// �໬����ռ�ı���
 		range = (int) (width * 0.7f);
 	}
 

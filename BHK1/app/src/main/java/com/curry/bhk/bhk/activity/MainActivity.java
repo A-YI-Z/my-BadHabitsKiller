@@ -3,7 +3,6 @@ package com.curry.bhk.bhk.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.fragment.NewFragment;
+import com.curry.bhk.bhk.fragment.PendingFragment;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
-import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DragLayout;
 import com.curry.bhk.bhk.view.MyRelativeLayout;
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
 
         dataInit();
 
-        addFragment("New");
+        addFragment(0);
     }
 
     public void viewInit() {
@@ -60,14 +60,13 @@ public class MainActivity extends BaseActivity {
     }
 
     public void dataInit() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
-        String mUserName = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
-        mUserNameTV.setText(mUserName);
 
-        UserdbOperator userdbOperator = new UserdbOperator();
+        mUserNameTV.setText(BadHabitsKillerApplication.mUsername);
+
+        UserdbOperator userdbOperator = new UserdbOperator(MainActivity.this);
         UserBean userBean = new UserBean();
-        userBean.setUsername(mUserName);
-        List<UserBean> userbean_list = userdbOperator.queryUser(MainActivity.this, 2, userBean);
+        userBean.setUsername(BadHabitsKillerApplication.mUsername);
+        List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
@@ -75,9 +74,13 @@ public class MainActivity extends BaseActivity {
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
                 mHeadImageView.setImageBitmap(bm);
             }
+            BadHabitsKillerApplication.mEmail = userbean_list.get(0).getEmail();
         }
     }
 
+    /**
+     * Slide layout  ctrl
+     */
     public class myDrag implements DragLayout.DragListener {
 
         @Override
@@ -108,6 +111,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * click event  in this activity
+     */
     public void menu_onClick(View view) {
 
         switch (view.getId()) {
@@ -115,22 +121,22 @@ public class MainActivity extends BaseActivity {
                 mDraglayout.open();
                 break;
             case R.id.menu_new:
-                addFragment("New");
+                addFragment(0);//New
                 break;
             case R.id.menu_pending:
-                addFragment("Pending");
+                addFragment(1);//Pending
                 break;
             case R.id.menu_on_Hold:
-                addFragment("On Hold");
+                addFragment(2);//On Hold
                 break;
             case R.id.menu_Resolved:
-                addFragment("Resolved");
+                addFragment(3);//Resolved
                 break;
             case R.id.menu_Profiled:
-                addFragment("Profiled");
+                addFragment(4);//Profiled
                 break;
             case R.id.menu_About:
-                addFragment("About");
+                addFragment(5);//About
                 break;
             case R.id.buttonFloat:
                 this.startActivity(new Intent(MainActivity.this, AddActivity.class));
@@ -141,14 +147,43 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void addFragment(String menuName) {
+    /**
+     * add  the fragments
+     */
+    public void addFragment(int numFragment) {
         mDraglayout.close();
-        mTitlebarName.setText(menuName);
 
         FragmentManager fmanager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fmanager.beginTransaction();
-        NewFragment newFragment = new NewFragment();
-        fragmentTransaction.replace(R.id.fragment, newFragment);
+        switch (numFragment) {
+            case 0:
+                mTitlebarName.setText("New");
+
+                NewFragment newFragment = new NewFragment();
+                fragmentTransaction.replace(R.id.fragment, newFragment);
+                break;
+            case 1:
+                mTitlebarName.setText("Pending");
+
+                PendingFragment pendingFragment = new PendingFragment();
+                fragmentTransaction.replace(R.id.fragment, pendingFragment);
+                break;
+            case 2:
+                mTitlebarName.setText("On Hold");
+                break;
+            case 3:
+                mTitlebarName.setText("Resolved");
+                break;
+            case 4:
+                mTitlebarName.setText("Profiled");
+                break;
+            case 5:
+                mTitlebarName.setText("About");
+                break;
+            default:
+                break;
+        }
+
         fragmentTransaction.commit();
     }
 

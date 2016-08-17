@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.curry.bhk.bhk.activity.DetailActivity">
+
+    <include
+        android:id="@+id/detail_title_bar"
+        layout="@layout/layout_title_bar" />
+
+    <RelativeLayout
+        android:id="@+id/detail_rel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@id/detail_title_bar">
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/detail_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_title"
+            android:paddingTop="4dp"
+            android:text="detail_author"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/detail_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/detail_author"
+            android:layout_alignParentRight="true"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/detail_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detail_author"
+            android:layout_marginTop="4dp"
+            android:text="detail_description"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/detail_pending_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginRight="34dp"
+        android:background="#1E88E5"
+        android:text="Resolved by me" />
+
+    <ImageView
+        android:id="@+id/detail_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/detail_pending_btn"
+        android:layout_below="@id/detail_rel"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/defult_img" />
+</RelativeLayout>
