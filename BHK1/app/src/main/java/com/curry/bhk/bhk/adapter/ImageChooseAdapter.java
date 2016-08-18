@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.curry.bhk.bhk.bean.EventBean;
+import com.curry.bhk.bhk.bean.ImageItem;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class ImageChooseAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
-    List<EventBean> myList;
+    List<ImageItem> myList;
 
-    public ImageChooseAdapter(Context context, List<EventBean> outList) {
+    public ImageChooseAdapter(Context context, List<ImageItem> outList) {
         layoutInflater = LayoutInflater.from(context);
         myList = outList;
     }

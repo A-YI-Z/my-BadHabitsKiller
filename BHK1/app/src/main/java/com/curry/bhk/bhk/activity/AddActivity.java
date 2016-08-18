@@ -15,12 +15,14 @@ import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.adapter.ImageChooseAdapter;
 import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.EventBean;
+import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AddActivity extends BaseActivity {
     public static int id = 0;
@@ -120,7 +122,7 @@ public class AddActivity extends BaseActivity {
     }
 
     private void getPhotoOnItemClick(){
-        List<> mPhotoList = new ArrayList<>();
+        List<ImageItem> mPhotoList = new ArrayList<>();
         mImageChooseAdapter = new ImageChooseAdapter(AddActivity.this,mPhotoList);
         mPhotoGridView.setAdapter(mImageChooseAdapter);
     }
