@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
@@ -35,6 +39,9 @@ public class MainActivity extends BaseActivity {
     private CircleImageView mHeadImageView;
     private TextView mUserNameTV;
     private TextView mTitlebarName;
+    private ListView mMenuList;
+
+    private int mSelectMenu = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,10 @@ public class MainActivity extends BaseActivity {
         mDraglayout.setDragListener(new myDrag());
 
         dataInit();
+        Log.e(TAG, getIntent().getIntExtra("MENUID", 0)+ "");
+        addFragment(getIntent().getIntExtra("MENUID", 0));
 
-        addFragment(0);
+        menuOnClick();
     }
 
     public void viewInit() {
@@ -57,9 +66,14 @@ public class MainActivity extends BaseActivity {
         mMenuRelativeLayout = (MyRelativeLayout) findViewById(R.id.myrl);
         mTitleBarBotton = (ImageView) findViewById(R.id.title_bar_menu_btn);
         mTitlebarName = (TextView) findViewById(R.id.title_bar_name);
+        mMenuList = (ListView) findViewById(R.id.list_menu);
     }
 
     public void dataInit() {
+        String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About"};
+        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(this, R.layout.menu_list_item, menuName);
+        mMenuList.setAdapter(myArrayAdapter);
+        myArrayAdapter.notifyDataSetChanged();
 
         mUserNameTV.setText(BadHabitsKillerApplication.mUsername);
 
@@ -76,6 +90,7 @@ public class MainActivity extends BaseActivity {
             }
             BadHabitsKillerApplication.mEmail = userbean_list.get(0).getEmail();
         }
+
     }
 
     /**
@@ -90,6 +105,7 @@ public class MainActivity extends BaseActivity {
             // rotate.setDuration(700);
             // rotate.setFillAfter(true);
             // ima_cehua.startAnimation(rotate);
+
             AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
             alphaAnimation.setDuration(500);
             alphaAnimation.setFillAfter(true);
@@ -111,32 +127,29 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void menuOnClick() {
+        mMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (mSelectMenu != i) {
+//                    adapterView.getChildAt(mSelectMenu).setBackgroundColor(Color.TRANSPARENT);
+//                }
+//                adapterView.getChildAt(i).setBackgroundColor(Color.parseColor("#3762c9") );
+
+                addFragment(i);
+//                mSelectMenu = i;
+            }
+        });
+    }
+
     /**
      * click event  in this activity
      */
-    public void menu_onClick(View view) {
+    public void mainOnClick(View view) {
 
         switch (view.getId()) {
             case R.id.title_bar_menu_btn:
                 mDraglayout.open();
-                break;
-            case R.id.menu_new:
-                addFragment(0);//New
-                break;
-            case R.id.menu_pending:
-                addFragment(1);//Pending
-                break;
-            case R.id.menu_on_Hold:
-                addFragment(2);//On Hold
-                break;
-            case R.id.menu_Resolved:
-                addFragment(3);//Resolved
-                break;
-            case R.id.menu_Profiled:
-                addFragment(4);//Profiled
-                break;
-            case R.id.menu_About:
-                addFragment(5);//About
                 break;
             case R.id.buttonFloat:
                 this.startActivity(new Intent(MainActivity.this, AddActivity.class));

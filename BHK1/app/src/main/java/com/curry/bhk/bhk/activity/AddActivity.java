@@ -7,16 +7,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.adapter.ImageChooseAdapter;
 import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AddActivity extends BaseActivity {
@@ -28,10 +31,13 @@ public class AddActivity extends BaseActivity {
     private ImageView mImgChoose;
     private ImageView mAddBack;
     private ButtonRectangle mAddComplete;
+    private GridView mPhotoGridView;
 
     private int mRestLength = 0;
     private String mTitleStr = "";
     private String mDescriptionStr = "";
+
+    private ImageChooseAdapter mImageChooseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +58,11 @@ public class AddActivity extends BaseActivity {
         mDescriptionNumTV = (TextView) findViewById(R.id.add_tv_description_num);
         mAddTitleET = (EditText) findViewById(R.id.add_et_title);
         mAddDescriptionET = (EditText) findViewById(R.id.add_et_description);
-        mImgChoose = (ImageView) findViewById(R.id.add_img_choose);
 
         mAddComplete = (ButtonRectangle) findViewById(R.id.add_complete_btn);
         mAddBack = (ImageView) findViewById(R.id.back_img);
-        mImgChoose = (ImageView) findViewById(R.id.add_img_choose);
+
+        mPhotoGridView = (GridView)findViewById(R.id.gridview);
     }
 
     /**
@@ -93,6 +99,7 @@ public class AddActivity extends BaseActivity {
         mAddBack.setOnClickListener(new OnclickEvent());
         mImgChoose.setOnClickListener(new OnclickEvent());
         mAddComplete.setOnClickListener(new OnclickEvent());
+        getPhotoOnItemClick();
     }
 
     private class OnclickEvent implements View.OnClickListener {
@@ -106,15 +113,17 @@ public class AddActivity extends BaseActivity {
                     startActivity(new Intent().setClass(AddActivity.this, MainActivity.class));
                     finishActivity();
                     break;
-                case R.id.add_img_choose:
-                    mImgChoose.setImageResource(R.drawable.default_head);
-                    break;
                 default:
                     break;
             }
         }
     }
 
+    private void getPhotoOnItemClick(){
+        List<> mPhotoList = new ArrayList<>();
+        mImageChooseAdapter = new ImageChooseAdapter(AddActivity.this,mPhotoList);
+        mPhotoGridView.setAdapter(mImageChooseAdapter);
+    }
     /**
      * click the add btn ,execute this  method
      */
@@ -145,9 +154,10 @@ public class AddActivity extends BaseActivity {
 
         EventBean eventBean = new EventBean();
         EventdbOperator eventdbOperator = new EventdbOperator(AddActivity.this);
-        int id = eventdbOperator.queryEvent(0,null).size();
 
-        eventBean.setId(id++);
+//        int id = eventdbOperator.queryEvent(0,null).size();
+//        eventBean.setId(id++);
+
         eventBean.setDescription(mDescriptionStr);
         eventBean.setAuthor(BadHabitsKillerApplication.mUsername);
         eventBean.setPhotos_url("");
@@ -157,5 +167,11 @@ public class AddActivity extends BaseActivity {
         eventBean.setTime(data);
 
         eventdbOperator.insertEvent(eventBean);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent().setClass(AddActivity.this, MainActivity.class));
+        finishActivity();
     }
 }

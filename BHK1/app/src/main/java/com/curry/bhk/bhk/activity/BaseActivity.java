@@ -14,7 +14,8 @@ public class BaseActivity extends Activity {
     String TAG = "curry";
     boolean exit_flag = false;
 
-    public static int staticId = 0;
+    public static int eventItemId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class BaseActivity extends Activity {
         super.onDestroy();
     }
 
-    public void finishActivity(){
+    public void finishActivity() {
         finish();
         overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
     }
@@ -66,7 +67,7 @@ public class BaseActivity extends Activity {
     public void onBackPressed() {
 
         if (!exit_flag) {
-            Toast.makeText(BaseActivity.this, "Please again to exit.", Toast.LENGTH_SHORT).show();
+            toastSomething(BaseActivity.this, "Please again to exit.");
             delayHandler.sendEmptyMessageDelayed(0, 2000);
             exit_flag = true;
         } else {
@@ -83,9 +84,9 @@ public class BaseActivity extends Activity {
     };
 
     /**
-     *  toast some content
+     * toast some content
      */
-    public void toastSomething(Context context , String content){
+    public void toastSomething(Context context, String content) {
         Toast.makeText(context, content, Toast.LENGTH_LONG).show();
     }
 }

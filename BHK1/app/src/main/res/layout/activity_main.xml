@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:background="#99ccFF"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingTop="20dp">
 
             <com.curry.bhk.bhk.view.CircleImageView
                 android:id="@+id/menu_head_img"
@@ -35,93 +35,19 @@
                 android:textSize="16sp" />
 
             <View
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/menu_username"
                 android:layout_marginTop="6dp"
                 android:background="#f2f9ff" />
 
-            <ScrollView
-                android:id="@+id/scrollView"
+            <ListView
+                android:id="@+id/list_menu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/menu_username"
-                android:layout_marginTop="12dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/menu_new"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="New"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/menu_pending"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="Pending"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/menu_on_Hold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="On Hold"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/menu_Resolved"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="Resolved"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/menu_Profiled"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="Profiled"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:id="@+id/menu_About"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:onClick="menu_onClick"
-                        android:text="About"
-                        android:textColor="@drawable/textcolorchange"
-                        android:textSize="22sp" />
-                </LinearLayout>
-            </ScrollView>
+                android:layout_below="@id/view"
+                android:scrollbars="none" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -146,7 +72,7 @@
                     android:id="@+id/title_bar_menu_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="menu_onClick"
+                    android:onClick="mainOnClick"
                     android:src="@drawable/ic_top_bar_category" />
 
                 <TextView
@@ -156,7 +82,7 @@
                     android:layout_centerInParent="true"
                     android:singleLine="true"
                     android:text="New"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textSize="22sp" />
 
             </RelativeLayout>

@@ -2,6 +2,7 @@ package com.curry.bhk.bhk.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,17 +51,18 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void dataInit() {
-        mTitleBarText.setText("Description");
+        mTitleBarText.setText("Detail");
 
         EventdbOperator eventdbOperator = new EventdbOperator(DetailActivity.this);
 //        String id = new Intent().getStringExtra("ID");
 
         EventBean eventBean = new EventBean();
-        eventBean.setId(BaseActivity.staticId);
+        eventBean.setId(BaseActivity.eventItemId);
         List<EventBean> mDetailList = eventdbOperator.queryEvent(3, eventBean);
+        Log.e(TAG, BaseActivity.eventItemId + "");
 
         mDetailAuthor.setText(mDetailList.get(0).getAuthor());
-        mDetailDescription.setText(mDetailList.get(0).getDescription());
+        mDetailDescription.setText("    "+mDetailList.get(0).getDescription());
         mDetailTime.setText(mDetailList.get(0).getTime());
         mDetailTitle.setText(mDetailList.get(0).getTitle());
 
@@ -80,7 +82,9 @@ public class DetailActivity extends BaseActivity {
                     finishActivity();
                     break;
                 case R.id.detail_pending_btn:
-                    startActivity(new Intent().setClass(DetailActivity.this, MainActivity.class));
+                    Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                    intent.putExtra("MENUID",1);
+                    startActivity(intent);
                     finishActivity();
                     break;
                 default:
@@ -89,4 +93,9 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent().setClass(DetailActivity.this, MainActivity.class));
+        finishActivity();
+    }
 }

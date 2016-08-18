@@ -64,20 +64,10 @@ public class RegistActivity extends BaseActivity {
         regist_et_password = (EditText) findViewById(R.id.regist_et_password);
         regist_et_confirm_password = (EditText) findViewById(R.id.regist_et_confirm_password);
         regist_head_img = (ImageView) findViewById(R.id.regist_img_choose);
+
         regist_complete = (ButtonRectangle) findViewById(R.id.regist_btn_complete);
-
-
-//        regist_complete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                et_input_set();
-//                if (!input_isnot_legal) {
-//                    completeRegist();
-//                }
-//            }
-//        });
-
-
+//        regist_complete.setAlpha(0.5f);
+//        regist_complete.setClickable(false);
     }
 
     /**
@@ -113,22 +103,34 @@ public class RegistActivity extends BaseActivity {
         password = regist_et_password.getText().toString();
         confirm_password = regist_et_confirm_password.getText().toString();
 
+        UserdbOperator userdbOperator = new UserdbOperator(this);
+        UserBean userBean = new UserBean();
+        userBean.setEmail(email);
         //password is num and English letters and length more than 8 while less than 16.
         String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
 
         input_isnot_legal = true;
         if (username.equals("") || email.equals("") || password.equals("") || confirm_password.equals("")) {
-            toastSomething(RegistActivity.this, "Please be sure to complete.");
-        } else if (!email.equals("") && !isEmail(email)) {
-            toastSomething(RegistActivity.this, "Is not a true email.");
-        } else if (username.length()>10) {// judge strings is  all English letters
+            toastSomething(RegistActivity.this, "Please fill in.");
+        }
+//        else {
+//            regist_complete.setAlpha(1f);
+//            regist_complete.setClickable(true);
+//        }
+        else if (!isEmail(email)) {
+            toastSomething(RegistActivity.this, "Is not a true email address.");
+        }
+//        else if (userdbOperator.isExist(1, userBean)) {
+//            toastSomething(RegistActivity.this, "The email is exists .");
+//        }
+        else if (username.length() > 10) {// judge strings is  all English letters
             toastSomething(RegistActivity.this, "Nickname is too long.");
         } else if (!password.matches(regex)) {
             toastSomething(RegistActivity.this, "The password is wrong.");
         } else if (!confirm_password.equals(password)) {
             toastSomething(RegistActivity.this, "The two passwords don't match,please input again.");
         } else if (mHeadImageUrl.equals("")) {
-            toastSomething(RegistActivity.this,"Please choose a picture for your head portrait.");
+            toastSomething(RegistActivity.this, "Please choose a picture for your head portrait.");
         } else {
             input_isnot_legal = false;
         }
@@ -152,7 +154,6 @@ public class RegistActivity extends BaseActivity {
      * click "complete"
      */
     private void completeRegist() {
-//        else{
         UserBean userBean = new UserBean();
         userBean.setUsername(username);
         userBean.setEmail(email);
@@ -160,12 +161,7 @@ public class RegistActivity extends BaseActivity {
         userBean.setStatus(1);
         userBean.setPic_url(mHeadImageUrl);
 
-        UserdbOperator userdbOperator = new UserdbOperator(RegistActivity.this);
-
-//            List<UserBean> userbean_list = userdbOperator.queryUser(RegistActivity.this, 0, null);
-//            if (userbean_list.size() != 0) {
-//                for (int i = 0; i < userbean_list.size(); i++) {
-//                    if (!email.equals(userbean_list.get(i).getEmail())) {
+        UserdbOperator userdbOperator = new UserdbOperator(this);
         userdbOperator.insertUser(userBean);
 
         SharedPreferences.Editor edit = getSharedPreferences(
@@ -176,15 +172,8 @@ public class RegistActivity extends BaseActivity {
         Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
         //                 intent.putExtra("USERNAME", username);
         startActivity(intent);
-        toastSomething(RegistActivity.this,"Regist  success!");
+        toastSomething(RegistActivity.this, "Regist  success!");
         finish();
-//        }
-//        else {
-//                        Toast.makeText(RegistActivity.this, "The email address is exits!", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        }
     }
 
     /**
@@ -206,7 +195,7 @@ public class RegistActivity extends BaseActivity {
 //                                regist_head_img.setImageResource(R.raw.defult_img);
 //                                mHeadImageUrl = "android:resource://"+ getPackageName() + "/" + R.raw.defult_img;
 //                                // System.out.println(PublicStatic.head_path);
-                                toastSomething(RegistActivity.this,"Default picture set success!");
+                                toastSomething(RegistActivity.this, "Default picture set success!");
                                 break;
                             case 1:
                                 Intent intent1 = new Intent(Intent.ACTION_PICK,
@@ -250,7 +239,7 @@ public class RegistActivity extends BaseActivity {
                 }
                 mycursor.close();
             } else {
-                toastSomething(RegistActivity.this,"Don't choose any picture.");
+                toastSomething(RegistActivity.this, "Don't choose any picture.");
             }
         } else if (requestCode == 2) {
             if (resultCode == Activity.RESULT_OK) {
@@ -261,7 +250,7 @@ public class RegistActivity extends BaseActivity {
                     mHeadImageUrl = saveFile(mybitmap);
                 }
             } else {
-                toastSomething(RegistActivity.this,"Taking a photo is defeated.");
+                toastSomething(RegistActivity.this, "Taking a photo is defeated.");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -13,7 +13,8 @@
         android:id="@+id/detail_rel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/et_fouce"
         android:layout_below="@id/detail_title_bar">
 
         <TextView
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/detail_author"
             android:layout_alignParentRight="true"
+            android:paddingRight="4dp"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

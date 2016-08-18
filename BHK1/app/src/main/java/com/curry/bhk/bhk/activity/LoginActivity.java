@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     private String mloginusername = "";
     private String db_password = "";// sqlite
     private String input_password = "";// password now
-    private String input_username = "";// username now
+//    private String input_username = "";// username now
     private String input_email = "";// email now
     private String ago_username = "";
 
@@ -87,16 +87,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void usernameListener() {
-        // about Soft keyboard
-//        login_et_username.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//                if (i == EditorInfo.IME_ACTION_NEXT) {
-//                    toastSomething(LoginActivity.this, "1234341123");
-//                }
-//                return false;
-//            }
-//        });
 
         ago_username = login_et_username.getText().toString();
         login_et_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -185,28 +175,28 @@ public class LoginActivity extends BaseActivity {
      */
     private void login() {
         input_password = login_et_password.getText().toString();
-        input_username = login_et_username.getText().toString();
+        mloginusername = login_et_username.getText().toString();
 
 /*
     save the username which input
  */
         SharedPreferences.Editor edit = getSharedPreferences(
                 PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
-        edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, input_username);
+        edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, mloginusername);
         edit.commit();
 
         UserBean userbean = new UserBean();
-        userbean.setUsername(input_username);
+        userbean.setUsername(mloginusername);
 
-        if (input_username.equals("") || input_username == null) {
+        if (mloginusername.equals("") || mloginusername == null) {
             toastSomething(LoginActivity.this, "Your username is null!");
-        } else if (!userdbOperator.isExist(1, userbean) && !userdbOperator.isExist(2, userbean)) {
+        } else if (!userdbOperator.isExist(2, userbean)) {
             toastSomething(LoginActivity.this, "The username or Email is not exist!");
         } else if (input_password.equals("") || input_password == null) {
             toastSomething(LoginActivity.this, "Please input your password!");
         } else if (input_password.equals(db_password)) {
             // static
-            BadHabitsKillerApplication.mUsername = input_username;
+            BadHabitsKillerApplication.mUsername = mloginusername;
 
             startActivity(new Intent().setClass(LoginActivity.this, MainActivity.class));
             finish();

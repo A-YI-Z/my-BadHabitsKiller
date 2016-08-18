@@ -40,7 +40,7 @@ public class EventdbOperator {
                     String[] temp = {outbean.getAuthor()};
                     cursor = db.query("event_bhk", null, "author=?", temp, null, null, null, null);
                     break;
-                case 3://query the table according to author;
+                case 3://query the table according to ID;
                     cursor = db.rawQuery("select * from event_bhk where id="+ outbean.getId(), null);
                     break;
                 default:
@@ -91,7 +91,7 @@ public class EventdbOperator {
 
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put("id",outBean.getId());
+//            contentValues.put("id",outBean.getId());
             contentValues.put("email", outBean.getEmail());
             contentValues.put("status", outBean.getStatus());
             contentValues.put("author", outBean.getAuthor());

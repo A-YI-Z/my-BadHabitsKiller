@@ -74,40 +74,19 @@
                 android:text="Picture"
                 android:textSize="18sp" />
 
-            <LinearLayout
-                android:id="@+id/add_linearlayout"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
+            <GridView
+                android:id="@+id/gridview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tv_picture"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="4"
+                android:scrollbars="none"
+                android:verticalSpacing="3dp">
 
-                <ImageView
-                    android:id="@+id/add_img_choose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="addAcitvityOnclick"
-                    android:src="@drawable/add" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/add" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/add" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/add" />
-
-            </LinearLayout>
+            </GridView>
         </RelativeLayout>
     </ScrollView>
 

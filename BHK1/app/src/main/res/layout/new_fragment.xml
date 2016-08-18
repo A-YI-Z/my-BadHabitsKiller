@@ -22,6 +22,6 @@
         android:layout_marginRight="24dp"
         android:background="#1E88E5"
         materialdesign:animate="true"
-        android:onClick="menu_onClick"
+        android:onClick="mainOnClick"
         materialdesign:iconDrawable="@drawable/ic_action_new" />
 </RelativeLayout>
