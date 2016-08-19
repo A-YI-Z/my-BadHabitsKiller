@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.curry.bhk.bhk.R;
-import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
@@ -32,7 +31,6 @@ public class LoginActivity extends BaseActivity {
     private String mloginusername = "";
     private String db_password = "";// sqlite
     private String input_password = "";// password now
-//    private String input_username = "";// username now
     private String input_email = "";// email now
     private String ago_username = "";
 
@@ -77,7 +75,6 @@ public class LoginActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
         mloginusername = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
         login_et_username.setText(mloginusername);
-
 
          /*
         get head picture by username
@@ -127,6 +124,7 @@ public class LoginActivity extends BaseActivity {
             } else {
                 Log.e(TAG, userbean_list.get(0).getPic_url());
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
+                bm = RegistActivity.rotateBitmapByDegree(bm,RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
                 login_head_img_view.setImageBitmap(bm);
             }
 
@@ -188,15 +186,15 @@ public class LoginActivity extends BaseActivity {
         UserBean userbean = new UserBean();
         userbean.setUsername(mloginusername);
 
-        if (mloginusername.equals("") || mloginusername == null) {
+        if (mloginusername.equals("")) {
             toastSomething(LoginActivity.this, "Your username is null!");
         } else if (!userdbOperator.isExist(2, userbean)) {
-            toastSomething(LoginActivity.this, "The username or Email is not exist!");
-        } else if (input_password.equals("") || input_password == null) {
+            toastSomething(LoginActivity.this, "The username  is not exist!");
+        } else if (input_password.equals("")) {
             toastSomething(LoginActivity.this, "Please input your password!");
         } else if (input_password.equals(db_password)) {
             // static
-            BadHabitsKillerApplication.mUsername = mloginusername;
+            BaseActivity.mUsername = mloginusername;
 
             startActivity(new Intent().setClass(LoginActivity.this, MainActivity.class));
             finish();

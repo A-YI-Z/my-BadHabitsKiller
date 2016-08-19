@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,11 +22,9 @@ import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
+import com.curry.bhk.bhk.utils.SavePicture;
 import com.gc.materialdesign.views.ButtonRectangle;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,9 +103,10 @@ public class RegistActivity extends BaseActivity {
         password = regist_et_password.getText().toString();
         confirm_password = regist_et_confirm_password.getText().toString();
 
-        UserdbOperator userdbOperator = new UserdbOperator(this);
+        UserdbOperator userdbOperator = new UserdbOperator(RegistActivity.this);
         UserBean userBean = new UserBean();
         userBean.setEmail(email);
+
         //password is num and English letters and length more than 8 while less than 16.
         String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
 
@@ -120,9 +121,9 @@ public class RegistActivity extends BaseActivity {
         else if (!isEmail(email)) {
             toastSomething(RegistActivity.this, "Is not a true email address.");
         }
-//        else if (userdbOperator.isExist(1, userBean)) {
-//            toastSomething(RegistActivity.this, "The email is exists .");
-//        }
+        else if (userdbOperator.isExist(1, userBean)) {
+            toastSomething(RegistActivity.this, "The email is exists .");
+        }
         else if (username.length() > 10) {// judge strings is  all English letters
             toastSomething(RegistActivity.this, "Nickname is too long.");
         } else if (!password.matches(regex)) {
@@ -195,7 +196,7 @@ public class RegistActivity extends BaseActivity {
 //                                regist_head_img.setImageResource(R.raw.defult_img);
 //                                mHeadImageUrl = "android:resource://"+ getPackageName() + "/" + R.raw.defult_img;
 //                                // System.out.println(PublicStatic.head_path);
-                                toastSomething(RegistActivity.this, "Default picture set success!");
+//                                toastSomething(RegistActivity.this, "Default picture set success!");
                                 break;
                             case 1:
                                 Intent intent1 = new Intent(Intent.ACTION_PICK,
@@ -208,8 +209,7 @@ public class RegistActivity extends BaseActivity {
 //                                            Toast.LENGTH_SHORT).show();
                                 break;
                             case 2:
-                                Intent intent2 = new Intent(
-                                        "android.media.action.IMAGE_CAPTURE");
+                                Intent intent2 = new Intent("android.media.action.IMAGE_CAPTURE");
                                 startActivityForResult(intent2, 1);
 //                                    Toast.makeText(RegistActivity.this, "take a photo",
 //                                            Toast.LENGTH_SHORT).show();
@@ -235,6 +235,7 @@ public class RegistActivity extends BaseActivity {
                     mHeadImageUrl = mycursor.getString(mycursor
                             .getColumnIndex("_data"));
                     Bitmap bm = BitmapFactory.decodeFile(mHeadImageUrl);
+                    bm = rotateBitmapByDegree(bm, getBitmapDegree(mHeadImageUrl));
                     regist_head_img.setImageBitmap(bm);
                 }
                 mycursor.close();
@@ -246,8 +247,12 @@ public class RegistActivity extends BaseActivity {
                 if (data != null) {
                     Bundle bundle = data.getExtras();
                     Bitmap mybitmap = (Bitmap) bundle.get("data");
+
+                    mHeadImageUrl = new SavePicture(this).saveFile(mybitmap);
+
+                    mybitmap = rotateBitmapByDegree(mybitmap, getBitmapDegree(mHeadImageUrl));
+
                     regist_head_img.setImageBitmap(mybitmap);
-                    mHeadImageUrl = saveFile(mybitmap);
                 }
             } else {
                 toastSomething(RegistActivity.this, "Taking a photo is defeated.");
@@ -256,38 +261,44 @@ public class RegistActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * save picture
-     */
-    public String saveFile(Bitmap bmp) {
-//        String sdStatue = Environment.getExternalStorageState();
-//        if (!sdStatue.endsWith(Environment.MEDIA_MOUNTED)) {
-//            System.out.println("can't use SD card");
-//            return null;
-//        }
-        String sd_root_path = android.os.Environment.getExternalStorageDirectory().getPath();
-        FileOutputStream b = null;
-        File dirFile = new File(sd_root_path + "/myImage");
-        if (!dirFile.isDirectory()) {
-            dirFile.mkdir();
-        }
-//        SimpleDateFormat sDattFormat = new SimpleDateFormat("yyyMMddhhmmss");
-//        String data = sDattFormat.format(new Date());
-//        String pictureName = sd_root_path + "/myImage/" + data + ".jpg";
-        String pictureName = sd_root_path + "/myImage/" + email + ".jpg";
+    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
+        Bitmap returnBm = null;
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
         try {
-            b = new FileOutputStream(pictureName);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, b);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                b.flush();
-                b.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
         }
-        return sd_root_path;
+        if (returnBm == null) {
+            returnBm = bm;
+        }
+        if (bm != returnBm) {
+            bm.recycle();
+        }
+        return returnBm;
+    }
+
+    public static int getBitmapDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 }

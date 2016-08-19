@@ -84,9 +84,17 @@
                 android:horizontalSpacing="3dp"
                 android:numColumns="4"
                 android:scrollbars="none"
-                android:verticalSpacing="3dp">
+                android:verticalSpacing="3dp"
+                android:visibility="gone"></GridView>
 
-            </GridView>
+            <ImageView
+                android:id="@+id/image_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_below="@id/tv_picture"
+                android:src="@drawable/btn_add_pic" />
+
+
         </RelativeLayout>
     </ScrollView>
 
@@ -99,6 +107,7 @@
         android:layout_marginLeft="34dp"
         android:layout_marginRight="34dp"
         android:background="#1E88E5"
-        android:onClick="addAcitvityOnclick"
         android:text="Add" />
+
+
 </RelativeLayout>

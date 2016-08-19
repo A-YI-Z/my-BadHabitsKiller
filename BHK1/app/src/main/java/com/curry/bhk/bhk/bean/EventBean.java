@@ -13,6 +13,15 @@ public class EventBean {
     private String photos_url;
     private String title;
     private int status; // 0:new ,1:pending ,2:on hold ,3:resolved
+    private String resolvedby;
+
+    public String getResolvedby() {
+        return resolvedby;
+    }
+
+    public void setResolvedby(String resolvedby) {
+        this.resolvedby = resolvedby;
+    }
 
     public int getId() {
         return id;

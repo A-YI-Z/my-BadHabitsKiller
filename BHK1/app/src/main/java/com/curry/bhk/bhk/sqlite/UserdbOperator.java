@@ -96,8 +96,8 @@ public class UserdbOperator {
         try {
             switch (mode) {
                 case 1://query the table according to email;
-                    cursor = db.rawQuery("select * from user_bhk where email="
-                            + outbean.getEmail(), null);
+                    cursor = db.rawQuery("select * from user_bhk where email= ?", new String[]{outbean.getEmail()});
+
                     break;
                 case 2://query the table according to username;
                     String[] temp = {outbean.getUsername()};
@@ -106,16 +106,22 @@ public class UserdbOperator {
                     break;
                 default:
                     break;
+
             }
             if (cursor != null) {
-                isExist = true;
-            } else {
-                isExist = false;
+                if (cursor.moveToNext()) {
+                    isExist = true;
+                } else {
+                    isExist = false;
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
             closeAll();
         }
 

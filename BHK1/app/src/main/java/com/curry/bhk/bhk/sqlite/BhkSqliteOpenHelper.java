@@ -31,6 +31,7 @@ public class BhkSqliteOpenHelper extends SQLiteOpenHelper {
                 + "email varchar ,"
                 + "author varchar,"
                 + "title varchar,"
+                + "resolvedby varchar,"
                 + "photos_url varchar,"
                 + "status integer,"
                 + "time varchar,"

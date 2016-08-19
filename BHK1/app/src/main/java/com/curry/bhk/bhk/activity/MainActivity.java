@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -17,10 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
-import com.curry.bhk.bhk.application.BadHabitsKillerApplication;
 import com.curry.bhk.bhk.bean.UserBean;
+import com.curry.bhk.bhk.fragment.AboutFragment;
 import com.curry.bhk.bhk.fragment.NewFragment;
+import com.curry.bhk.bhk.fragment.OnHoldFragment;
 import com.curry.bhk.bhk.fragment.PendingFragment;
+import com.curry.bhk.bhk.fragment.ProfiledFragment;
+import com.curry.bhk.bhk.fragment.ResolvedFragment;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DragLayout;
@@ -53,7 +55,7 @@ public class MainActivity extends BaseActivity {
         mDraglayout.setDragListener(new myDrag());
 
         dataInit();
-        Log.e(TAG, getIntent().getIntExtra("MENUID", 0)+ "");
+        Log.e(TAG, getIntent().getIntExtra("MENUID", 0) + "");
         addFragment(getIntent().getIntExtra("MENUID", 0));
 
         menuOnClick();
@@ -75,20 +77,22 @@ public class MainActivity extends BaseActivity {
         mMenuList.setAdapter(myArrayAdapter);
         myArrayAdapter.notifyDataSetChanged();
 
-        mUserNameTV.setText(BadHabitsKillerApplication.mUsername);
+        mUserNameTV.setText(BaseActivity.mUsername);
 
         UserdbOperator userdbOperator = new UserdbOperator(MainActivity.this);
         UserBean userBean = new UserBean();
-        userBean.setUsername(BadHabitsKillerApplication.mUsername);
+        userBean.setUsername(BaseActivity.mUsername);
         List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
             } else {
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
+                bm = RegistActivity.rotateBitmapByDegree(bm,RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
                 mHeadImageView.setImageBitmap(bm);
+
             }
-            BadHabitsKillerApplication.mEmail = userbean_list.get(0).getEmail();
+            BaseActivity.mEmail = userbean_list.get(0).getEmail();
         }
 
     }
@@ -115,10 +119,10 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onClose() {
-            // tv.startAnimation(AnimationUtils.loadAnimation(Cehua.this, R.anim.shake));
-//            ViewHelper.setAlpha(mTitleBarBotton, 1);
-            mTitleBarBotton.startAnimation(AnimationUtils.loadAnimation(
-                    MainActivity.this, R.anim.shake));
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+            alphaAnimation.setDuration(500);
+            alphaAnimation.setFillAfter(true);
+            mTitleBarBotton.startAnimation(alphaAnimation);
         }
 
         @Override
@@ -183,15 +187,27 @@ public class MainActivity extends BaseActivity {
                 break;
             case 2:
                 mTitlebarName.setText("On Hold");
+
+                OnHoldFragment onHoldFragment = new OnHoldFragment();
+                fragmentTransaction.replace(R.id.fragment, onHoldFragment);
                 break;
             case 3:
                 mTitlebarName.setText("Resolved");
+
+                ResolvedFragment resolvedFragment = new ResolvedFragment();
+                fragmentTransaction.replace(R.id.fragment, resolvedFragment);
                 break;
             case 4:
                 mTitlebarName.setText("Profiled");
+
+                ProfiledFragment profiledFragment = new ProfiledFragment();
+                fragmentTransaction.replace(R.id.fragment, profiledFragment);
                 break;
             case 5:
                 mTitlebarName.setText("About");
+
+                AboutFragment aboutFragment = new AboutFragment();
+                fragmentTransaction.replace(R.id.fragment, aboutFragment);
                 break;
             default:
                 break;

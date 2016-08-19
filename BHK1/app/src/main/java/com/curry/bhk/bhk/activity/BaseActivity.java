@@ -14,6 +14,8 @@ public class BaseActivity extends Activity {
     String TAG = "curry";
     boolean exit_flag = false;
 
+    public static String mUsername = "";
+    public static String mEmail = "";
     public static int eventItemId = 0;
 
     @Override

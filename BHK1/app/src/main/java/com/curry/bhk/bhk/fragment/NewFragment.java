@@ -52,8 +52,9 @@ public class NewFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                 BaseActivity.eventItemId = mEventBeanList.get(i).getId();
+                BaseActivity.eventItemId = mEventBeanList.get(i).getId();
 //                Log.e("Curry", mItemId + "");
+
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
 //                intent.putExtra("ID", mItemId);
                 startActivity(intent);

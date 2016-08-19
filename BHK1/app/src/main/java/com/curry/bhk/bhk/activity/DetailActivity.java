@@ -1,6 +1,8 @@
 package com.curry.bhk.bhk.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +36,7 @@ public class DetailActivity extends BaseActivity {
 
         dataInit();
 
-        addAcitvityOnclick();
+        detailAcitvityOnclick();
     }
 
     private void viewInit() {
@@ -62,13 +64,21 @@ public class DetailActivity extends BaseActivity {
         Log.e(TAG, BaseActivity.eventItemId + "");
 
         mDetailAuthor.setText(mDetailList.get(0).getAuthor());
-        mDetailDescription.setText("    "+mDetailList.get(0).getDescription());
+        mDetailDescription.setText(mDetailList.get(0).getDescription());
         mDetailTime.setText(mDetailList.get(0).getTime());
         mDetailTitle.setText(mDetailList.get(0).getTitle());
 
+        String strPhotoUrl = mDetailList.get(0).getPhotos_url();
+        if (strPhotoUrl.equals("null")) {
+            mDetailPhoto.setImageResource(R.drawable.nophoto);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(strPhotoUrl);
+            bitmap = RegistActivity.rotateBitmapByDegree(bitmap, RegistActivity.getBitmapDegree(strPhotoUrl));
+            mDetailPhoto.setImageBitmap(bitmap);
+        }
     }
 
-    public void addAcitvityOnclick() {
+    public void detailAcitvityOnclick() {
         mDetailBack.setOnClickListener(new OnclickEvent());
         mDetailResolveBtn.setOnClickListener(new OnclickEvent());
     }
@@ -82,8 +92,17 @@ public class DetailActivity extends BaseActivity {
                     finishActivity();
                     break;
                 case R.id.detail_pending_btn:
+                    /*
+                        insert the resolvedby data
+                     */
+                    EventBean eventBean = new EventBean();
+                    eventBean.setId(BaseActivity.eventItemId);
+
+                    EventdbOperator eventdbOperator = new EventdbOperator(DetailActivity.this);
+                    eventdbOperator.updateEvent(eventBean);
+
                     Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                    intent.putExtra("MENUID",1);
+                    intent.putExtra("MENUID", 1);
                     startActivity(intent);
                     finishActivity();
                     break;

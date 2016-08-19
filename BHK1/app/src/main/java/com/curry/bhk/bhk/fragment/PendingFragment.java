@@ -33,7 +33,9 @@ public class PendingFragment extends Fragment {
 
     public void dataInit() {
         EventBean eventBean = new EventBean();
+//        eventBean.setResolvedby(BaseActivity.mUsername);
         eventBean.setId(BaseActivity.eventItemId);
+
         EventdbOperator eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(3, eventBean);
 
