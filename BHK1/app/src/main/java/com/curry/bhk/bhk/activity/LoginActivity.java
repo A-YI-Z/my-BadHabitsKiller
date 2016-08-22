@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
@@ -25,16 +28,15 @@ public class LoginActivity extends BaseActivity {
     private CircleImageView login_head_img_view;
     private EditText login_et_username;
     private EditText login_et_password;
-    //    private CheckBox mLoginCheckBoxView;
     private android.widget.CheckBox mCheck;
+    private TextView mVersionName;
 
     private String mloginusername = "";
+    private String ago_username = "";
+    private String input_email = "";// email now
     private String db_password = "";// sqlite
     private String input_password = "";// password now
-    private String input_email = "";// email now
-    private String ago_username = "";
 
-    //    private String mLoginHeadPicture = "";
     private boolean isRemeber;
 
     private List<UserBean> userbean_list;
@@ -50,12 +52,12 @@ public class LoginActivity extends BaseActivity {
 
         dataInit();
 
+        usernameListener();
         /*
             judge is or not remember me
          */
         rememberMeCheckBox();
 
-        usernameListener();
     }
 
     public void viewInit() {
@@ -64,7 +66,7 @@ public class LoginActivity extends BaseActivity {
         login_et_password = (EditText) findViewById(R.id.login_et_password);
 //        mLoginCheckBoxView = (CheckBox) findViewById(R.id.login_checkBox);
         mCheck = (android.widget.CheckBox) findViewById(R.id.login_checkBox);
-
+        mVersionName = (TextView) findViewById(R.id.tv_login_versionName);
 
     }
 
@@ -84,19 +86,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void usernameListener() {
-
         ago_username = login_et_username.getText().toString();
-        login_et_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean isFocused) {
-
-                if (!isFocused) {
-//                    toastSomething(LoginActivity.this, "onFocusChange");
-                    matchHead();
-                }
-            }
-        });
+//        login_et_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean isFocused) {
+//                if (!isFocused) {
+//                    matchHead();
+//                }
+//            }
+//        });
 
         login_et_username.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +103,29 @@ public class LoginActivity extends BaseActivity {
                 login_et_username.setCursorVisible(true);
             }
         });
+
+        login_et_username.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!ago_username.equals(login_et_password.getText().toString())) {
+                    login_et_password.setText("");
+                    matchHead();
+                } else {
+                    toastSomething(LoginActivity.this, "~~~~~");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     /**
@@ -112,24 +133,26 @@ public class LoginActivity extends BaseActivity {
      */
     private void matchHead() {
         mloginusername = login_et_username.getText().toString();
-        if (!ago_username.equals(mloginusername)) {
-            login_et_password.setText("");
-        }
+//        if (!ago_username.equals(mloginusername)) {
+//            login_et_password.setText("");
+//        }
         UserBean userBean = new UserBean();
         userBean.setUsername(mloginusername);
-        userbean_list = userdbOperator.queryUser( 2, userBean);
+        userbean_list = userdbOperator.queryUser(2, userBean);
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
                 login_head_img_view.setImageResource(R.drawable.defult_img);
             } else {
                 Log.e(TAG, userbean_list.get(0).getPic_url());
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
-                bm = RegistActivity.rotateBitmapByDegree(bm,RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
+                bm = RegistActivity.rotateBitmapByDegree(bm, RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
                 login_head_img_view.setImageBitmap(bm);
             }
 
             //get the password according to the username
             db_password = userbean_list.get(0).getPassword();
+        } else {
+            login_head_img_view.setImageResource(R.drawable.default_head);
         }
     }
 
@@ -160,7 +183,7 @@ public class LoginActivity extends BaseActivity {
         remember userinfo is or not
          */
         if (sharedPreferences.getBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false)) {
-            Log.e(TAG, "here1");
+//            Log.e(TAG, "here1");
             mCheck.setChecked(true);
             login_et_password.setText(db_password);
         } else {

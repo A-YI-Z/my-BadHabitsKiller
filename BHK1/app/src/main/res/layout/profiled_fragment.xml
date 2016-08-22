@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ededed"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <com.curry.bhk.bhk.view.CircleImageView
+        android:id="@+id/profile_img_head"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/default_head" />
+
+    <com.curry.bhk.bhk.view.DeleteEditText
+        android:id="@+id/profile_et_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_img_head"
+        android:layout_marginTop="30dp"
+        android:background="#FFFFFF"
+        android:maxLength="10"
+        android:drawableRight="@drawable/delete_change"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/profile_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_et_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="--- change password ---"
+        android:textColor="#3875c6"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/profile_et_old_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_tv"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:hint="Old password"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/profile_et_new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_et_old_password"
+        android:layout_marginTop="6dp"
+        android:background="#FFFFFF"
+        android:hint="New password"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/profile_et_again_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_et_new_password"
+        android:layout_marginTop="6dp"
+        android:background="#FFFFFF"
+        android:hint="Confirm password "
+        android:padding="10dp" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/profile_btn_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#1E88E5"
+        android:text="Save" />
+
+</RelativeLayout>

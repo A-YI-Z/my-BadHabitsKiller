@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.curry.bhk.bhk.activity.AddActivity">
 
-
     <include
         android:id="@+id/title_bar"
         layout="@layout/layout_title_bar" />
@@ -34,9 +33,13 @@
             <EditText
                 android:id="@+id/add_et_title"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tv_title"
-                android:background="@drawable/et_change" />
+                android:background="@drawable/et_change"
+
+                android:maxLength="30"
+                android:singleLine="true"
+                android:padding="10dp" />
 
             <TextView
                 android:id="@+id/add_tv_description"
@@ -63,7 +66,8 @@
                 android:background="@drawable/et_change"
                 android:gravity="top"
                 android:maxLength="200"
-                android:maxLines="10" />
+                android:maxLines="10"
+                android:padding="6dp" />
 
             <TextView
                 android:id="@+id/tv_picture"
@@ -85,7 +89,9 @@
                 android:numColumns="4"
                 android:scrollbars="none"
                 android:verticalSpacing="3dp"
-                android:visibility="gone"></GridView>
+                android:visibility="gone">
+
+            </GridView>
 
             <ImageView
                 android:id="@+id/image_photo"

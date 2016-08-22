@@ -168,10 +168,12 @@ public class RegistActivity extends BaseActivity {
         SharedPreferences.Editor edit = getSharedPreferences(
                 PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
         edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, username);
+        edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
         edit.commit();
 
         Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
-        //                 intent.putExtra("USERNAME", username);
+
+
         startActivity(intent);
         toastSomething(RegistActivity.this, "Regist  success!");
         finish();
@@ -232,8 +234,7 @@ public class RegistActivity extends BaseActivity {
                 Cursor mycursor = resolver.query(myuri, null, null, null, null);
                 if (mycursor != null) {
                     mycursor.moveToNext();
-                    mHeadImageUrl = mycursor.getString(mycursor
-                            .getColumnIndex("_data"));
+                    mHeadImageUrl = mycursor.getString(mycursor.getColumnIndex("_data"));
                     Bitmap bm = BitmapFactory.decodeFile(mHeadImageUrl);
                     bm = rotateBitmapByDegree(bm, getBitmapDegree(mHeadImageUrl));
                     regist_head_img.setImageBitmap(bm);

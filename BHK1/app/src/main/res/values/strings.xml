@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BHK</string>
+    <string name = "version_code">VersionCode </string>
 </resources>

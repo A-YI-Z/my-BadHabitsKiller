@@ -2,24 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="8dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:paddingTop="10dp">
 
 
     <TextView
         android:id="@+id/tv_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/tv_title"
         android:layout_alignParentRight="true"
         android:text="tv_author"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -29,17 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tv_author"
+        android:layout_marginLeft="10dp"
         android:layout_toLeftOf="@id/tv_author"
         android:text="by : "
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
-
+    
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/tv_author"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="6dp"
         android:text="data"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -55,5 +48,18 @@
         android:maxLines="1"
         android:text="tv_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/text_by"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/text_by"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000" />
 
 </RelativeLayout>
