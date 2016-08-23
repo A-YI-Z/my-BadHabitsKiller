@@ -16,11 +16,11 @@ import java.util.List;
  * Created by Curry on 2016/8/9.
  */
 public class NewListitemAdapter extends BaseAdapter {
-    LayoutInflater layoutInflater;
+    LayoutInflater mLayoutInflater;
     List<EventBean> myList;
 
     public NewListitemAdapter(Context context, List<EventBean> outList) {
-        layoutInflater = LayoutInflater.from(context);
+        mLayoutInflater = LayoutInflater.from(context);
         myList = outList;
     }
 
@@ -44,7 +44,7 @@ public class NewListitemAdapter extends BaseAdapter {
         ViewHolder mViewHolder;
         if (view == null) {
             mViewHolder = new ViewHolder();
-            view = layoutInflater.inflate(R.layout.list_item, null);
+            view = mLayoutInflater.inflate(R.layout.list_item, null);
             mViewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
             mViewHolder.tv_author = (TextView) view.findViewById(R.id.tv_author);
             mViewHolder.tv_time = (TextView) view.findViewById(R.id.tv_time);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
+import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class DetailActivity extends BaseActivity {
             mDetailPhoto.setImageResource(R.drawable.nophoto);
         } else {
             Bitmap bitmap = BitmapFactory.decodeFile(strPhotoUrl);
-            bitmap = RegistActivity.rotateBitmapByDegree(bitmap, RegistActivity.getBitmapDegree(strPhotoUrl));
+            bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(strPhotoUrl));
             mDetailPhoto.setImageBitmap(bitmap);
         }
     }

@@ -99,14 +99,4 @@ public class DeleteEditText extends EditText implements
 
     }
 
-//    public void setShakeAnimation() {
-//        this.setAnimation(shakeAnimation(5));
-//    }
-//
-//    public static Animation shakeAnimation(int counts) {
-//        Animation translateAnimation = new TranslateAnimation(0, 10, 0, 0);
-//        translateAnimation.setInterpolator(new CycleInterpolator(counts));
-//        translateAnimation.setDuration(1000);
-//        return translateAnimation;
-//    }
 }  

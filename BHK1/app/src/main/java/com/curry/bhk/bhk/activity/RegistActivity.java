@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,11 +19,11 @@ import android.widget.ImageView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
+import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.utils.SavePicture;
 import com.gc.materialdesign.views.ButtonRectangle;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,8 +64,6 @@ public class RegistActivity extends BaseActivity {
         regist_head_img = (ImageView) findViewById(R.id.regist_img_choose);
 
         regist_complete = (ButtonRectangle) findViewById(R.id.regist_btn_complete);
-//        regist_complete.setAlpha(0.5f);
-//        regist_complete.setClickable(false);
     }
 
     /**
@@ -120,11 +116,9 @@ public class RegistActivity extends BaseActivity {
 //        }
         else if (!isEmail(email)) {
             toastSomething(RegistActivity.this, "Is not a true email address.");
-        }
-        else if (userdbOperator.isExist(1, userBean)) {
+        } else if (userdbOperator.isExist(1, userBean)) {
             toastSomething(RegistActivity.this, "The email is exists .");
-        }
-        else if (username.length() > 10) {// judge strings is  all English letters
+        } else if (username.length() > 10) {// judge strings is  all English letters
             toastSomething(RegistActivity.this, "Nickname is too long.");
         } else if (!password.matches(regex)) {
             toastSomething(RegistActivity.this, "The password is wrong.");
@@ -207,14 +201,12 @@ public class RegistActivity extends BaseActivity {
                                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                         "image/*");
                                 startActivityForResult(intent1, 1);
-//                                    Toast.makeText(RegistActivity.this, "Photo album",
-//                                            Toast.LENGTH_SHORT).show();
+
                                 break;
                             case 2:
                                 Intent intent2 = new Intent("android.media.action.IMAGE_CAPTURE");
                                 startActivityForResult(intent2, 1);
-//                                    Toast.makeText(RegistActivity.this, "take a photo",
-//                                            Toast.LENGTH_SHORT).show();
+
                                 break;
                             default:
                                 break;
@@ -236,7 +228,7 @@ public class RegistActivity extends BaseActivity {
                     mycursor.moveToNext();
                     mHeadImageUrl = mycursor.getString(mycursor.getColumnIndex("_data"));
                     Bitmap bm = BitmapFactory.decodeFile(mHeadImageUrl);
-                    bm = rotateBitmapByDegree(bm, getBitmapDegree(mHeadImageUrl));
+                    bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(mHeadImageUrl));
                     regist_head_img.setImageBitmap(bm);
                 }
                 mycursor.close();
@@ -251,7 +243,7 @@ public class RegistActivity extends BaseActivity {
 
                     mHeadImageUrl = new SavePicture(this).saveFile(mybitmap);
 
-                    mybitmap = rotateBitmapByDegree(mybitmap, getBitmapDegree(mHeadImageUrl));
+                    mybitmap = CheckBitmapDegree.rotateBitmapByDegree(mybitmap, CheckBitmapDegree.getBitmapDegree(mHeadImageUrl));
 
                     regist_head_img.setImageBitmap(mybitmap);
                 }
@@ -262,44 +254,5 @@ public class RegistActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
-        Bitmap returnBm = null;
 
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        try {
-            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-        } catch (OutOfMemoryError e) {
-        }
-        if (returnBm == null) {
-            returnBm = bm;
-        }
-        if (bm != returnBm) {
-            bm.recycle();
-        }
-        return returnBm;
-    }
-
-    public static int getBitmapDegree(String path) {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return degree;
-    }
 }

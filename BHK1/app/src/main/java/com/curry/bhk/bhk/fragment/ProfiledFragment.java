@@ -18,9 +18,9 @@ import android.widget.EditText;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.LoginActivity;
-import com.curry.bhk.bhk.activity.RegistActivity;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
+import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DeleteEditText;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -80,7 +80,7 @@ public class ProfiledFragment extends Fragment {
                 mProfiledHead.setImageResource(R.drawable.defult_img);
             } else {
                 Bitmap bitmap = BitmapFactory.decodeFile(strPictureUrl);
-                bitmap = RegistActivity.rotateBitmapByDegree(bitmap, RegistActivity.getBitmapDegree(strPictureUrl));
+                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(strPictureUrl));
                 mProfiledHead.setImageBitmap(bitmap);
             }
         }

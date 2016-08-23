@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
+import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.view.CircleImageView;
 
@@ -145,7 +146,7 @@ public class LoginActivity extends BaseActivity {
             } else {
                 Log.e(TAG, userbean_list.get(0).getPic_url());
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
-                bm = RegistActivity.rotateBitmapByDegree(bm, RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
+                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(userbean_list.get(0).getPic_url()));
                 login_head_img_view.setImageBitmap(bm);
             }
 

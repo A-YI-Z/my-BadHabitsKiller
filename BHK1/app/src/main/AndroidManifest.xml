@@ -34,6 +34,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.AddActivity" />
+        <activity android:name=".activity.ImageBucketChooseActivity" />
+        <activity android:name=".activity.ImageChooseActivity" />
+        <activity android:name=".activity.ImageZoomActivity" />
         <activity android:name=".activity.DetailActivity"></activity>
     </application>
 

@@ -24,6 +24,7 @@ import com.curry.bhk.bhk.fragment.PendingFragment;
 import com.curry.bhk.bhk.fragment.ProfiledFragment;
 import com.curry.bhk.bhk.fragment.ResolvedFragment;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
+import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DragLayout;
 import com.curry.bhk.bhk.view.MyRelativeLayout;
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
             } else {
                 Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
-                bm = RegistActivity.rotateBitmapByDegree(bm,RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
+                bm = CheckBitmapDegree.rotateBitmapByDegree(bm,CheckBitmapDegree.getBitmapDegree(userbean_list.get(0).getPic_url()));
                 mHeadImageView.setImageBitmap(bm);
 
             }

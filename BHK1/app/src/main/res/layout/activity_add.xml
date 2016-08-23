@@ -9,100 +9,82 @@
         android:id="@+id/title_bar"
         layout="@layout/layout_title_bar" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_bar"
         android:paddingLeft="34dp"
         android:paddingRight="34dp"
-        android:paddingTop="20dp"
-        android:scrollbars="none">
+        android:paddingTop="20dp">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/add_et_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:background="@drawable/et_change"
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="18sp" />
+            android:maxLength="30"
+            android:padding="10dp"
+            android:singleLine="true" />
 
-            <EditText
-                android:id="@+id/add_et_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_title"
-                android:background="@drawable/et_change"
+        <TextView
+            android:id="@+id/add_tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_et_title"
+            android:layout_marginTop="8dp"
+            android:text="Description"
+            android:textSize="18sp" />
 
-                android:maxLength="30"
-                android:singleLine="true"
-                android:padding="10dp" />
+        <TextView
+            android:id="@+id/add_tv_description_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/add_tv_description"
+            android:layout_alignParentRight="true"
+            android:text="0/200" />
 
-            <TextView
-                android:id="@+id/add_tv_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_et_title"
-                android:layout_marginTop="8dp"
-                android:text="Description"
-                android:textSize="18sp" />
+        <EditText
+            android:id="@+id/add_et_description"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/add_tv_description"
+            android:background="@drawable/et_change"
+            android:gravity="top"
+            android:maxLength="200"
+            android:maxLines="10"
+            android:padding="6dp" />
 
-            <TextView
-                android:id="@+id/add_tv_description_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/add_tv_description"
-                android:layout_alignParentRight="true"
-                android:text="0/200" />
+        <TextView
+            android:id="@+id/tv_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_et_description"
+            android:layout_marginTop="8dp"
+            android:text="Picture"
+            android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/add_et_description"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_below="@id/add_tv_description"
-                android:background="@drawable/et_change"
-                android:gravity="top"
-                android:maxLength="200"
-                android:maxLines="10"
-                android:padding="6dp" />
-
-            <TextView
-                android:id="@+id/tv_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_et_description"
-                android:layout_marginTop="8dp"
-                android:text="Picture"
-                android:textSize="18sp" />
-
-            <GridView
-                android:id="@+id/gridview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_picture"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:horizontalSpacing="3dp"
-                android:numColumns="4"
-                android:scrollbars="none"
-                android:verticalSpacing="3dp"
-                android:visibility="gone">
-
-            </GridView>
-
-            <ImageView
-                android:id="@+id/image_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_below="@id/tv_picture"
-                android:src="@drawable/btn_add_pic" />
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_below="@id/tv_picture"
+            android:numColumns="4"
+            android:scrollbars="none"
+            android:verticalSpacing="3dp">
+        </GridView>
 
 
-        </RelativeLayout>
-    </ScrollView>
+    </RelativeLayout>
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/add_complete_btn"
