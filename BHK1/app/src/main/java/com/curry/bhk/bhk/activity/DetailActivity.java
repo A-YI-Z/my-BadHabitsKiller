@@ -28,6 +28,8 @@ public class DetailActivity extends BaseActivity {
     private TextView mDetailDescription;
     private TextView mTitleBarText;
 
+    private EventdbOperator eventdbOperator;
+    private EventBean eventBean = new EventBean();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +58,8 @@ public class DetailActivity extends BaseActivity {
     private void dataInit() {
         mTitleBarText.setText("Detail");
 
-        EventdbOperator eventdbOperator = new EventdbOperator(DetailActivity.this);
-//        String id = new Intent().getStringExtra("ID");
+        eventdbOperator = new EventdbOperator(DetailActivity.this);;
 
-        EventBean eventBean = new EventBean();
         eventBean.setId(BaseActivity.eventItemId);
         List<EventBean> mDetailList = eventdbOperator.queryEvent(3, eventBean);
         Log.e(TAG, BaseActivity.eventItemId + "");
@@ -96,10 +96,7 @@ public class DetailActivity extends BaseActivity {
                     /*
                         insert the resolvedby data
                      */
-                    EventBean eventBean = new EventBean();
-                    eventBean.setId(BaseActivity.eventItemId);
-
-                    EventdbOperator eventdbOperator = new EventdbOperator(DetailActivity.this);
+                    eventBean.setResolvedby(BaseActivity.mUsername);
                     eventdbOperator.updateEvent(eventBean);
 
                     Intent intent = new Intent(DetailActivity.this, MainActivity.class);

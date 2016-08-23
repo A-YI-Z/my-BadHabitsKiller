@@ -75,27 +75,29 @@ public class AddActivity extends BaseActivity {
 
     protected void onPause() {
         super.onPause();
-//        saveTempToPref();
+        saveTempToPref();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        saveTempToPref();
+        saveTempToPref();
     }
 
     private void saveTempToPref() {
-        SharedPreferences sp = getSharedPreferences(
-                PublicStatic.APPLICATION_NAME, MODE_PRIVATE);
-        String prefStr = JSON.toJSONString(mDataList);
-        sp.edit().putString(PublicStatic.PREF_TEMP_IMAGES, prefStr).commit();
+        mAddTitleET.setText(mTitleStr);
+        mAddDescriptionET.setText(mDescriptionStr);
+
+//        SharedPreferences sp = getSharedPreferences(
+//                PublicStatic.APPLICATION_NAME, MODE_PRIVATE);
+//        String prefStr = JSON.toJSONString(mDataList);
+//        sp.edit().putString(PublicStatic.PREF_TEMP_IMAGES, prefStr).commit();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         mImageChooseAdapter.notifyDataSetChanged();//当在ImageZoomActivity中删除图片时，返回这里需要刷新
     }
 
@@ -235,7 +237,6 @@ public class AddActivity extends BaseActivity {
         EventBean eventBean = new EventBean();
         EventdbOperator eventdbOperator = new EventdbOperator(AddActivity.this);
 
-
         eventBean.setDescription(mDescriptionStr);
         eventBean.setAuthor(BaseActivity.mUsername);
         eventBean.setPhotos_url(mImageUrl);
@@ -284,7 +285,7 @@ public class AddActivity extends BaseActivity {
                     Intent intent = new Intent(AddActivity.this, ImageBucketChooseActivity.class);
                     intent.putExtra(PublicStatic.EXTRA_CAN_ADD_IMAGE_SIZE, getAvailableSize());
                     startActivity(intent);
-                    finishActivity();
+//                    finishActivity();
                     dialog.dismiss();
                 }
             });
@@ -344,6 +345,7 @@ public class AddActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Do you want to mass E-mail?");
+        builder.setCancelable(false);
         builder.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
 
@@ -374,14 +376,33 @@ public class AddActivity extends BaseActivity {
     public void goToSystemEmail() {
 
         // Here should use 'mailto:' , otherwise can't match mail application
+//        Uri uri = Uri.parse("mailto:" + BaseActivity.mEmail);
+//        String[] email = {"123@qq.com"};
+//        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+//        intent.putExtra(Intent.EXTRA_CC, email); // Cc people
+//        intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr); // The theme
+//        intent.putExtra(Intent.EXTRA_TEXT, mDescriptionStr); // The body
+
+        // with extra file
         Uri uri = Uri.parse("mailto:" + BaseActivity.mEmail);
-        String[] email = {"123@qq.com"};
-        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-        intent.putExtra(Intent.EXTRA_CC, email); // Cc people
-        intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr); // The theme
-        intent.putExtra(Intent.EXTRA_TEXT, mDescriptionStr); // The body
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE, uri);
+        String[] tos = {"wingfourever@gmail.com"};
+        String[] ccs = {"tongyue@gmail.com"};
+        intent.putExtra(Intent.EXTRA_EMAIL, tos);// consignee
+        intent.putExtra(Intent.EXTRA_CC, ccs); // CC
+        intent.putExtra(Intent.EXTRA_TEXT, mDescriptionStr);
+        intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr);
+
+        ArrayList imageUris = new ArrayList();
+        int size = mDataList.size();
+        for (int i = 0; i < size; i++) {
+//            imageUris.add(Uri.parse(mDataList.get(i).sourcePath));
+        }
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+        intent.setType("image/*");
+        intent.setType("message/rfc882");
         startActivity(Intent.createChooser(intent, "Please choose a E-mail application."));
-        finishActivity();
+//        finishActivity();
     }
 
     @Override

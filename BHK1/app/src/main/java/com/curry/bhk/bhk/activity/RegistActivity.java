@@ -254,5 +254,9 @@ public class RegistActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent().setClass(RegistActivity.this, LoginActivity.class));
+        finishActivity();
+    }
 }

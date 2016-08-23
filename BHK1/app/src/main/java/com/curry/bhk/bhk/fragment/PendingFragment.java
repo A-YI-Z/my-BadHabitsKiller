@@ -33,11 +33,10 @@ public class PendingFragment extends Fragment {
 
     public void dataInit() {
         EventBean eventBean = new EventBean();
-//        eventBean.setResolvedby(BaseActivity.mUsername);
-        eventBean.setId(BaseActivity.eventItemId);
+        eventBean.setResolvedby(BaseActivity.mUsername);
 
         EventdbOperator eventdbOperator = new EventdbOperator(getActivity());
-        mEventBeanList = eventdbOperator.queryEvent(3, eventBean);
+        mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
 
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);

@@ -15,6 +15,7 @@ import java.util.List;
  * Created by Curry on 2016/8/17.
  */
 public class EventdbOperator {
+    public static final String TABLE_EVENT_BHK = "event_bhk";
 
     private BhkSqliteOpenHelper dBhelper;
     private SQLiteDatabase db;
@@ -32,20 +33,20 @@ public class EventdbOperator {
         try {
             switch (mode) {
                 case 0: //query all table
-                    cursor = db.query("event_bhk", null, null, null, null, null, null, null);
+                    cursor = db.query(TABLE_EVENT_BHK, null, null, null, null, null, null, null);
                     break;
                 case 1://query the table according to email;
-                    cursor = db.rawQuery("select * from event_bhk where email=" + outbean.getEmail(), null);
+                    cursor = db.rawQuery("select * from event_bhk where email= ?", new String[]{outbean.getEmail()});
                     break;
                 case 2://query the table according to author;
                     String[] temp = {outbean.getAuthor()};
-                    cursor = db.query("event_bhk", null, "author=?", temp, null, null, null, null);
+                    cursor = db.query(TABLE_EVENT_BHK, null, "author=?", temp, null, null, null, null);
                     break;
                 case 3://query the table according to ID;
-                    cursor = db.rawQuery("select * from event_bhk where id=" + outbean.getId(), null);
+                    cursor = db.rawQuery("select * from event_bhk where id= ?", new String[]{String.valueOf(outbean.getId())});
                     break;
                 case 4://query the table according to resolvedby;
-                    cursor = db.rawQuery("select * from event_bhk where resolvedby =" + outbean.getResolvedby(), null);
+                    cursor = db.rawQuery("select * from event_bhk where resolvedby = ?", new String[]{outbean.getResolvedby()});
                     break;
                 default:
                     break;
@@ -106,7 +107,7 @@ public class EventdbOperator {
             contentValues.put("title", outBean.getTitle());
             contentValues.put("resolvedby", outBean.getResolvedby());
 
-            db.insert("event_bhk", null, contentValues);
+            db.insert(TABLE_EVENT_BHK, null, contentValues);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -119,9 +120,9 @@ public class EventdbOperator {
         db = dBhelper.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put("resolvedby", BaseActivity.mUsername);
-            String[] id = {outBean.getId() + ""};
-            db.update("user_bhk", contentValues, "id = ?", id);
+            contentValues.put("resolvedby", outBean.getResolvedby());
+            String[] id = {String.valueOf(outBean.getId())};
+            db.update(TABLE_EVENT_BHK, contentValues, "id = ?", id);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
