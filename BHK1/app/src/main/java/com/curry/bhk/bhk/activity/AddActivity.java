@@ -3,7 +3,6 @@ package com.curry.bhk.bhk.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,12 +22,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.adapter.ImageChooseAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
+import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.gc.materialdesign.views.ButtonRectangle;
 
@@ -52,7 +51,7 @@ public class AddActivity extends BaseActivity {
     private int mRestLength = 0;
     private String mTitleStr = "";
     private String mDescriptionStr = "";
-    private String mImageUrl = "null";
+    private StringBuffer mImageUrl = new StringBuffer();
 
     public static List<ImageItem> mDataList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
@@ -85,8 +84,6 @@ public class AddActivity extends BaseActivity {
     }
 
     private void saveTempToPref() {
-        mAddTitleET.setText(mTitleStr);
-        mAddDescriptionET.setText(mDescriptionStr);
 
 //        SharedPreferences sp = getSharedPreferences(
 //                PublicStatic.APPLICATION_NAME, MODE_PRIVATE);
@@ -237,9 +234,18 @@ public class AddActivity extends BaseActivity {
         EventBean eventBean = new EventBean();
         EventdbOperator eventdbOperator = new EventdbOperator(AddActivity.this);
 
+        if (!mDataList.isEmpty()) {
+            int size = mDataList.size();
+            for (int i = 0; i < size; i++) {
+                mImageUrl.append(mDataList.get(i).sourcePath + "#");
+            }
+            mImageUrl.substring(0, mImageUrl.length() - 1);
+        }
+
+
         eventBean.setDescription(mDescriptionStr);
         eventBean.setAuthor(BaseActivity.mUsername);
-        eventBean.setPhotos_url(mImageUrl);
+        eventBean.setPhotos_url(mImageUrl.toString());
         eventBean.setTitle(mTitleStr);
         eventBean.setEmail(BaseActivity.mEmail);
         eventBean.setStatus(0);
@@ -375,34 +381,32 @@ public class AddActivity extends BaseActivity {
      */
     public void goToSystemEmail() {
 
-        // Here should use 'mailto:' , otherwise can't match mail application
-//        Uri uri = Uri.parse("mailto:" + BaseActivity.mEmail);
-//        String[] email = {"123@qq.com"};
-//        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-//        intent.putExtra(Intent.EXTRA_CC, email); // Cc people
-//        intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr); // The theme
-//        intent.putExtra(Intent.EXTRA_TEXT, mDescriptionStr); // The body
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+//        String[] tos = {BaseActivity.mEmail};
+        ArrayList<String> arrayList = new UserdbOperator(AddActivity.this).getAllEmail();
+        String[] allEmail = arrayList.toArray(new String[arrayList.size()]);
 
-        // with extra file
-        Uri uri = Uri.parse("mailto:" + BaseActivity.mEmail);
-        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE, uri);
-        String[] tos = {"wingfourever@gmail.com"};
-        String[] ccs = {"tongyue@gmail.com"};
-        intent.putExtra(Intent.EXTRA_EMAIL, tos);// consignee
-        intent.putExtra(Intent.EXTRA_CC, ccs); // CC
+        intent.putExtra(Intent.EXTRA_EMAIL, allEmail);
+//        intent.putExtra(Intent.EXTRA_CC, ccs);
         intent.putExtra(Intent.EXTRA_TEXT, mDescriptionStr);
         intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr);
 
-        ArrayList imageUris = new ArrayList();
-        int size = mDataList.size();
-        for (int i = 0; i < size; i++) {
-//            imageUris.add(Uri.parse(mDataList.get(i).sourcePath));
+
+        if (!mDataList.isEmpty()) {
+            int size = mDataList.size();
+            ArrayList imageUris = new ArrayList();
+            for (int i = 0; i < size; i++) {
+                File file = new File(mDataList.get(i).sourcePath);
+                imageUris.add(Uri.fromFile(file));
+            }
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
         }
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+
         intent.setType("image/*");
         intent.setType("message/rfc882");
-        startActivity(Intent.createChooser(intent, "Please choose a E-mail application."));
-//        finishActivity();
+        Intent.createChooser(intent, "Choose Email Client.");
+        startActivity(intent);
+
     }
 
     @Override

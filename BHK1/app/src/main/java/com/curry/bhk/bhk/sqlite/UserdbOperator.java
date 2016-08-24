@@ -14,6 +14,7 @@ import java.util.List;
  * Created by Curry on 2016/8/11.
  */
 public class UserdbOperator {
+    public static final String TABLE_USER_BHK = "user_bhk";
 
     private boolean isExist;
     private BhkSqliteOpenHelper dBhelper;
@@ -30,17 +31,17 @@ public class UserdbOperator {
         try {
             switch (mode) {
                 case 0: //query all table
-                    cursor = db.query("user_bhk", null, null, null, null, null, null, null);
+                    cursor = db.query(TABLE_USER_BHK, null, null, null, null, null, null, null);
                     break;
                 case 1://query the table according to email;
-                    cursor = db.rawQuery("select * from user_bhk where email= ?" , new String[]{outbean.getEmail()});
+                    cursor = db.rawQuery("select * from user_bhk where email= ?", new String[]{outbean.getEmail()});
                     break;
                 case 2://query the table according to username;
                     String[] temp = {outbean.getUsername()};
-                    cursor = db.query("user_bhk", null, "username=?", temp, null,null, null, null);
+                    cursor = db.query(TABLE_USER_BHK, null, "username=?", temp, null, null, null, null);
                     break;
                 case 3: //query the password according to username;
-                    cursor = db.query("user_bhk", new String[]{"password"}, "username=?", new String[]{outbean.getUsername()}, null,
+                    cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "username=?", new String[]{outbean.getUsername()}, null,
                             null, null, null);
                     break;
                 default:
@@ -74,12 +75,36 @@ public class UserdbOperator {
         return myList;
     }
 
+    public ArrayList<String> getAllEmail() {
+        db = dBhelper.getWritableDatabase();
+
+        ArrayList<String> arrayList = new ArrayList();
+        Cursor cursor = null;
+        try {
+            cursor = db.query(TABLE_USER_BHK, new String[]{"email"}, null, null, null, null, null);
+            if (cursor != null) {
+                int i = 0;
+                while (cursor.moveToNext()) {
+
+                    String email = cursor.getString(cursor.getColumnIndex("email"));
+                    arrayList.add(email);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            closeAll();
+        }
+        return arrayList;
+    }
+
     public String qureyPassword(UserBean outBean) {
         String password = "";
         db = dBhelper.getWritableDatabase();
         Cursor cursor = null;
         try {
-            cursor = db.query("user_bhk", new String[]{"password"}, "username=?", new String[]{outBean.getUsername()}, null,
+            cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "username=?", new String[]{outBean.getUsername()}, null,
                     null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -100,7 +125,7 @@ public class UserdbOperator {
         db = dBhelper.getWritableDatabase();
         Cursor cursor = null;
         try {
-            cursor = db.query("user_bhk", new String[]{"pic_url"}, "username=?", new String[]{outBean.getUsername()}, null,
+            cursor = db.query(TABLE_USER_BHK, new String[]{"pic_url"}, "username=?", new String[]{outBean.getUsername()}, null,
                     null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -115,6 +140,7 @@ public class UserdbOperator {
         }
         return pictureUrl;
     }
+
     /**
      * judge data is exist or not
      *
@@ -135,7 +161,7 @@ public class UserdbOperator {
                     break;
                 case 2://query the table according to username;
                     String[] temp = {outbean.getUsername()};
-                    cursor = db.query("user_bhk", null, "username=?", temp, null,
+                    cursor = db.query(TABLE_USER_BHK, null, "username=?", temp, null,
                             null, null, null);
                     break;
                 default:
@@ -182,7 +208,7 @@ public class UserdbOperator {
             contentValues.put("pic_url", outBean.getPic_url());
             contentValues.put("status", outBean.getStatus());
 
-            db.insert("user_bhk", null, contentValues);
+            db.insert(TABLE_USER_BHK, null, contentValues);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,7 +230,7 @@ public class UserdbOperator {
                 contentValues.put("password", outBean.getPassword());
             }
             String[] email = {outBean.getEmail()};
-            db.update("user_bhk", contentValues, "email = ?", email);
+            db.update(TABLE_USER_BHK, contentValues, "email = ?", email);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -219,16 +245,16 @@ public class UserdbOperator {
         try {
             switch (mode) {
                 case 0:
-                    db.delete("user_bhk", null, null);
+                    db.delete(TABLE_USER_BHK, null, null);
                     db.rawQuery("delete from user_bhk", null);
                     break;
                 case 1:
                     String[] str_email = {outBean.getEmail()};
-                    db.delete("user_bhk", "id=?", str_email);
+                    db.delete(TABLE_USER_BHK, "id=?", str_email);
                     break;
                 case 2:
                     String[] str_name = {outBean.getUsername()};
-                    db.delete("user_bhk", "username=?", str_name);
+                    db.delete(TABLE_USER_BHK, "username=?", str_name);
                     break;
 
                 default:

@@ -5,11 +5,12 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="D:\Adroidstudio\gradle\gradle-2.10" />
+        <option name="gradleHome" value="D:\Android_Studio\gradle\gradle-2.10" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/MaterialDesign" />
+            <option value="$PROJECT_DIR$/SwipeMenuListView" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
@@ -17,6 +18,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/MaterialDesign" />
+            <option value="$PROJECT_DIR$/SwipeMenuListView" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

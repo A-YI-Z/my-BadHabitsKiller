@@ -1,12 +1,20 @@
 package com.curry.bhk.bhk.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
@@ -20,14 +28,19 @@ import java.util.List;
  */
 public class PendingFragment extends Fragment {
     private List<EventBean> mEventBeanList;
-    private ListView mListView;
+    private SwipeMenuListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.panding_fragment, null);
-        mListView = (ListView) view.findViewById(R.id.pendingListView);
+        mListView = (SwipeMenuListView) view.findViewById(R.id.pendingListView);
 
         dataInit();
+
+        addSwipeMenu();
+
+        menuClick();
+
         return view;
     }
 
@@ -42,5 +55,80 @@ public class PendingFragment extends Fragment {
         mListView.setAdapter(newListitemAdapter);
 
         newListitemAdapter.notifyDataSetChanged();
+    }
+
+    public void addSwipeMenu() {
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+
+
+                SwipeMenuItem item = new SwipeMenuItem(getActivity());
+
+                item.setBackground(new ColorDrawable(Color.rgb(162, 162, 162)));
+
+                item.setTitle("On Hold");
+
+                item.setTitleColor(Color.WHITE);
+
+                item.setTitleSize(18);
+
+                item.setWidth(dpToPx(90));
+
+                menu.addMenuItem(item);
+
+                SwipeMenuItem item1 = new SwipeMenuItem(getActivity());
+
+                item1.setBackground(new ColorDrawable(Color.rgb(190, 60, 58)));
+
+//				item1.setIcon(R.drawable.ic_launcher);
+
+                item1.setTitle("Resolved");
+
+                item1.setTitleColor(Color.WHITE);
+
+                item1.setTitleSize(18);
+
+                item1.setWidth(dpToPx(90));
+
+                menu.addMenuItem(item1);
+
+            }
+        };
+
+        mListView.setMenuCreator(creator);
+    }
+
+    private void menuClick() {
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                switch (index) {
+                    case 0://on hold
+                        OnHoldFragment onHoldFragment = new OnHoldFragment();
+                        fragmentTransaction.replace(R.id.fragment, onHoldFragment);
+                        break;
+                    case 1:
+                        ResolvedFragment resolvedFragment = new ResolvedFragment();
+                        fragmentTransaction.replace(R.id.fragment, resolvedFragment);
+                        break;
+                    default:
+                        break;
+                }
+                fragmentTransaction.commit();
+                return false;
+            }
+        });
+
+    }
+
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
     }
 }

@@ -76,7 +76,7 @@
         <GridView
             android:id="@+id/gridview"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tv_picture"
             android:numColumns="4"
             android:scrollbars="none"

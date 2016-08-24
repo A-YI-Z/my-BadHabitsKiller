@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/detail_rel"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="200dp"
         android:layout_below="@id/detail_title_bar"
         android:layout_margin="10dp"
         android:background="@drawable/et_fouce">
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/detail_author"
             android:layout_marginTop="4dp"
+            android:scrollbars="vertical"
             android:text="detail_description"
-
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
 
@@ -75,13 +75,15 @@
         android:background="#1E88E5"
         android:text="Resolved by me" />
 
-    <ImageView
-        android:id="@+id/detail_photo"
+    <GridView
+        android:id="@+id/detail_photo_gridview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/detail_pending_btn"
         android:layout_below="@id/detail_rel"
         android:layout_centerHorizontal="true"
+        android:numColumns="4"
+        android:horizontalSpacing="3dp"
         android:padding="10dp"
         android:src="@drawable/nophoto" />
 </RelativeLayout>
