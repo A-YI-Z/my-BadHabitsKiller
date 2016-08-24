@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.replace(R.id.fragment, newFragment);
                 break;
             case 1:
-                mTitlebarName.setText("Pending");
+//                mTitlebarName.setText("Pending");
 
                 PendingFragment pendingFragment = new PendingFragment();
                 fragmentTransaction.replace(R.id.fragment, pendingFragment);

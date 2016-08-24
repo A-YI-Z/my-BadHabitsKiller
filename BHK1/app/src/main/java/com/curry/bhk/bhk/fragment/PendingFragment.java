@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -30,11 +31,12 @@ public class PendingFragment extends Fragment {
     private List<EventBean> mEventBeanList;
     private SwipeMenuListView mListView;
 
+    private EventdbOperator eventdbOperator;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.panding_fragment, null);
         mListView = (SwipeMenuListView) view.findViewById(R.id.pendingListView);
-
         dataInit();
 
         addSwipeMenu();
@@ -45,10 +47,13 @@ public class PendingFragment extends Fragment {
     }
 
     public void dataInit() {
+        TextView tv = (TextView)getActivity().findViewById(R.id.title_bar_name);
+        tv.setText("Pending");
+
         EventBean eventBean = new EventBean();
         eventBean.setResolvedby(BaseActivity.mUsername);
 
-        EventdbOperator eventdbOperator = new EventdbOperator(getActivity());
+        eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
 
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
@@ -101,6 +106,9 @@ public class PendingFragment extends Fragment {
         mListView.setMenuCreator(creator);
     }
 
+    /**
+     *  swipemenu on hold & resolved click event
+     */
     private void menuClick() {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
 
@@ -110,10 +118,22 @@ public class PendingFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 switch (index) {
                     case 0://on hold
+                        EventBean eventBeanHold = new EventBean();
+                        eventBeanHold.setId(mEventBeanList.get(position).getId());
+                        eventBeanHold.setStatus(2);
+
+                        eventdbOperator.updateEvent(eventBeanHold, 1);
+
                         OnHoldFragment onHoldFragment = new OnHoldFragment();
                         fragmentTransaction.replace(R.id.fragment, onHoldFragment);
+
                         break;
-                    case 1:
+                    case 1://resolved
+                        EventBean eventBeanResolved = new EventBean();
+                        eventBeanResolved.setId(mEventBeanList.get(position).getId());
+                        eventBeanResolved.setStatus(3);
+
+                        eventdbOperator.updateEvent(eventBeanResolved, 1);
                         ResolvedFragment resolvedFragment = new ResolvedFragment();
                         fragmentTransaction.replace(R.id.fragment, resolvedFragment);
                         break;

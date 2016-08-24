@@ -48,6 +48,10 @@ public class EventdbOperator {
                 case 4://query the table according to resolvedby;
                     cursor = db.rawQuery("select * from event_bhk where resolvedby = ?", new String[]{outbean.getResolvedby()});
                     break;
+                case 5:
+                    String[] selectionArgs = {String.valueOf(outbean.getStatus()), outbean.getResolvedby()};
+                    cursor = db.query(TABLE_EVENT_BHK, null, "status = ?" + "and resolvedby = ?", selectionArgs, null, null, null, null);
+                    break;
                 default:
                     break;
             }
@@ -116,13 +120,23 @@ public class EventdbOperator {
 
     }
 
-    public void updateEvent(EventBean outBean) {
+    public void updateEvent(EventBean outBean, int mode) {
         db = dBhelper.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put("resolvedby", outBean.getResolvedby());
             String[] id = {String.valueOf(outBean.getId())};
-            db.update(TABLE_EVENT_BHK, contentValues, "id = ?", id);
+            switch (mode) {
+                case 0: //updata resolvedby
+                    contentValues.put("resolvedby", outBean.getResolvedby());
+                    db.update(TABLE_EVENT_BHK, contentValues, "id = ?", id);
+                    break;
+                case 1:
+                    contentValues.put("status", outBean.getStatus());
+                    db.update(TABLE_EVENT_BHK, contentValues, "id = ?", id);
+                    break;
+                default:
+                    break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

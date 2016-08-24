@@ -113,7 +113,7 @@ public class DetailActivity extends BaseActivity {
                         insert the resolvedby data
                      */
                     eventBean.setResolvedby(BaseActivity.mUsername);
-                    eventdbOperator.updateEvent(eventBean);
+                    eventdbOperator.updateEvent(eventBean,0);
 
                     Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                     intent.putExtra("MENUID", 1);

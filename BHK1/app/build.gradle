@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.curry.bhk.bhk"
@@ -25,5 +25,5 @@ dependencies {
     compile project(':MaterialDesign')
     compile 'com.alibaba:fastjson:1.2.16'
     compile project(':SwipeMenuListView')
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.1.1'
 }
