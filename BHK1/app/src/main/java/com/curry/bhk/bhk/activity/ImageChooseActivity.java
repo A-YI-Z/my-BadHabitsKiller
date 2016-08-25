@@ -29,7 +29,7 @@ import java.util.List;
  * choose photo
  */
 public class ImageChooseActivity extends BaseActivity {
-    private List<ImageItem> mDataList = new ArrayList<>();
+    private List<ImageItem> mChooseDataList = new ArrayList<>();
     private String mBucketName;
     private int mAvailableSize;
     private GridView mGridView;
@@ -44,9 +44,7 @@ public class ImageChooseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_image_choose);
 
-        mDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
-        if (mDataList == null) mDataList = new ArrayList<>();
-        mBucketName = getIntent().getStringExtra(PublicStatic.EXTRA_BUCKET_NAME);
+        mChooseDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
 
         if (TextUtils.isEmpty(mBucketName)) {
             mBucketName = "Please choose";
@@ -67,7 +65,7 @@ public class ImageChooseActivity extends BaseActivity {
 
         mGridView = (GridView) findViewById(R.id.gridview);
         mGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        mAdapter = new ImageGridAdapter(ImageChooseActivity.this, mDataList);
+        mAdapter = new ImageGridAdapter(ImageChooseActivity.this, mChooseDataList);
         mGridView.setAdapter(mAdapter);
         mFinishBtn = (Button) findViewById(R.id.finish_btn);
 
@@ -81,9 +79,17 @@ public class ImageChooseActivity extends BaseActivity {
         mFinishBtn.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-                Intent intent = new Intent(ImageChooseActivity.this, AddActivity.class);
+//                Intent intent = new Intent(ImageChooseActivity.this, AddActivity.class);
+//                intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) new ArrayList<>(mSelectedImgs.values()));
+//                startActivity(intent);
+//                finishActivity();
+
+
+                Intent intent = new Intent(ImageChooseActivity.this, ImageBucketChooseActivity.class);
                 intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) new ArrayList<>(mSelectedImgs.values()));
-                startActivity(intent);
+
+                setResult(RESULT_OK, intent);
+
                 finishActivity();
             }
         });
@@ -94,7 +100,7 @@ public class ImageChooseActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                ImageItem item = mDataList.get(position);
+                ImageItem item = mChooseDataList.get(position);
                 if (item.isSelected) {
                     item.isSelected = false;
                     mSelectedImgs.remove(item.imageId);
@@ -116,7 +122,7 @@ public class ImageChooseActivity extends BaseActivity {
         mBackIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ImageChooseActivity.this, AddActivity.class));
+                startActivity(new Intent(ImageChooseActivity.this, ImageBucketChooseActivity.class));
                 finishActivity();
             }
         });

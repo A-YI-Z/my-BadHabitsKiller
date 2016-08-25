@@ -1,8 +1,16 @@
 package com.curry.bhk.bhk.utils;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -33,29 +41,62 @@ public class SavePicture {
         }
 
         String sd_root_path = android.os.Environment.getExternalStorageDirectory().getPath();
-        FileOutputStream b = null;
-        File dirFile = new File(sd_root_path + "/myImage");
+        FileOutputStream fileOutputStream = null;
+        File dirFile = new File(sd_root_path + "/BHK");
         if (!dirFile.isDirectory()) {
             dirFile.mkdir();
         }
         SimpleDateFormat sDattFormat = new SimpleDateFormat("yyyMMddhhmmss");
         String data = sDattFormat.format(new Date());
-        String pictureName = sd_root_path + "/myImage/" + data + ".jpg";
+        String pictureName = sd_root_path + "/BHK/" + data + ".jpg";
 
 //        String pictureName = sd_root_path + "/myImage/" + email + ".jpg";
         try {
-            b = new FileOutputStream(pictureName);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, b);
+            fileOutputStream = new FileOutputStream(pictureName);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
             try {
-                b.flush();
-                b.close();
+                fileOutputStream.flush();
+                fileOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return sd_root_path;
+    }
+
+    public String pictureResult(int requestCode, int resultCode, Intent data, ImageView head_img) {
+        String headUrl = "";
+        if (requestCode == 0) {// album
+            if (resultCode == Activity.RESULT_OK) {
+                Uri myuri = data.getData();
+                ContentResolver resolver = mContext.getContentResolver();
+                Cursor mycursor = resolver.query(myuri, null, null, null, null);
+                if (mycursor != null) {
+                    mycursor.moveToNext();
+                    headUrl = mycursor.getString(mycursor.getColumnIndex("_data"));
+                    Bitmap bm = BitmapFactory.decodeFile(headUrl);
+                    bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(headUrl));
+                    head_img.setImageBitmap(bm);
+                }
+                mycursor.close();
+            }
+        } else if (requestCode == 1) {// take a photo
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    Bundle bundle = data.getExtras();
+                    Bitmap mybitmap = (Bitmap) bundle.get("data");
+
+                    headUrl = new SavePicture(mContext).saveFile(mybitmap);
+
+                    mybitmap = CheckBitmapDegree.rotateBitmapByDegree(mybitmap, CheckBitmapDegree.getBitmapDegree(headUrl));
+
+                    head_img.setImageBitmap(mybitmap);
+                }
+            }
+        }
+        return headUrl;
     }
 }

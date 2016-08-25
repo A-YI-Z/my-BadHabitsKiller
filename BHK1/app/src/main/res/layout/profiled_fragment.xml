@@ -20,8 +20,9 @@
         android:layout_below="@id/profile_img_head"
         android:layout_marginTop="30dp"
         android:background="#FFFFFF"
-        android:maxLength="10"
         android:drawableRight="@drawable/delete_change"
+        android:gravity="center"
+        android:maxLength="10"
         android:padding="10dp" />
 
     <TextView

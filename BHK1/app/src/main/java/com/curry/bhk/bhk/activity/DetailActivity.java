@@ -35,6 +35,8 @@ public class DetailActivity extends BaseActivity {
     private List<ImageItem> mDetailPhotoList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
 
+    private int status = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,6 @@ public class DetailActivity extends BaseActivity {
         mTitleBarText.setText("Detail");
 
         eventdbOperator = new EventdbOperator(DetailActivity.this);
-        ;
 
         eventBean.setId(BaseActivity.eventItemId);
         List<EventBean> mDetailList = eventdbOperator.queryEvent(3, eventBean);
@@ -73,6 +74,8 @@ public class DetailActivity extends BaseActivity {
         mDetailDescription.setText(mDetailList.get(0).getDescription());
         mDetailTime.setText(mDetailList.get(0).getTime());
         mDetailTitle.setText(mDetailList.get(0).getTitle());
+
+        status = mDetailList.get(0).getStatus();
 
         String photoUrl[] = mDetailList.get(0).getPhotos_url().split("#");
         int length = photoUrl.length;
@@ -97,7 +100,11 @@ public class DetailActivity extends BaseActivity {
 
     public void detailAcitvityOnclick() {
         mDetailBack.setOnClickListener(new OnclickEvent());
-        mDetailResolveBtn.setOnClickListener(new OnclickEvent());
+        if (status == 1) {
+            mDetailResolveBtn.setAlpha(0.5f);
+        } else {
+            mDetailResolveBtn.setOnClickListener(new OnclickEvent());
+        }
     }
 
     private class OnclickEvent implements View.OnClickListener {
@@ -113,7 +120,8 @@ public class DetailActivity extends BaseActivity {
                         insert the resolvedby data
                      */
                     eventBean.setResolvedby(BaseActivity.mUsername);
-                    eventdbOperator.updateEvent(eventBean,0);
+                    eventBean.setStatus(1);
+                    eventdbOperator.updateEvent(eventBean, 0);
 
                     Intent intent = new Intent(DetailActivity.this, MainActivity.class);
                     intent.putExtra("MENUID", 1);

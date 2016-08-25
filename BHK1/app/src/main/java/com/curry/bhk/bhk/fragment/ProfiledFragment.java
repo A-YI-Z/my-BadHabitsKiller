@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.curry.bhk.bhk.activity.LoginActivity;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.CheckBitmapDegree;
+import com.curry.bhk.bhk.utils.SavePicture;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DeleteEditText;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -35,13 +37,14 @@ public class ProfiledFragment extends Fragment {
     private EditText mOldPasswordEt;
     private EditText mNewPasswordEt;
     private EditText mConPasswordEt;
-    private CircleImageView mProfiledHead;
+    private CircleImageView mProfiledHeadView;
     private ButtonRectangle saveProfiledBtn;
 
     private String mSqlPassword = "";
     private String mInputPassword = "";
     private String mNewPassword = "";
     private String mConfirmPassword = "";
+    private String mProfiledHeadUrl = "";
 
     private UserdbOperator userdbOperator;
     private UserBean userBean;
@@ -55,6 +58,8 @@ public class ProfiledFragment extends Fragment {
 
         dataInit();
 
+        profiledOnClick();
+
         return mView;
     }
 
@@ -63,39 +68,29 @@ public class ProfiledFragment extends Fragment {
         mOldPasswordEt = (EditText) mView.findViewById(R.id.profile_et_old_password);
         mNewPasswordEt = (EditText) mView.findViewById(R.id.profile_et_new_password);
         mConPasswordEt = (EditText) mView.findViewById(R.id.profile_et_again_password);
-        mProfiledHead = (CircleImageView) mView.findViewById(R.id.profile_img_head);
+        mProfiledHeadView = (CircleImageView) mView.findViewById(R.id.profile_img_head);
         saveProfiledBtn = (ButtonRectangle) mView.findViewById(R.id.profile_btn_finish);
 
-        mProfiledHead.setOnClickListener(new ProfiledOnClick());
-        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
     }
 
     private void dataInit() {
-        userdbOperator = new UserdbOperator(getActivity());
-        userBean = new UserBean();
-        userBean.setUsername(BaseActivity.mUsername);
-        String strPictureUrl = userdbOperator.qureyPicture(userBean);
-        if (!strPictureUrl.equals("")) {
-            if (strPictureUrl.equals("default")) {
-                mProfiledHead.setImageResource(R.drawable.defult_img);
+
+        if (!BaseActivity.mHeadUrl.equals("")) {
+            if (BaseActivity.mHeadUrl.equals("default")) {
+                mProfiledHeadView.setImageResource(R.drawable.defult_img);
             } else {
-                Bitmap bitmap = BitmapFactory.decodeFile(strPictureUrl);
-                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(strPictureUrl));
-                mProfiledHead.setImageBitmap(bitmap);
+                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
+                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
+                mProfiledHeadView.setImageBitmap(bitmap);
             }
         }
-//        List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
-//        if (!userbean_list.isEmpty()) {
-//            if (userbean_list.get(0).getPic_url().equals("default")) {
-//                mProfiledHead.setImageResource(R.drawable.defult_img);
-//            } else {
-//                Bitmap bitmap = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
-//                bitmap = RegistActivity.rotateBitmapByDegree(bitmap, RegistActivity.getBitmapDegree(userbean_list.get(0).getPic_url()));
-//                mProfiledHead.setImageBitmap(bitmap);
-//            }
-//        }
 
         mUsernameEt.setText(BaseActivity.mUsername);
+    }
+
+    private void profiledOnClick() {
+        mProfiledHeadView.setOnClickListener(new ProfiledOnClick());
+        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
     }
 
     private class ProfiledOnClick implements View.OnClickListener {
@@ -107,93 +102,132 @@ public class ProfiledFragment extends Fragment {
                     saveDialog();
                     break;
                 case R.id.profile_img_head:
-
+                    choose_head_img();
                     break;
                 default:
                     break;
             }
         }
+    }
 
-        private void saveDialog() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    private void saveDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            builder.setTitle("Your info is changed, would you like to save ?");
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-
-                    usernameChange();
-
-                }
-            });
-
-            builder.create().show();
-        }
-
-        /**
-         * username is successful and  then  check the password
-         */
-        private void usernameChange() {
-            String newUsername = mUsernameEt.getText().toString();
-            if (!BaseActivity.mUsername.equals(newUsername) && !newUsername.equals("")) {
-
-                userBean.setEmail(BaseActivity.mEmail);
-                userBean.setUsername(newUsername);
-                userdbOperator.updateUser(userBean);
-
-                BaseActivity.mUsername = newUsername;
-
-                passwordChange();
+        builder.setTitle("Your info is changed, would you like to save ?");
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
+        });
+        builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                usernameChange();
+
+            }
+        });
+
+        builder.create().show();
+    }
+
+    /**
+     * username is successful and  then  check the password
+     */
+    private void usernameChange() {
+        userdbOperator = new UserdbOperator(getActivity());
+        userBean = new UserBean();
+        String newUsername = mUsernameEt.getText().toString();
+        if (!BaseActivity.mUsername.equals(newUsername) && !newUsername.equals("")) {
+
+            userBean.setEmail(BaseActivity.mEmail);
+            userBean.setUsername(newUsername);
+            userdbOperator.updateUser(userBean);
+
+            BaseActivity.mUsername = newUsername;
+
+            passwordChange();
         }
+    }
 
-        private void passwordChange() {
+    private void passwordChange() {
 
-            mSqlPassword = userdbOperator.qureyPassword(userBean);
-            mInputPassword = mNewPasswordEt.getText().toString();
-            mConfirmPassword = mConPasswordEt.getText().toString();
-            mNewPassword = mNewPasswordEt.getText().toString();
+        mSqlPassword = userdbOperator.qureyPassword(userBean);
+        mInputPassword = mNewPasswordEt.getText().toString();
+        mConfirmPassword = mConPasswordEt.getText().toString();
+        mNewPassword = mNewPasswordEt.getText().toString();
 
-            mOldPasswordEt.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        mOldPasswordEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (mInputPassword.equals(mSqlPassword)) {
+                    mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.right), null);
+                } else {
+                    mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.error), null);
                 }
+            }
+        });
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
+        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+        if (!mNewPassword.matches(regex)) {
+            new BaseActivity().toastSomething(getActivity(), "The password is wrong.");
+        } else if (mConfirmPassword.equals(mNewPassword)) {
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (mInputPassword.equals(mSqlPassword)) {
-                        mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.right), null);
-                    } else {
-                        mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.error), null);
+            userBean.setEmail(BaseActivity.mEmail);
+            userBean.setPassword(mConfirmPassword);
+            userdbOperator.updateUser(userBean);
+
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+        } else {
+            new BaseActivity().toastSomething(getActivity(), "Confirm password is wrong!");
+        }
+    }
+
+    /**
+     * choose head image
+     */
+    private void choose_head_img() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Choose head-image");
+        String items[] = {"Photo album", "Take a photo"};
+        builder.setSingleChoiceItems(items, -1,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent intentPick = new Intent(Intent.ACTION_PICK, null);
+                                intentPick.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intentPick, 0);
+                                break;
+                            case 1:
+                                Intent intentCapture = new Intent("android.media.action.IMAGE_CAPTURE");
+                                startActivityForResult(intentCapture, 1);
+
+                                break;
+                            default:
+                                break;
+                        }
+                        dialog.dismiss();
                     }
-                }
-            });
+                });
+        builder.create().show();
+    }
 
-            String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-            if (!mNewPassword.matches(regex)) {
-                new BaseActivity().toastSomething(getActivity(), "The password is wrong.");
-            } else if (mConfirmPassword.equals(mNewPassword)) {
-
-                userBean.setEmail(BaseActivity.mEmail);
-                userBean.setPassword(mConfirmPassword);
-                userdbOperator.updateUser(userBean);
-
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
-            } else {
-                new BaseActivity().toastSomething(getActivity(), "Confirm password is wrong!");
-            }
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mProfiledHeadUrl = new SavePicture(getActivity()).pictureResult(requestCode, resultCode, data, mProfiledHeadView);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

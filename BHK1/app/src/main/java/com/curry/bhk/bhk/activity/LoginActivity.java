@@ -116,8 +116,6 @@ public class LoginActivity extends BaseActivity {
                 if (!ago_username.equals(login_et_password.getText().toString())) {
                     login_et_password.setText("");
                     matchHead();
-                } else {
-                    toastSomething(LoginActivity.this, "~~~~~");
                 }
             }
 
@@ -217,8 +215,12 @@ public class LoginActivity extends BaseActivity {
         } else if (input_password.equals("")) {
             toastSomething(LoginActivity.this, "Please input your password!");
         } else if (input_password.equals(db_password)) {
+
             // static
             BaseActivity.mUsername = mloginusername;
+            BaseActivity.mHeadUrl = userbean_list.get(0).getPic_url();
+            BaseActivity.mEmail = userbean_list.get(0).getEmail();
+            BaseActivity.mPassword = userbean_list.get(0).getPassword();
 
             startActivity(new Intent().setClass(LoginActivity.this, MainActivity.class));
             finish();

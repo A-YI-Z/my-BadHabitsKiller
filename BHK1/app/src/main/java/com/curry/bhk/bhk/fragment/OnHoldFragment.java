@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
@@ -44,7 +43,7 @@ public class OnHoldFragment extends Fragment {
         eventBean.setResolvedby(BaseActivity.mUsername);
 
         eventdbOperator = new EventdbOperator(getActivity());
-        mEventBeanList = eventdbOperator.queryEvent(5, eventBean);
+        mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
 
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);

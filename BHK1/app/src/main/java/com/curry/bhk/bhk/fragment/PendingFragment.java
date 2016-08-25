@@ -52,6 +52,7 @@ public class PendingFragment extends Fragment {
 
         EventBean eventBean = new EventBean();
         eventBean.setResolvedby(BaseActivity.mUsername);
+        eventBean.setStatus(1);
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
@@ -126,6 +127,8 @@ public class PendingFragment extends Fragment {
 
                         OnHoldFragment onHoldFragment = new OnHoldFragment();
                         fragmentTransaction.replace(R.id.fragment, onHoldFragment);
+
+
 
                         break;
                     case 1://resolved

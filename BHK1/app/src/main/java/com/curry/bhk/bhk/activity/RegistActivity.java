@@ -1,15 +1,9 @@
 package com.curry.bhk.bhk.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -19,7 +13,6 @@ import android.widget.ImageView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
-import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.utils.SavePicture;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -189,23 +182,16 @@ public class RegistActivity extends BaseActivity {
 //                                InputStream inputStream = getResources().openRawResource(R.raw.defult_img);
                                 regist_head_img.setImageResource(R.drawable.defult_img);
                                 mHeadImageUrl = "default";
-//                                regist_head_img.setImageResource(R.raw.defult_img);
-//                                mHeadImageUrl = "android:resource://"+ getPackageName() + "/" + R.raw.defult_img;
-//                                // System.out.println(PublicStatic.head_path);
-//                                toastSomething(RegistActivity.this, "Default picture set success!");
                                 break;
                             case 1:
-                                Intent intent1 = new Intent(Intent.ACTION_PICK,
-                                        null);
-                                intent1.setDataAndType(
-                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                        "image/*");
-                                startActivityForResult(intent1, 1);
+                                Intent intentPick = new Intent(Intent.ACTION_PICK, null);
+                                intentPick.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intentPick, 0);
 
                                 break;
                             case 2:
-                                Intent intent2 = new Intent("android.media.action.IMAGE_CAPTURE");
-                                startActivityForResult(intent2, 1);
+                                Intent intentCapture = new Intent("android.media.action.IMAGE_CAPTURE");
+                                startActivityForResult(intentCapture, 1);
 
                                 break;
                             default:
@@ -219,38 +205,7 @@ public class RegistActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
-                Uri myuri = data.getData();
-                ContentResolver resolver = getContentResolver();
-                Cursor mycursor = resolver.query(myuri, null, null, null, null);
-                if (mycursor != null) {
-                    mycursor.moveToNext();
-                    mHeadImageUrl = mycursor.getString(mycursor.getColumnIndex("_data"));
-                    Bitmap bm = BitmapFactory.decodeFile(mHeadImageUrl);
-                    bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(mHeadImageUrl));
-                    regist_head_img.setImageBitmap(bm);
-                }
-                mycursor.close();
-            } else {
-                toastSomething(RegistActivity.this, "Don't choose any picture.");
-            }
-        } else if (requestCode == 2) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    Bundle bundle = data.getExtras();
-                    Bitmap mybitmap = (Bitmap) bundle.get("data");
-
-                    mHeadImageUrl = new SavePicture(this).saveFile(mybitmap);
-
-                    mybitmap = CheckBitmapDegree.rotateBitmapByDegree(mybitmap, CheckBitmapDegree.getBitmapDegree(mHeadImageUrl));
-
-                    regist_head_img.setImageBitmap(mybitmap);
-                }
-            } else {
-                toastSomething(RegistActivity.this, "Taking a photo is defeated.");
-            }
-        }
+        mHeadImageUrl = new SavePicture(RegistActivity.this).pictureResult(requestCode, resultCode, data, regist_head_img);
         super.onActivityResult(requestCode, resultCode, data);
     }
 

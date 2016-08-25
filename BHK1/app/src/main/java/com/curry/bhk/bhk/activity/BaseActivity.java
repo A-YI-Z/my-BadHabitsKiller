@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.curry.bhk.bhk.R;
@@ -17,48 +16,15 @@ public class BaseActivity extends Activity {
     public static String mUsername = "";
     public static String mEmail = "";
     public static int eventItemId = 0;
+    public static String mHeadUrl = "";
+    public static String mPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-
-    @Override
-    protected void onStart() {
-        Log.d(TAG, "onStart() called with: " + "");
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.d(TAG, "onPause() called with: " + "");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop() called with: " + "");
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.d(TAG, "onRestart() called with: " + "");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume() called with: " + "");
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy() called with: " + "");
-        super.onDestroy();
-    }
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     public void finishActivity() {
         finish();

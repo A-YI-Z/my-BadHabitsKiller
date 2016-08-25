@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.bean.EventBean;
 
 import java.util.ArrayList;
@@ -45,10 +44,7 @@ public class EventdbOperator {
                 case 3://query the table according to ID;
                     cursor = db.rawQuery("select * from event_bhk where id= ?", new String[]{String.valueOf(outbean.getId())});
                     break;
-                case 4://query the table according to resolvedby;
-                    cursor = db.rawQuery("select * from event_bhk where resolvedby = ?", new String[]{outbean.getResolvedby()});
-                    break;
-                case 5:
+                case 4:
                     String[] selectionArgs = {String.valueOf(outbean.getStatus()), outbean.getResolvedby()};
                     cursor = db.query(TABLE_EVENT_BHK, null, "status = ?" + "and resolvedby = ?", selectionArgs, null, null, null, null);
                     break;
@@ -128,6 +124,7 @@ public class EventdbOperator {
             switch (mode) {
                 case 0: //updata resolvedby
                     contentValues.put("resolvedby", outBean.getResolvedby());
+                    contentValues.put("status", outBean.getStatus());
                     db.update(TABLE_EVENT_BHK, contentValues, "id = ?", id);
                     break;
                 case 1:

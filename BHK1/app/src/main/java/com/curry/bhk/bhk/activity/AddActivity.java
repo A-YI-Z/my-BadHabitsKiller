@@ -1,5 +1,6 @@
 package com.curry.bhk.bhk.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +57,8 @@ public class AddActivity extends BaseActivity {
 
     public static List<ImageItem> mDataList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
-    private static final int TAKE_PICTURE = 0x000000;
+    private static final int TAKE_PICTURE = 0;
+    private static final int CHOOSE_PICTURE = 1;
     private String path = "";
 
     @Override
@@ -72,31 +75,28 @@ public class AddActivity extends BaseActivity {
         countDescriptionNum();
     }
 
-    protected void onPause() {
-        super.onPause();
-        saveTempToPref();
-    }
+//    protected void onPause() {
+//        super.onPause();
+//        saveTempToPref();
+//    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveTempToPref();
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        saveTempToPref();
+//    }
 
-    private void saveTempToPref() {
+//    private void saveTempToPref() {
+//
+////        SharedPreferences sp = getSharedPreferences(
+////                PublicStatic.APPLICATION_NAME, MODE_PRIVATE);
+////        String prefStr = JSON.toJSONString(mDataList);
+////        sp.edit().putString(PublicStatic.PREF_TEMP_IMAGES, prefStr).commit();
+//
+//        mAddDescriptionET.setText(mDescriptionStr);
+//        mAddTitleET.setText(mTitleStr);
+//    }
 
-//        SharedPreferences sp = getSharedPreferences(
-//                PublicStatic.APPLICATION_NAME, MODE_PRIVATE);
-//        String prefStr = JSON.toJSONString(mDataList);
-//        sp.edit().putString(PublicStatic.PREF_TEMP_IMAGES, prefStr).commit();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mImageChooseAdapter.notifyDataSetChanged();//当在ImageZoomActivity中删除图片时，返回这里需要刷新
-    }
 
     public void dataInit() {
 //        SharedPreferences sp = getSharedPreferences(
@@ -189,10 +189,8 @@ public class AddActivity extends BaseActivity {
                 if (i == getDataSize()) {
                     choosePhoto();
                 } else {
-                    Intent intent = new Intent(AddActivity.this,
-                            ImageZoomActivity.class);
-                    intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST,
-                            (Serializable) mDataList);
+                    Intent intent = new Intent(AddActivity.this, ImageZoomActivity.class);
+                    intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) mDataList);
                     intent.putExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, i);
                     startActivity(intent);
                 }
@@ -290,8 +288,10 @@ public class AddActivity extends BaseActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(AddActivity.this, ImageBucketChooseActivity.class);
                     intent.putExtra(PublicStatic.EXTRA_CAN_ADD_IMAGE_SIZE, getAvailableSize());
-                    startActivity(intent);
+//                    startActivity(intent);
+                    startActivityForResult(intent, CHOOSE_PICTURE);
 //                    finishActivity();
+
                     dialog.dismiss();
                 }
             });
@@ -313,10 +313,13 @@ public class AddActivity extends BaseActivity {
         return 0;
     }
 
+    /**
+     * take a photo and return this activity
+     */
     public void takePhoto() {
         Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        File vFile = new File(Environment.getExternalStorageDirectory() + "/myimage/", String.valueOf(System.currentTimeMillis()) + ".jpg");
+        File vFile = new File(Environment.getExternalStorageDirectory().getPath() + "/BHK/", BaseActivity.mUsername + "_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
         if (!vFile.exists()) {
             File vDirPath = vFile.getParentFile();
             vDirPath.mkdirs();
@@ -329,6 +332,9 @@ public class AddActivity extends BaseActivity {
         Uri cameraUri = Uri.fromFile(vFile);
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
         startActivityForResult(openCameraIntent, TAKE_PICTURE);
+
+//        Intent intentCapture = new Intent("android.media.action.IMAGE_CAPTURE");
+//        startActivityForResult(intentCapture, 1);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -341,7 +347,19 @@ public class AddActivity extends BaseActivity {
                     mDataList.add(item);
                 }
                 break;
+            case CHOOSE_PICTURE:
+                if(resultCode== Activity.RESULT_OK){
+
+                    dataInit();
+                    Log.e(TAG, "back" );
+                    getPhotoOnItemClick();
+                }
+
+                break;
+            default:
+                break;
         }
+
     }
 
     /**
@@ -414,4 +432,13 @@ public class AddActivity extends BaseActivity {
         startActivity(new Intent().setClass(AddActivity.this, MainActivity.class));
         finishActivity();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        saveTempToPref();
+
+        mImageChooseAdapter.notifyDataSetChanged();//when delete picture  , should notify data.
+    }
+
 }

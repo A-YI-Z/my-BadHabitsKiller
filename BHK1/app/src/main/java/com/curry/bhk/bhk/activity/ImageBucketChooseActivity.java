@@ -2,6 +2,7 @@ package com.curry.bhk.bhk.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -72,9 +73,10 @@ public class ImageBucketChooseActivity extends BaseActivity {
                 intent.putExtra(PublicStatic.EXTRA_CAN_ADD_IMAGE_SIZE,
                         mAvailableSize);
 
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, 1);
 
-                finishActivity();
+//                finishActivity();
             }
         });
 
@@ -83,10 +85,23 @@ public class ImageBucketChooseActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ImageBucketChooseActivity.this, AddActivity.class));
+                startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
                 finishActivity();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                data.setClass(ImageBucketChooseActivity.this, AddActivity.class);
+                this.setResult(RESULT_OK, data);
+                Log.e(TAG, "ImageBucketChooseActivity");
+            }
+        }
+//        super.onActivityResult(requestCode, resultCode, data);
+        finishActivity();
     }
 
     private void selectOne(int position) {
@@ -101,9 +116,10 @@ public class ImageBucketChooseActivity extends BaseActivity {
         mAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ImageBucketChooseActivity.this, AddActivity.class));
+        startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
         finishActivity();
     }
 }

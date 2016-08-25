@@ -44,8 +44,6 @@ public class MainActivity extends BaseActivity {
     private TextView mTitlebarName;
     private ListView mMenuList;
 
-    private int mSelectMenu = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +68,7 @@ public class MainActivity extends BaseActivity {
         mTitleBarBotton = (ImageView) findViewById(R.id.title_bar_menu_btn);
         mTitlebarName = (TextView) findViewById(R.id.title_bar_name);
         mMenuList = (ListView) findViewById(R.id.list_menu);
+
     }
 
     public void dataInit() {
@@ -85,17 +84,14 @@ public class MainActivity extends BaseActivity {
         userBean.setUsername(BaseActivity.mUsername);
         List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
         if (!userbean_list.isEmpty()) {
-            if (userbean_list.get(0).getPic_url().equals("default")) {
+            if (BaseActivity.mHeadUrl.equals("default")) {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
             } else {
-                Bitmap bm = BitmapFactory.decodeFile(userbean_list.get(0).getPic_url());
-                bm = CheckBitmapDegree.rotateBitmapByDegree(bm,CheckBitmapDegree.getBitmapDegree(userbean_list.get(0).getPic_url()));
+                Bitmap bm = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
+                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
                 mHeadImageView.setImageBitmap(bm);
-
             }
-            BaseActivity.mEmail = userbean_list.get(0).getEmail();
         }
-
     }
 
     /**
@@ -187,22 +183,23 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.replace(R.id.fragment, pendingFragment);
                 break;
             case 2:
-                mTitlebarName.setText("On Hold");
+//                mTitlebarName.setText("On Hold");
 
                 OnHoldFragment onHoldFragment = new OnHoldFragment();
                 fragmentTransaction.replace(R.id.fragment, onHoldFragment);
                 break;
             case 3:
-                mTitlebarName.setText("Resolved");
+//                mTitlebarName.setText("Resolved");
 
                 ResolvedFragment resolvedFragment = new ResolvedFragment();
                 fragmentTransaction.replace(R.id.fragment, resolvedFragment);
                 break;
             case 4:
                 mTitlebarName.setText("Profiled");
-
+//
                 ProfiledFragment profiledFragment = new ProfiledFragment();
                 fragmentTransaction.replace(R.id.fragment, profiledFragment);
+//                startActivity(new Intent(MainActivity.this, ProfiledActivity.class));
                 break;
             case 5:
                 mTitlebarName.setText("About");
@@ -216,5 +213,6 @@ public class MainActivity extends BaseActivity {
 
         fragmentTransaction.commit();
     }
+
 
 }
