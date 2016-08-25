@@ -57,8 +57,10 @@ public class AddActivity extends BaseActivity {
 
     public static List<ImageItem> mDataList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
+
     private static final int TAKE_PICTURE = 0;
     private static final int CHOOSE_PICTURE = 1;
+    private static final int EMAIL_BACK = 2;
     private String path = "";
 
     @Override
@@ -107,10 +109,11 @@ public class AddActivity extends BaseActivity {
 //                    ImageItem.class);
 //            mDataList = tempImages;
 //        }
-        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
-        if (incomingDataList != null) {
-            mDataList.addAll(incomingDataList);
-        }
+//        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
+//        if (incomingDataList != null) {
+//            Log.e(TAG, "!!!!!!");
+//            mDataList.addAll(incomingDataList);
+//        }
     }
 
     private void viewInit() {
@@ -214,8 +217,7 @@ public class AddActivity extends BaseActivity {
         } else if (mDescriptionStr.equals("")) {
             toastSomething(AddActivity.this, "The description can't be null.");
         } else {
-            //add data
-            addDataIntoSql();
+
 
             popUpDialog();
 
@@ -348,13 +350,21 @@ public class AddActivity extends BaseActivity {
                 }
                 break;
             case CHOOSE_PICTURE:
-                if(resultCode== Activity.RESULT_OK){
-
-                    dataInit();
-                    Log.e(TAG, "back" );
+                if (resultCode == RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    List<ImageItem> incomingDataList = (ArrayList<ImageItem>) bundle.getSerializable(PublicStatic.EXTRA_IMAGE_LIST);
+                    if (incomingDataList != null) {
+                        Log.e(TAG, "!!!!!!");
+                        mDataList.addAll(incomingDataList);
+                    }
+                    Log.e(TAG, "back");
                     getPhotoOnItemClick();
                 }
 
+                break;
+            case EMAIL_BACK:
+                startActivity(new Intent().setClass(AddActivity.this, MainActivity.class));
+                finishActivity();
                 break;
             default:
                 break;
@@ -379,7 +389,8 @@ public class AddActivity extends BaseActivity {
                         dialog.dismiss();
                         startActivity(new Intent().setClass(AddActivity.this, MainActivity.class));
                         finishActivity();
-
+                        //add data
+                        addDataIntoSql();
                     }
                 });
         builder.setPositiveButton("Sure",
@@ -389,6 +400,8 @@ public class AddActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         goToSystemEmail();
                         dialog.dismiss();
+                        //add data
+                        addDataIntoSql();
                     }
                 });
         builder.create().show();
@@ -410,7 +423,7 @@ public class AddActivity extends BaseActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, mTitleStr);
 
 
-        if (!mDataList.isEmpty()) {
+        if (mDataList != null) {
             int size = mDataList.size();
             ArrayList imageUris = new ArrayList();
             for (int i = 0; i < size; i++) {
@@ -423,8 +436,7 @@ public class AddActivity extends BaseActivity {
         intent.setType("image/*");
         intent.setType("message/rfc882");
         Intent.createChooser(intent, "Choose Email Client.");
-        startActivity(intent);
-
+        startActivityForResult(intent, EMAIL_BACK);
     }
 
     @Override
@@ -441,4 +453,10 @@ public class AddActivity extends BaseActivity {
         mImageChooseAdapter.notifyDataSetChanged();//when delete picture  , should notify data.
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mDataList = null;
+    }
 }

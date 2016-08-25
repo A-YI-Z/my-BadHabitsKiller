@@ -171,7 +171,7 @@ public class RegistActivity extends BaseActivity {
      */
     private void choose_head_img() {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegistActivity.this);
-        builder.setTitle("Choose head-image");
+        builder.setTitle("Choose a picture .");
         String items[] = {"Default picture", "Photo album", "Take a photo"};
         builder.setSingleChoiceItems(items, -1,
                 new DialogInterface.OnClickListener() {

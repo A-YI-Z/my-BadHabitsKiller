@@ -104,7 +104,7 @@ public class UserdbOperator {
         db = dBhelper.getWritableDatabase();
         Cursor cursor = null;
         try {
-            cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "username=?", new String[]{outBean.getUsername()}, null,
+            cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "email = ?", new String[]{outBean.getEmail()}, null,
                     null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -218,19 +218,27 @@ public class UserdbOperator {
 
     }
 
-    public void updateUser(UserBean outBean) {
-//        BhkSqliteOpenHelper dBhelper = new BhkSqliteOpenHelper(context);
+    public void updateUser(UserBean outBean, int mode) {
+
         db = dBhelper.getWritableDatabase();
         try {
             ContentValues contentValues = new ContentValues();
-            if (!outBean.getUsername().equals("") && outBean.getUsername() != null) {
-                contentValues.put("username", outBean.getUsername());
-            }
-            if (!outBean.getPassword().equals("") && outBean.getPassword() != null) {
-                contentValues.put("password", outBean.getPassword());
+            switch (mode) {
+                case 0:
+                    contentValues.put("username", outBean.getUsername());
+                    break;
+                case 1:
+                    contentValues.put("password", outBean.getPassword());
+                    break;
+                case 2:
+                    contentValues.put("pic_url", outBean.getPic_url());
+                    break;
+                default:
+                    break;
             }
             String[] email = {outBean.getEmail()};
             db.update(TABLE_USER_BHK, contentValues, "email = ?", email);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -240,8 +248,7 @@ public class UserdbOperator {
 
 
     public void deleteUser(int mode, UserBean outBean) {
-//        BhkSqliteOpenHelper dBhelper = new BhkSqliteOpenHelper(context);
-//        SQLiteDatabase db = dBhelper.getReadableDatabase();
+
         try {
             switch (mode) {
                 case 0:
