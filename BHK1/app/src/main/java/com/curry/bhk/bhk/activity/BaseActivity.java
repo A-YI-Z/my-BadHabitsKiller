@@ -24,7 +24,6 @@ public class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
 
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     public void finishActivity() {
         finish();

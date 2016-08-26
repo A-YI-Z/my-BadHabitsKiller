@@ -53,15 +53,22 @@
             android:layout_below="@id/detail_author"
             android:background="#888888" />
 
-        <TextView
-            android:id="@+id/detail_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/detail_author"
             android:layout_marginTop="4dp"
-            android:scrollbars="vertical"
-            android:text="detail_description"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="detail_description"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </ScrollView>
+
+
     </RelativeLayout>
 
     <com.gc.materialdesign.views.ButtonRectangle
@@ -75,15 +82,24 @@
         android:background="#1E88E5"
         android:text="Resolved by me" />
 
-    <GridView
-        android:id="@+id/detail_photo_gridview"
+    <RelativeLayout
+        android:id="@+id/detail_picture_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/detail_pending_btn"
         android:layout_below="@id/detail_rel"
-        android:layout_centerHorizontal="true"
-        android:numColumns="4"
-        android:horizontalSpacing="3dp"
-        android:padding="10dp"
-        android:src="@drawable/nophoto" />
+        android:gravity="center"
+        android:padding="20dp">
+
+        <GridView
+            android:id="@+id/detail_photo_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:horizontalSpacing="3dp"
+            android:numColumns="2"
+            android:src="@drawable/nophoto"
+            android:verticalSpacing="3dp" />
+    </RelativeLayout>
+
 </RelativeLayout>

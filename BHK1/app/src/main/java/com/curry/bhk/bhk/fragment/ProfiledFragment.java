@@ -1,17 +1,12 @@
 package com.curry.bhk.bhk.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -20,9 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +23,6 @@ import android.widget.Toast;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.LoginActivity;
-import com.curry.bhk.bhk.activity.MainActivity;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.CheckBitmapDegree;
@@ -64,12 +56,13 @@ public class ProfiledFragment extends Fragment {
 
     private UserdbOperator userdbOperator;
     private UserBean userBean;
-
     private SharedPreferences.Editor edit;
+
+    private boolean usernameIsChanged = true;
+    private boolean passwordIsChanged = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mView = inflater.inflate(R.layout.profiled_fragment, null);
         viewInit();
         dataInit();
@@ -93,36 +86,11 @@ public class ProfiledFragment extends Fragment {
 
         mProfiledHeadView.setOnClickListener(new ProfiledOnClick());
         mChangePasswordTv.setOnClickListener(new ProfiledOnClick());
-        mUsernameEt.addTextChangedListener(new TextWatcher() {
+        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!mUsernameEt.getText().toString().equals(BaseActivity.mUsername)
-                        && !mUsernameEt.getText().toString().equals("")) {
-                    saveProfiledBtn.setAlpha(1f);
-                    saveProfiledBtn.setClickable(true);
-                    saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
-                } else {
-                    if (mProfiledHeadUrl.equals(BaseActivity.mHeadUrl)) {
-                        saveProfiledBtn.setAlpha(0.5f);
-                        saveProfiledBtn.setClickable(false);
-                    } else {
-                        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
-                    }
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-
+//        userNameIsChanged();
     }
+
 
     private void dataInit() {
         if (!BaseActivity.mHeadUrl.equals("")) {
@@ -135,6 +103,7 @@ public class ProfiledFragment extends Fragment {
             }
         }
         mUsernameEt.setText(BaseActivity.mUsername);
+        mProfiledHeadUrl = BaseActivity.mHeadUrl;
 
         edit = getActivity().getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
 
@@ -148,7 +117,12 @@ public class ProfiledFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.profile_btn_finish:
-                    saveDialog();
+                    if (userNameIsChanged() || !mProfiledHeadUrl.equals(BaseActivity.mHeadUrl) || passwordIsChange()) {
+                        saveDialog();
+                    } else {
+                        Toast.makeText(getActivity(), "There is no change!", Toast.LENGTH_SHORT).show();
+                    }
+
                     break;
                 case R.id.profile_img_head:
                     choose_head_img();
@@ -156,7 +130,6 @@ public class ProfiledFragment extends Fragment {
                 case R.id.profile_tv:
                     if (mIsVisible) {
                         mRelativeLayout.setVisibility(View.VISIBLE);
-                        passwordChange();
                         mIsVisible = false;
                     } else {
                         mRelativeLayout.setVisibility(View.INVISIBLE);
@@ -168,6 +141,37 @@ public class ProfiledFragment extends Fragment {
                     break;
             }
         }
+
+    }
+
+    private boolean userNameIsChanged() {
+
+        mUsernameEt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String nowUsername = mUsernameEt.getText().toString();
+                if (nowUsername.equals(BaseActivity.mUsername) || nowUsername.equals("") || nowUsername == null) {
+//                    saveProfiledBtn.setAlpha(0.5f);
+//                    saveProfiledBtn.setClickable(false);
+                    usernameIsChanged = false;
+                } else {
+//                    saveProfiledBtn.setAlpha(1f);
+//                    saveProfiledBtn.setClickable(true);
+                    usernameIsChanged = true; //is changed
+                }
+                usernameIsChanged = false;
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        return usernameIsChanged;
     }
 
     private void saveDialog() {
@@ -186,20 +190,16 @@ public class ProfiledFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-
                 if (mRelativeLayout.getVisibility() == View.VISIBLE) {
                     updatePassword();
                 } else {
-                    usernameChange();
-
+                    saveUserName();
                     if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl)) {
-                        headChange();
+                        saveHeadUrl();
                     }
-
-
-//                    startActivity(new Intent(getActivity(), MainActivity.class));
-//                    getActivity().finish();
                 }
+                sendBroadcast();
+//                mUsernameEt.onFocusChange(mUsernameEt, false);
             }
         });
         builder.create().show();
@@ -208,83 +208,90 @@ public class ProfiledFragment extends Fragment {
     /**
      * username is successful and  then  check the password
      */
-    private void usernameChange() {
-
+    private void saveUserName() {
         String newUsername = mUsernameEt.getText().toString();
-        if (!newUsername.equals(BaseActivity.mUsername) && !newUsername.equals("")) {
-            userBean.setUsername(newUsername);
-            userdbOperator.updateUser(userBean, 0);
 
-            BaseActivity.mUsername = newUsername;
+        userBean.setUsername(newUsername);
+        userdbOperator.updateUser(userBean, 0);
+
+        BaseActivity.mUsername = newUsername;
 
 
-            edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, newUsername);
-            edit.commit();
-        }
+        edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, newUsername);
+        edit.commit();
     }
 
-    private void passwordChange() {
+    private boolean passwordIsChange() {
 
         mSqlPassword = userdbOperator.qureyPassword(userBean);
+        Log.e("curry", mSqlPassword);
         mInputPassword = mNewPasswordEt.getText().toString();
         mConfirmPassword = mConPasswordEt.getText().toString();
         mNewPassword = mNewPasswordEt.getText().toString();
 
-
-        mOldPasswordEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (mNewPasswordEt.getText().toString().equals(mSqlPassword)) {
-                    mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.right), null);
-
+        if (mRelativeLayout.getVisibility() == View.VISIBLE) {
+            if (mInputPassword.equals("") || mInputPassword == null
+                    || mConfirmPassword.equals("") || mConfirmPassword == null
+                    || mNewPassword.equals("") || mNewPassword == null) {
+                passwordIsChanged = false;
+                saveProfiledBtn.setAlpha(0.5f);
+                saveProfiledBtn.setClickable(false);
+                Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
+            } else {
+                String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+                if (!mInputPassword.equals(mSqlPassword)) {
+                    Toast.makeText(getActivity(), "The original password is wrong.", Toast.LENGTH_LONG).show();
+                } else if (!mNewPassword.matches(regex)) {
+                    Toast.makeText(getActivity(), "The password type is wrong.", Toast.LENGTH_LONG).show();
+                } else if (!mConfirmPassword.equals(mNewPassword)) {
+                    Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
                 } else {
-                    mOldPasswordEt.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.error), null);
+                    passwordIsChanged = true;
+                    saveProfiledBtn.setAlpha(1f);
+                    saveProfiledBtn.setClickable(true);
                 }
             }
+        } else {
+            passwordIsChanged = false;
+        }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+        return passwordIsChanged;
+
     }
 
     private void updatePassword() {
-        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-        if (mNewPassword.equals("") || mConfirmPassword.equals("") || mInputPassword.equals("")) {
-            Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
-        } else if (!mNewPassword.matches(regex)) {
-            new BaseActivity().toastSomething(getActivity(), "The password is wrong.");
-        } else if (mConfirmPassword.equals(mNewPassword)) {
-            usernameChange();
+//        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
+//        if (mNewPassword.equals("") || mConfirmPassword.equals("") || mInputPassword.equals("")) {
+//            Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
+//        } else if (!mNewPassword.matches(regex)) {
+//            new BaseActivity().toastSomething(getActivity(), "The password is wrong.");
+//        } else if (mConfirmPassword.equals(mNewPassword)) {
+        saveUserName();
 
-            headChange();
+        saveHeadUrl();
 
-            userBean.setEmail(BaseActivity.mEmail);
-            userBean.setPassword(mConfirmPassword);
-            userdbOperator.updateUser(userBean, 1);
+        userBean.setEmail(BaseActivity.mEmail);
+        userBean.setPassword(mConfirmPassword);
+        userdbOperator.updateUser(userBean, 1);
 
-            edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
-            edit.commit();
+        edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
+        edit.commit();
 
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            getActivity().finish();
-        } else {
-            Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
-        }
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
+//        } else {
+//            Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
+//        }
     }
 
-    private void headChange() {
-//        if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl)) {
+    private void saveHeadUrl() {
+
         BaseActivity.mHeadUrl = mProfiledHeadUrl;
 
         userBean.setPic_url(mProfiledHeadUrl);
 
         userdbOperator.updateUser(userBean, 2);
-//        }
+
     }
 
     /**
@@ -324,8 +331,18 @@ public class ProfiledFragment extends Fragment {
         if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl) && !mProfiledHeadUrl.equals("")) {
             saveProfiledBtn.setAlpha(1f);
             saveProfiledBtn.setClickable(true);
-            saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
+//            saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void sendBroadcast() {
+
+        Intent intent = new Intent();
+//        intent.putExtra("USERNAME", BaseActivity.mUsername);
+//        intent.putExtra("HEADURL", BaseActivity.mHeadUrl);
+        intent.setAction("CHANGE");
+        getActivity().sendBroadcast(intent);
+
     }
 }

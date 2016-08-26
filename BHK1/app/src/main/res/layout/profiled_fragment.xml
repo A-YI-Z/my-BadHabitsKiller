@@ -20,8 +20,11 @@
         android:layout_below="@id/profile_img_head"
         android:layout_marginTop="30dp"
         android:background="#FFFFFF"
+        android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM"
         android:drawableRight="@drawable/delete_change"
         android:gravity="center"
+        android:imeOptions="actionDone"
+        android:lines="1"
         android:maxLength="10"
         android:padding="10dp" />
 
@@ -48,10 +51,12 @@
             android:id="@+id/profile_et_old_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
             android:hint="Old password"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:lines="1"
             android:padding="10dp" />
 
         <EditText
@@ -62,6 +67,9 @@
             android:layout_marginTop="6dp"
             android:background="#FFFFFF"
             android:hint="New password"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:lines="1"
             android:padding="10dp" />
 
         <EditText
@@ -72,6 +80,9 @@
             android:layout_marginTop="6dp"
             android:background="#FFFFFF"
             android:hint="Confirm password "
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:lines="1"
             android:padding="10dp" />
 
     </RelativeLayout>
@@ -85,9 +96,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:alpha="0.5"
         android:background="#1E88E5"
-        android:clickable="false"
         android:text="Save" />
+        <!--android:alpha="0.5"-->
+        <!--android:clickable="false"-->
 
 </RelativeLayout>

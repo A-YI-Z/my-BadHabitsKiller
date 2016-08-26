@@ -7,20 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.DetailActivity;
-import com.curry.bhk.bhk.activity.MainActivity;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
-import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 
@@ -34,11 +32,13 @@ import java.util.List;
 public class NewFragment extends Fragment {
 
     private ListView mListView;
+    private TextView mNullTextView;
     private List<EventBean> mEventBeanList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_fragment, null);
+        mNullTextView = (TextView) view.findViewById(R.id.new_null_textview);
         mListView = (ListView) view.findViewById(R.id.listView);
         dataInit();
 
@@ -49,7 +49,9 @@ public class NewFragment extends Fragment {
     private void dataInit() {
         EventdbOperator eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(0, null);
-
+        if (mEventBeanList.size() == 0) {
+            mNullTextView.setVisibility(View.VISIBLE);
+        }
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);
 
@@ -75,7 +77,7 @@ public class NewFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 popUpDialog();
-                return false;
+                return true;
             }
         });
     }
@@ -92,16 +94,15 @@ public class NewFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
-        builder.setPositiveButton("Sure",
-                new DialogInterface.OnClisckListener() {
+        builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendEmail();
-                        dialog.dismiss();
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendEmail();
+                dialog.dismiss();
 
-                    }
-                });
+            }
+        });
         builder.create().show();
     }
 

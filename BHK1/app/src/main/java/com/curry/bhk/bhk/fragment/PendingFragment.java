@@ -30,13 +30,14 @@ import java.util.List;
 public class PendingFragment extends Fragment {
     private List<EventBean> mEventBeanList;
     private SwipeMenuListView mListView;
-
+    private TextView mNullTextView;
     private EventdbOperator eventdbOperator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.panding_fragment, null);
         mListView = (SwipeMenuListView) view.findViewById(R.id.pendingListView);
+        mNullTextView = (TextView) view.findViewById(R.id.pending_null_textview);
         dataInit();
 
         addSwipeMenu();
@@ -56,7 +57,9 @@ public class PendingFragment extends Fragment {
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
-
+        if (mEventBeanList.size() == 0) {
+            mNullTextView.setVisibility(View.VISIBLE);
+        }
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);
 

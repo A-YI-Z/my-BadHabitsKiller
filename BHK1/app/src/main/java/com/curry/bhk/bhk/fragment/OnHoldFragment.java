@@ -23,19 +23,20 @@ public class OnHoldFragment extends Fragment {
 
     private List<EventBean> mEventBeanList;
     private ListView mListView;
-
+    private TextView mNullTextView;
     private EventdbOperator eventdbOperator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.onhold_fragment, null);
         mListView = (ListView) view.findViewById(R.id.onHoldListView);
+        mNullTextView = (TextView) view.findViewById(R.id.onhold_null_textview);
         dataInit();
         return view;
     }
 
-    private void dataInit(){
-        TextView tv = (TextView)getActivity().findViewById(R.id.title_bar_name);
+    private void dataInit() {
+        TextView tv = (TextView) getActivity().findViewById(R.id.title_bar_name);
         tv.setText("On Hold");
 
         EventBean eventBean = new EventBean();
@@ -44,7 +45,9 @@ public class OnHoldFragment extends Fragment {
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
-
+        if (mEventBeanList.size() == 0) {
+            mNullTextView.setVisibility(View.VISIBLE);
+        }
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);
 

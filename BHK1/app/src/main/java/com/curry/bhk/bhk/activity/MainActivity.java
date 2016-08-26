@@ -2,7 +2,11 @@ package com.curry.bhk.bhk.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,21 +20,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
-import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.fragment.AboutFragment;
 import com.curry.bhk.bhk.fragment.NewFragment;
 import com.curry.bhk.bhk.fragment.OnHoldFragment;
 import com.curry.bhk.bhk.fragment.PendingFragment;
 import com.curry.bhk.bhk.fragment.ProfiledFragment;
 import com.curry.bhk.bhk.fragment.ResolvedFragment;
-import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.CheckBitmapDegree;
+import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DragLayout;
 import com.curry.bhk.bhk.view.MyRelativeLayout;
 import com.nineoldandroids.view.ViewHelper;
-
-import java.util.List;
 
 /**
  * Created by Curry on 2016/8/9.
@@ -51,13 +52,18 @@ public class MainActivity extends BaseActivity {
 
         viewInit();
 
-        mDraglayout.setDragListener(new myDrag());
+        mDraglayout.setDragListener(new MyDrag());
 
         dataInit();
         Log.e(TAG, getIntent().getIntExtra("MENUID", 0) + "");
         addFragment(getIntent().getIntExtra("MENUID", 0));
 
         menuOnClick();
+
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("CHANGE");
+        registerReceiver(receiver, filter);
     }
 
     public void viewInit() {
@@ -72,24 +78,34 @@ public class MainActivity extends BaseActivity {
     }
 
     public void dataInit() {
-        String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About"};
+        String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About", "Login Out"};
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(this, R.layout.menu_list_item, menuName);
         mMenuList.setAdapter(myArrayAdapter);
         myArrayAdapter.notifyDataSetChanged();
 
         mUserNameTV.setText(BaseActivity.mUsername);
 
-        UserdbOperator userdbOperator = new UserdbOperator(MainActivity.this);
-        UserBean userBean = new UserBean();
-        userBean.setUsername(BaseActivity.mUsername);
-        List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
-        if (!userbean_list.isEmpty()) {
+//        UserdbOperator userdbOperator = new UserdbOperator(MainActivity.this);
+//        UserBean userBean = new UserBean();
+//        userBean.setUsername(BaseActivity.mUsername);
+//        List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
+//        if (!userbean_list.isEmpty()) {
+//            if (BaseActivity.mHeadUrl.equals("default")) {
+//                mHeadImageView.setImageResource(R.drawable.defult_img);
+//            } else {
+//                Bitmap bm = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
+//                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
+//                mHeadImageView.setImageBitmap(bm);
+//            }
+//        }
+
+        if (!BaseActivity.mHeadUrl.equals("")) {
             if (BaseActivity.mHeadUrl.equals("default")) {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
             } else {
-                Bitmap bm = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
-                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
-                mHeadImageView.setImageBitmap(bm);
+                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
+                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
+                mHeadImageView.setImageBitmap(bitmap);
             }
         }
     }
@@ -97,7 +113,7 @@ public class MainActivity extends BaseActivity {
     /**
      * Slide layout  ctrl
      */
-    public class myDrag implements DragLayout.DragListener {
+    public class MyDrag implements DragLayout.DragListener {
 
         @Override
         public void onOpen() {
@@ -131,14 +147,19 @@ public class MainActivity extends BaseActivity {
     private void menuOnClick() {
         mMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if (mSelectMenu != i) {
-//                    adapterView.getChildAt(mSelectMenu).setBackgroundColor(Color.TRANSPARENT);
-//                }
-//                adapterView.getChildAt(i).setBackgroundColor(Color.parseColor("#3762c9") );
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // login out
+                if (position == 6) {
 
-                addFragment(i);
-//                mSelectMenu = i;
+                    SharedPreferences.Editor edit = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
+                    edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
+                    edit.commit();
+
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finishActivity();
+                } else {
+                    addFragment(position);
+                }
             }
         });
     }
@@ -214,5 +235,13 @@ public class MainActivity extends BaseActivity {
         fragmentTransaction.commit();
     }
 
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("CHANGE")) {
+               dataInit();
+            }
+        }
+    };
 
 }

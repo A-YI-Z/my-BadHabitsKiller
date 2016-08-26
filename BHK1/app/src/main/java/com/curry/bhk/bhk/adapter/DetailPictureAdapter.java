@@ -45,17 +45,25 @@ public class DetailPictureAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = View.inflate(mContext, R.layout.item_publish, null);
-        ImageView imageIv = (ImageView) convertView.findViewById(R.id.item_grid_image);
+
+        ViewHolder mViewHolder;
+        if (convertView == null) {
+            mViewHolder = new ViewHolder();
+            convertView = View.inflate(mContext, R.layout.item_detail, null);
+            mViewHolder.mPictureView = (ImageView) convertView.findViewById(R.id.detail_item_grid_image);
+            convertView.setTag(mViewHolder);
+        } else {
+            mViewHolder = (ViewHolder) convertView.getTag();
+        }
 
         Bitmap bm = BitmapFactory.decodeFile(mDataList.get(position).sourcePath);
-        bm = CheckBitmapDegree.rotateBitmapByDegree(bm,CheckBitmapDegree.getBitmapDegree(mDataList.get(position).sourcePath));
-        imageIv.setImageBitmap(bm);
-
-//        final ImageItem item = mDataList.get(position);
-//        ImageDisplayer.getInstance(mContext).displayBmp(imageIv, item.thumbnailPath, item.sourcePath);
+        bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(mDataList.get(position).sourcePath));
+        mViewHolder.mPictureView.setImageBitmap(bm);
 
         return convertView;
     }
 
+    static class ViewHolder {
+        public ImageView mPictureView;
+    }
 }

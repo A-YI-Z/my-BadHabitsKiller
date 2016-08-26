@@ -5,13 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/new_null_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No Data !"
+        android:visibility="gone"
+        android:textSize="20sp" />
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#d9d9d9"
-        android:paddingTop="10dp"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:paddingTop="10dp" />
 
     <com.gc.materialdesign.views.ButtonFloat
         android:id="@+id/buttonFloat"
@@ -21,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="24dp"
         android:background="#1E88E5"
-        materialdesign:animate="true"
         android:onClick="mainOnClick"
+        materialdesign:animate="true"
         materialdesign:iconDrawable="@drawable/ic_action_new" />
 </RelativeLayout>

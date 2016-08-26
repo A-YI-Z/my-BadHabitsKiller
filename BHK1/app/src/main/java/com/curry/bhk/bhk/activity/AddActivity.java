@@ -1,6 +1,5 @@
 package com.curry.bhk.bhk.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -354,10 +352,10 @@ public class AddActivity extends BaseActivity {
                     Bundle bundle = data.getExtras();
                     List<ImageItem> incomingDataList = (ArrayList<ImageItem>) bundle.getSerializable(PublicStatic.EXTRA_IMAGE_LIST);
                     if (incomingDataList != null) {
-                        Log.e(TAG, "!!!!!!");
+//                        Log.e(TAG, "!!!!!!");
                         mDataList.addAll(incomingDataList);
                     }
-                    Log.e(TAG, "back");
+//                    Log.e(TAG, "back");
                     getPhotoOnItemClick();
                 }
 

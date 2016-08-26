@@ -6,10 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
-import com.curry.bhk.bhk.adapter.ImageChooseAdapter;
+import com.curry.bhk.bhk.adapter.DetailPictureAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
@@ -28,12 +29,13 @@ public class DetailActivity extends BaseActivity {
     private TextView mDetailTime;
     private TextView mDetailDescription;
     private TextView mTitleBarText;
+    private RelativeLayout mPictureBackground;
 
     private EventdbOperator eventdbOperator;
     private EventBean eventBean = new EventBean();
 
     private List<ImageItem> mDetailPhotoList = new ArrayList<>();
-    private ImageChooseAdapter mImageChooseAdapter;
+    private DetailPictureAdapter mDetailPictureAdapter;
 
     private int status = 0;
 
@@ -52,7 +54,7 @@ public class DetailActivity extends BaseActivity {
     private void viewInit() {
         mDetailBack = (ImageView) findViewById(R.id.back_img);
         mDetailResolveBtn = (ButtonRectangle) findViewById(R.id.detail_pending_btn);
-
+        mPictureBackground = (RelativeLayout)findViewById(R.id.detail_picture_bg);
         mDetailAuthor = (TextView) findViewById(R.id.detail_author);
         mDetailDescription = (TextView) findViewById(R.id.detail_description);
         mDetailTime = (TextView) findViewById(R.id.detail_time);
@@ -74,33 +76,32 @@ public class DetailActivity extends BaseActivity {
         mDetailDescription.setText(mDetailList.get(0).getDescription());
         mDetailTime.setText(mDetailList.get(0).getTime());
         mDetailTitle.setText(mDetailList.get(0).getTitle());
-
         status = mDetailList.get(0).getStatus();
 
-        String photoUrl[] = mDetailList.get(0).getPhotos_url().split("#");
-        int length = photoUrl.length;
-        for (int i = 0; i < length; i++) {
-            ImageItem item = new ImageItem();
-            item.sourcePath = photoUrl[i];
-            Log.e(TAG, item.sourcePath);
-            mDetailPhotoList.add(item);
+        String mPictureUrl = mDetailList.get(0).getPhotos_url();
+        if (mPictureUrl != null && !mPictureUrl.equals("")) {
+            String photoUrl[] = mPictureUrl.split("#");
+            int length = photoUrl.length;
+            for (int i = 0; i < length; i++) {
+                ImageItem item = new ImageItem();
+                item.sourcePath = photoUrl[i];
+                Log.e(TAG, photoUrl[i]);
+                Log.e(TAG, item.sourcePath);
+                mDetailPhotoList.add(item);
+            }
+
+            mDetailPictureAdapter = new DetailPictureAdapter(DetailActivity.this, mDetailPhotoList);
+            mDetailPhoto.setAdapter(mDetailPictureAdapter);
+        }else{
+            mPictureBackground.setBackgroundResource(R.drawable.nophoto);
         }
 
-        mImageChooseAdapter = new ImageChooseAdapter(DetailActivity.this, mDetailPhotoList);
-        mDetailPhoto.setAdapter(mImageChooseAdapter);
 
-//        if (strPhotoUrl.equals("null")) {
-//            mDetailPhoto.setImageResource(R.drawable.nophoto);
-//        } else {
-//            Bitmap bitmap = BitmapFactory.decodeFile(strPhotoUrl);
-//            bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(strPhotoUrl));
-//            mDetailPhoto.setImageBitmap(bitmap);
-//        }
     }
 
     public void detailAcitvityOnclick() {
         mDetailBack.setOnClickListener(new OnclickEvent());
-        if (status == 1) {
+        if (status != 0) {
             mDetailResolveBtn.setAlpha(0.5f);
         } else {
             mDetailResolveBtn.setOnClickListener(new OnclickEvent());

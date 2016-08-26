@@ -6,8 +6,9 @@ package com.curry.bhk.bhk.utils;
 public class PublicStatic {
     public static final int BHK_USER_DATABASE_VERSION = 1;
     public static final String SHAREDPREFERENCES_USER_BHK = "user_bhk";
-    public static final String SHAREDPREFERENCES_USERNAME= "username";
-    public static final String SHAREDPREFERENCES_CHECKBOX= "isRemeber";
+    public static final String SHAREDPREFERENCES_USERNAME = "username";
+    public static final String SHAREDPREFERENCES_CHECKBOX = "isRemeber";
+    public static final String SHAREDPREFERENCES_EMAIL = "email";
 
 
     public static final String EXTRA_IMAGE_LIST = "image_list";

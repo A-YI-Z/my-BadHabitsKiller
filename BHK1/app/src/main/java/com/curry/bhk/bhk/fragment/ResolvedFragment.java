@@ -22,13 +22,14 @@ import java.util.List;
 public class ResolvedFragment extends Fragment {
     private List<EventBean> mEventBeanList;
     private ListView mListView;
-
+    private TextView mNullTextView;
     private EventdbOperator eventdbOperator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.resolved_fragment, null);
         mListView = (ListView) view.findViewById(R.id.reslovedListView);
+        mNullTextView = (TextView) view.findViewById(R.id.resolved_null_textview);
         dataInit();
         return view;
     }
@@ -43,7 +44,9 @@ public class ResolvedFragment extends Fragment {
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
-
+        if (mEventBeanList.size() == 0) {
+            mNullTextView.setVisibility(View.VISIBLE);
+        }
         NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
         mListView.setAdapter(newListitemAdapter);
 

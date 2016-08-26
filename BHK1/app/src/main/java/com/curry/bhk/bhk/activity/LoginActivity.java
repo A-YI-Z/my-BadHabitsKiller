@@ -138,6 +138,7 @@ public class LoginActivity extends BaseActivity {
         UserBean userBean = new UserBean();
         userBean.setUsername(mloginusername);
         userbean_list = userdbOperator.queryUser(2, userBean);
+
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
                 login_head_img_view.setImageResource(R.drawable.defult_img);
@@ -197,16 +198,17 @@ public class LoginActivity extends BaseActivity {
         input_password = login_et_password.getText().toString();
         mloginusername = login_et_username.getText().toString();
 
+        UserBean userbean = new UserBean();
+        userbean.setUsername(mloginusername);
+
 /*
     save the username which input
  */
         SharedPreferences.Editor edit = getSharedPreferences(
                 PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
         edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, mloginusername);
+//        edit.putString(PublicStatic.SHAREDPREFERENCES_EMAIL,userbean_list.get(0).getEmail());
         edit.commit();
-
-        UserBean userbean = new UserBean();
-        userbean.setUsername(mloginusername);
 
         if (mloginusername.equals("")) {
             toastSomething(LoginActivity.this, "Your username is null!");
