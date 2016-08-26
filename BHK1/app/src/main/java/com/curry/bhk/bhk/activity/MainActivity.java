@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void dataInit() {
-        String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About", "Login Out"};
+        String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About", "Sign Out"};
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(this, R.layout.menu_list_item, menuName);
         mMenuList.setAdapter(myArrayAdapter);
         myArrayAdapter.notifyDataSetChanged();

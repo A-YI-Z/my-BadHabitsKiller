@@ -75,9 +75,12 @@ public class LoginActivity extends BaseActivity {
         /*
             get  username  from RegistActivity
          */
-        SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
-        mloginusername = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
-        login_et_username.setText(mloginusername);
+//        SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
+//        mloginusername = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
+//        login_et_username.setText(mloginusername);
+        mloginusername = getIntent().getStringExtra("EMAIL");
+        login_et_username.setText( mloginusername);
+
 
          /*
         get head picture by username

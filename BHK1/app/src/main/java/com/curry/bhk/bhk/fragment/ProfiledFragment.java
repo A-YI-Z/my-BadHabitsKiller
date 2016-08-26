@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +56,8 @@ public class ProfiledFragment extends Fragment {
     private UserBean userBean;
     private SharedPreferences.Editor edit;
 
-    private boolean usernameIsChanged = true;
-    private boolean passwordIsChanged = true;
+    private boolean usernameIsChanged = false;
+    private boolean passwordIsChanged = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,32 +143,37 @@ public class ProfiledFragment extends Fragment {
     }
 
     private boolean userNameIsChanged() {
-
-        mUsernameEt.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String nowUsername = mUsernameEt.getText().toString();
-                if (nowUsername.equals(BaseActivity.mUsername) || nowUsername.equals("") || nowUsername == null) {
-//                    saveProfiledBtn.setAlpha(0.5f);
-//                    saveProfiledBtn.setClickable(false);
-                    usernameIsChanged = false;
-                } else {
-//                    saveProfiledBtn.setAlpha(1f);
-//                    saveProfiledBtn.setClickable(true);
-                    usernameIsChanged = true; //is changed
-                }
-                usernameIsChanged = false;
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        String nowUsername = mUsernameEt.getText().toString();
+        if(nowUsername.equals(BaseActivity.mUsername)&&nowUsername.equals("")){
+            usernameIsChanged = false;
+        }else{
+            usernameIsChanged = true;
+        }
+//        mUsernameEt.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String nowUsername = mUsernameEt.getText().toString();
+//                if (nowUsername.equals(BaseActivity.mUsername) || nowUsername.equals("") || nowUsername == null) {
+////                    saveProfiledBtn.setAlpha(0.5f);
+////                    saveProfiledBtn.setClickable(false);
+//                    usernameIsChanged = false;
+//                } else {
+////                    saveProfiledBtn.setAlpha(1f);
+////                    saveProfiledBtn.setClickable(true);
+//                    usernameIsChanged = true; //is changed
+//                }
+//                usernameIsChanged = false;
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
         return usernameIsChanged;
     }
 
@@ -234,8 +237,8 @@ public class ProfiledFragment extends Fragment {
                     || mConfirmPassword.equals("") || mConfirmPassword == null
                     || mNewPassword.equals("") || mNewPassword == null) {
                 passwordIsChanged = false;
-                saveProfiledBtn.setAlpha(0.5f);
-                saveProfiledBtn.setClickable(false);
+//                saveProfiledBtn.setAlpha(0.5f);
+//                saveProfiledBtn.setClickable(false);
                 Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
             } else {
                 String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
@@ -247,8 +250,8 @@ public class ProfiledFragment extends Fragment {
                     Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
                 } else {
                     passwordIsChanged = true;
-                    saveProfiledBtn.setAlpha(1f);
-                    saveProfiledBtn.setClickable(true);
+//                    saveProfiledBtn.setAlpha(1f);
+//                    saveProfiledBtn.setClickable(true);
                 }
             }
         } else {
