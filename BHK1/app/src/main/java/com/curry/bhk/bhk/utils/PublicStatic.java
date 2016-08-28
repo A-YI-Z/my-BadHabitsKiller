@@ -9,6 +9,7 @@ public class PublicStatic {
     public static final String SHAREDPREFERENCES_USERNAME = "username";
     public static final String SHAREDPREFERENCES_CHECKBOX = "isRemeber";
     public static final String SHAREDPREFERENCES_EMAIL = "email";
+    public static final String SHAREDPREFERENCES_EMAIL_OR_USERNAME = "emailorusername";
 
 
     public static final String EXTRA_IMAGE_LIST = "image_list";

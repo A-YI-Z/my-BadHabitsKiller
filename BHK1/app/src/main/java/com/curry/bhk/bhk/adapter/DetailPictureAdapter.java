@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.utils.CheckBitmapDegree;
+import com.curry.bhk.bhk.utils.ImageDisplayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,12 @@ public class DetailPictureAdapter extends BaseAdapter {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Bitmap bm = BitmapFactory.decodeFile(mDataList.get(position).sourcePath);
-        bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(mDataList.get(position).sourcePath));
-        mViewHolder.mPictureView.setImageBitmap(bm);
+//        Bitmap bm = BitmapFactory.decodeFile(mDataList.get(position).sourcePath);
+//        bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(mDataList.get(position).sourcePath));
+//        mViewHolder.mPictureView.setImageBitmap(bm);
 
+        final ImageItem item = mDataList.get(position);
+        ImageDisplayer.getInstance(mContext).displayBmp(mViewHolder.mPictureView, item.thumbnailPath, item.sourcePath);
         return convertView;
     }
 

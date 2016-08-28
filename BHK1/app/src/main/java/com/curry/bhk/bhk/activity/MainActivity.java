@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,11 +56,10 @@ public class MainActivity extends BaseActivity {
         mDraglayout.setDragListener(new MyDrag());
 
         dataInit();
-        Log.e(TAG, getIntent().getIntExtra("MENUID", 0) + "");
+
         addFragment(getIntent().getIntExtra("MENUID", 0));
 
         menuOnClick();
-
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("CHANGE");
@@ -84,20 +84,6 @@ public class MainActivity extends BaseActivity {
         myArrayAdapter.notifyDataSetChanged();
 
         mUserNameTV.setText(BaseActivity.mUsername);
-
-//        UserdbOperator userdbOperator = new UserdbOperator(MainActivity.this);
-//        UserBean userBean = new UserBean();
-//        userBean.setUsername(BaseActivity.mUsername);
-//        List<UserBean> userbean_list = userdbOperator.queryUser(2, userBean);
-//        if (!userbean_list.isEmpty()) {
-//            if (BaseActivity.mHeadUrl.equals("default")) {
-//                mHeadImageView.setImageResource(R.drawable.defult_img);
-//            } else {
-//                Bitmap bm = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
-//                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
-//                mHeadImageView.setImageBitmap(bm);
-//            }
-//        }
 
         if (!BaseActivity.mHeadUrl.equals("")) {
             if (BaseActivity.mHeadUrl.equals("default")) {
@@ -148,6 +134,7 @@ public class MainActivity extends BaseActivity {
         mMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 // login out
                 if (position == 6) {
 
@@ -198,20 +185,16 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.replace(R.id.fragment, newFragment);
                 break;
             case 1:
-//                mTitlebarName.setText("Pending");
+                mTitlebarName.setText("Pending");
 
                 PendingFragment pendingFragment = new PendingFragment();
                 fragmentTransaction.replace(R.id.fragment, pendingFragment);
                 break;
             case 2:
-//                mTitlebarName.setText("On Hold");
-
                 OnHoldFragment onHoldFragment = new OnHoldFragment();
                 fragmentTransaction.replace(R.id.fragment, onHoldFragment);
                 break;
             case 3:
-//                mTitlebarName.setText("Resolved");
-
                 ResolvedFragment resolvedFragment = new ResolvedFragment();
                 fragmentTransaction.replace(R.id.fragment, resolvedFragment);
                 break;
@@ -239,9 +222,16 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("CHANGE")) {
-               dataInit();
+                dataInit();
             }
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
+    }
 }

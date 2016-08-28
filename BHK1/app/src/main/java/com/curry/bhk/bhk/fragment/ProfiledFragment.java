@@ -67,6 +67,15 @@ public class ProfiledFragment extends Fragment {
         return mView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mProfiledHeadView.setOnClickListener(new ProfiledOnClick());
+        mChangePasswordTv.setOnClickListener(new ProfiledOnClick());
+        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
+        mUsernameEt.setOnClickListener(new ProfiledOnClick());
+    }
+
     private void viewInit() {
         mUsernameEt = (DeleteEditText) mView.findViewById(R.id.profile_et_username);
         mOldPasswordEt = (EditText) mView.findViewById(R.id.profile_et_old_password);
@@ -77,18 +86,6 @@ public class ProfiledFragment extends Fragment {
         mChangePasswordTv = (TextView) mView.findViewById(R.id.profile_tv);
         mRelativeLayout = (RelativeLayout) mView.findViewById(R.id.relativeLayout);
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mProfiledHeadView.setOnClickListener(new ProfiledOnClick());
-        mChangePasswordTv.setOnClickListener(new ProfiledOnClick());
-        saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
-
-//        userNameIsChanged();
-    }
-
 
     private void dataInit() {
         if (!BaseActivity.mHeadUrl.equals("")) {
@@ -115,12 +112,15 @@ public class ProfiledFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.profile_btn_finish:
-                    if (userNameIsChanged() || !mProfiledHeadUrl.equals(BaseActivity.mHeadUrl) || passwordIsChange()) {
-                        saveDialog();
-                    } else {
+                    if (!userNameIsChanged() && mProfiledHeadUrl.equals(BaseActivity.mHeadUrl)
+                            && mRelativeLayout.getVisibility() == View.INVISIBLE) {
                         Toast.makeText(getActivity(), "There is no change!", Toast.LENGTH_SHORT).show();
+                        mUsernameEt.setText(BaseActivity.mUsername);
+                        mUsernameEt.setClearIconVisible(false);
+                        mUsernameEt.setCursorVisible(false);
+                    } else {
+                        passwordIsRight();
                     }
-
                     break;
                 case R.id.profile_img_head:
                     choose_head_img();
@@ -135,46 +135,15 @@ public class ProfiledFragment extends Fragment {
                     }
 
                     break;
+                case R.id.profile_et_username:
+                    mUsernameEt.setClearIconVisible(true);
+                    mUsernameEt.setCursorVisible(true);
+                    break;
                 default:
                     break;
             }
         }
 
-    }
-
-    private boolean userNameIsChanged() {
-        String nowUsername = mUsernameEt.getText().toString();
-        if(nowUsername.equals(BaseActivity.mUsername)&&nowUsername.equals("")){
-            usernameIsChanged = false;
-        }else{
-            usernameIsChanged = true;
-        }
-//        mUsernameEt.addTextChangedListener(new TextWatcher() {
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                String nowUsername = mUsernameEt.getText().toString();
-//                if (nowUsername.equals(BaseActivity.mUsername) || nowUsername.equals("") || nowUsername == null) {
-////                    saveProfiledBtn.setAlpha(0.5f);
-////                    saveProfiledBtn.setClickable(false);
-//                    usernameIsChanged = false;
-//                } else {
-////                    saveProfiledBtn.setAlpha(1f);
-////                    saveProfiledBtn.setClickable(true);
-//                    usernameIsChanged = true; //is changed
-//                }
-//                usernameIsChanged = false;
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
-        return usernameIsChanged;
     }
 
     private void saveDialog() {
@@ -185,7 +154,7 @@ public class ProfiledFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                dataInit();
+
             }
         });
         builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
@@ -197,15 +166,25 @@ public class ProfiledFragment extends Fragment {
                     updatePassword();
                 } else {
                     saveUserName();
-                    if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl)) {
-                        saveHeadUrl();
-                    }
+                    saveHeadUrl();
                 }
                 sendBroadcast();
-//                mUsernameEt.onFocusChange(mUsernameEt, false);
             }
         });
         builder.create().show();
+        
+        mUsernameEt.setClearIconVisible(false);
+        mUsernameEt.setCursorVisible(false);
+    }
+
+    private boolean userNameIsChanged() {
+        String nowUsername = mUsernameEt.getText().toString();
+        if (nowUsername.equals(BaseActivity.mUsername) || nowUsername.equals("")) {
+            usernameIsChanged = false;
+        } else {
+            usernameIsChanged = true;
+        }
+        return usernameIsChanged;
     }
 
     /**
@@ -219,15 +198,13 @@ public class ProfiledFragment extends Fragment {
 
         BaseActivity.mUsername = newUsername;
 
-
         edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, newUsername);
         edit.commit();
     }
 
-    private boolean passwordIsChange() {
-
+    private void passwordIsRight() {
         mSqlPassword = userdbOperator.qureyPassword(userBean);
-        Log.e("curry", mSqlPassword);
+
         mInputPassword = mNewPasswordEt.getText().toString();
         mConfirmPassword = mConPasswordEt.getText().toString();
         mNewPassword = mNewPasswordEt.getText().toString();
@@ -236,9 +213,8 @@ public class ProfiledFragment extends Fragment {
             if (mInputPassword.equals("") || mInputPassword == null
                     || mConfirmPassword.equals("") || mConfirmPassword == null
                     || mNewPassword.equals("") || mNewPassword == null) {
-                passwordIsChanged = false;
-//                saveProfiledBtn.setAlpha(0.5f);
-//                saveProfiledBtn.setClickable(false);
+//                passwordIsChanged = false;
+
                 Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
             } else {
                 String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
@@ -249,26 +225,17 @@ public class ProfiledFragment extends Fragment {
                 } else if (!mConfirmPassword.equals(mNewPassword)) {
                     Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
                 } else {
-                    passwordIsChanged = true;
-//                    saveProfiledBtn.setAlpha(1f);
-//                    saveProfiledBtn.setClickable(true);
+                    saveDialog();
                 }
             }
         } else {
-            passwordIsChanged = false;
+            saveDialog();
         }
-
-        return passwordIsChanged;
 
     }
 
     private void updatePassword() {
-//        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-//        if (mNewPassword.equals("") || mConfirmPassword.equals("") || mInputPassword.equals("")) {
-//            Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
-//        } else if (!mNewPassword.matches(regex)) {
-//            new BaseActivity().toastSomething(getActivity(), "The password is wrong.");
-//        } else if (mConfirmPassword.equals(mNewPassword)) {
+
         saveUserName();
 
         saveHeadUrl();
@@ -332,8 +299,6 @@ public class ProfiledFragment extends Fragment {
         mProfiledHeadUrl = new SavePicture(getActivity()).pictureResult(requestCode, resultCode, data, mProfiledHeadView);
 
         if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl) && !mProfiledHeadUrl.equals("")) {
-            saveProfiledBtn.setAlpha(1f);
-            saveProfiledBtn.setClickable(true);
 //            saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -342,8 +307,7 @@ public class ProfiledFragment extends Fragment {
     public void sendBroadcast() {
 
         Intent intent = new Intent();
-//        intent.putExtra("USERNAME", BaseActivity.mUsername);
-//        intent.putExtra("HEADURL", BaseActivity.mHeadUrl);
+
         intent.setAction("CHANGE");
         getActivity().sendBroadcast(intent);
 

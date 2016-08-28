@@ -20,6 +20,7 @@
         android:layout_below="@id/profile_img_head"
         android:layout_marginTop="30dp"
         android:background="#FFFFFF"
+        android:clickable="true"
         android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM"
         android:drawableRight="@drawable/delete_change"
         android:gravity="center"
@@ -98,7 +99,8 @@
         android:layout_marginRight="30dp"
         android:background="#1E88E5"
         android:text="Save" />
-        <!--android:alpha="0.5"-->
-        <!--android:clickable="false"-->
+
+    <!--android:alpha="0.5"-->
+    <!--android:clickable="false"-->
 
 </RelativeLayout>

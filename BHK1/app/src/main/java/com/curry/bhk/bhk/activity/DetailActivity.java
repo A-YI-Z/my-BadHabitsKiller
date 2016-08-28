@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,8 +15,10 @@ import com.curry.bhk.bhk.adapter.DetailPictureAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
+import com.curry.bhk.bhk.utils.PublicStatic;
 import com.gc.materialdesign.views.ButtonRectangle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +31,8 @@ public class DetailActivity extends BaseActivity {
     private TextView mDetailAuthor;
     private TextView mDetailTime;
     private TextView mDetailDescription;
-    private TextView mTitleBarText;
     private RelativeLayout mPictureBackground;
+    private TextView mBarTitle;
 
     private EventdbOperator eventdbOperator;
     private EventBean eventBean = new EventBean();
@@ -54,19 +57,18 @@ public class DetailActivity extends BaseActivity {
     private void viewInit() {
         mDetailBack = (ImageView) findViewById(R.id.back_img);
         mDetailResolveBtn = (ButtonRectangle) findViewById(R.id.detail_pending_btn);
-        mPictureBackground = (RelativeLayout)findViewById(R.id.detail_picture_bg);
+        mPictureBackground = (RelativeLayout) findViewById(R.id.detail_picture_bg);
         mDetailAuthor = (TextView) findViewById(R.id.detail_author);
         mDetailDescription = (TextView) findViewById(R.id.detail_description);
         mDetailTime = (TextView) findViewById(R.id.detail_time);
         mDetailTitle = (TextView) findViewById(R.id.detail_title);
-        mTitleBarText = (TextView) findViewById(R.id.bar_tv_title);
+        mBarTitle = (TextView) findViewById(R.id.bar_tv_title);
 
         mDetailPhoto = (GridView) findViewById(R.id.detail_photo_gridview);
     }
 
     private void dataInit() {
-        mTitleBarText.setText("Detail");
-
+        mBarTitle.setText("Detail");
         eventdbOperator = new EventdbOperator(DetailActivity.this);
 
         eventBean.setId(BaseActivity.eventItemId);
@@ -85,14 +87,12 @@ public class DetailActivity extends BaseActivity {
             for (int i = 0; i < length; i++) {
                 ImageItem item = new ImageItem();
                 item.sourcePath = photoUrl[i];
-                Log.e(TAG, photoUrl[i]);
-                Log.e(TAG, item.sourcePath);
                 mDetailPhotoList.add(item);
             }
 
             mDetailPictureAdapter = new DetailPictureAdapter(DetailActivity.this, mDetailPhotoList);
             mDetailPhoto.setAdapter(mDetailPictureAdapter);
-        }else{
+        } else {
             mPictureBackground.setBackgroundResource(R.drawable.nophoto);
         }
 
@@ -105,6 +105,18 @@ public class DetailActivity extends BaseActivity {
             mDetailResolveBtn.setAlpha(0.5f);
         } else {
             mDetailResolveBtn.setOnClickListener(new OnclickEvent());
+        }
+        mDetailPhoto.setOnItemClickListener(new GridViewOnItemClick());
+    }
+
+    private class GridViewOnItemClick implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(DetailActivity.this, ImageZoomActivity.class);
+            intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) mDetailPhotoList);
+            intent.putExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, position);
+            intent.putExtra("FROM_DETAIL_ACTIVITY", true);
+            startActivity(intent);
         }
     }
 
@@ -120,7 +132,7 @@ public class DetailActivity extends BaseActivity {
                     /*
                         insert the resolvedby data
                      */
-                    eventBean.setResolvedby(BaseActivity.mUsername);
+                    eventBean.setResolvedby(BaseActivity.mEmail);
                     eventBean.setStatus(1);
                     eventdbOperator.updateEvent(eventBean, 0);
 

@@ -48,22 +48,22 @@ public class PendingFragment extends Fragment {
     }
 
     public void dataInit() {
-        TextView tv = (TextView)getActivity().findViewById(R.id.title_bar_name);
-        tv.setText("Pending");
 
         EventBean eventBean = new EventBean();
-        eventBean.setResolvedby(BaseActivity.mUsername);
+        eventBean.setResolvedby(BaseActivity.mEmail);
         eventBean.setStatus(1);
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
         if (mEventBeanList.size() == 0) {
             mNullTextView.setVisibility(View.VISIBLE);
+        } else {
+            NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
+            mListView.setAdapter(newListitemAdapter);
+            newListitemAdapter.notifyDataSetChanged();
         }
-        NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
-        mListView.setAdapter(newListitemAdapter);
 
-        newListitemAdapter.notifyDataSetChanged();
+
     }
 
     public void addSwipeMenu() {
@@ -111,7 +111,7 @@ public class PendingFragment extends Fragment {
     }
 
     /**
-     *  swipemenu on hold & resolved click event
+     * swipemenu on hold & resolved click event
      */
     private void menuClick() {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -130,7 +130,6 @@ public class PendingFragment extends Fragment {
 
                         OnHoldFragment onHoldFragment = new OnHoldFragment();
                         fragmentTransaction.replace(R.id.fragment, onHoldFragment);
-
 
 
                         break;

@@ -102,12 +102,7 @@ public class RegistActivity extends BaseActivity {
         input_isnot_legal = true;
         if (username.equals("") || email.equals("") || password.equals("") || confirm_password.equals("")) {
             toastSomething(RegistActivity.this, "Please fill in.");
-        }
-//        else {
-//            regist_complete.setAlpha(1f);
-//            regist_complete.setClickable(true);
-//        }
-        else if (!isEmail(email)) {
+        } else if (!isEmail(email)) {
             toastSomething(RegistActivity.this, "Is not a true email address.");
         } else if (userdbOperator.isExist(1, userBean)) {
             toastSomething(RegistActivity.this, "The email is exists .");
@@ -122,7 +117,6 @@ public class RegistActivity extends BaseActivity {
         } else {
             input_isnot_legal = false;
         }
-
     }
 
     /**
@@ -160,7 +154,7 @@ public class RegistActivity extends BaseActivity {
         edit.commit();
 
         Intent intent = new Intent(RegistActivity.this, LoginActivity.class);
-        intent.putExtra("EMAIL", email);
+//        intent.putExtra("EMAIL", email);
 
         startActivity(intent);
         toastSomething(RegistActivity.this, "Regist  success!");

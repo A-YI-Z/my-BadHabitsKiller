@@ -1,5 +1,6 @@
 package com.curry.bhk.bhk.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,7 +9,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -32,7 +35,7 @@ public class LoginActivity extends BaseActivity {
     private android.widget.CheckBox mCheck;
     private TextView mVersionName;
 
-    private String mloginusername = "";
+    private String mUsernameOrEmail = "";
     private String ago_username = "";
     private String input_email = "";// email now
     private String db_password = "";// sqlite
@@ -43,7 +46,8 @@ public class LoginActivity extends BaseActivity {
     private List<UserBean> userbean_list;
 
     private UserdbOperator userdbOperator = new UserdbOperator(this);
-
+    private UserBean userBean = new UserBean();
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +79,14 @@ public class LoginActivity extends BaseActivity {
         /*
             get  username  from RegistActivity
          */
-//        SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
-//        mloginusername = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
-//        login_et_username.setText(mloginusername);
-        mloginusername = getIntent().getStringExtra("EMAIL");
-        login_et_username.setText( mloginusername);
-
+        SharedPreferences sharedPreferences = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0);
+        boolean isEmailorUsername = sharedPreferences.getBoolean(PublicStatic.SHAREDPREFERENCES_EMAIL_OR_USERNAME, true);
+        if (isEmailorUsername) {//true:Email
+            mUsernameOrEmail = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_EMAIL, "");
+        } else {
+            mUsernameOrEmail = sharedPreferences.getString(PublicStatic.SHAREDPREFERENCES_USERNAME, "");
+        }
+        login_et_username.setText(mUsernameOrEmail);
 
          /*
         get head picture by username
@@ -134,13 +140,23 @@ public class LoginActivity extends BaseActivity {
      * match true head pic according to username or email
      */
     private void matchHead() {
-        mloginusername = login_et_username.getText().toString();
-//        if (!ago_username.equals(mloginusername)) {
-//            login_et_password.setText("");
-//        }
-        UserBean userBean = new UserBean();
-        userBean.setUsername(mloginusername);
-        userbean_list = userdbOperator.queryUser(2, userBean);
+        editor = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
+        mUsernameOrEmail = login_et_username.getText().toString();
+//        UserBean userBean = new UserBean();
+        if (mUsernameOrEmail.contains("@")) {//judge is a email
+            userBean.setEmail(mUsernameOrEmail);
+            userbean_list = userdbOperator.queryUser(1, userBean);
+
+            editor.putString(PublicStatic.SHAREDPREFERENCES_EMAIL, mUsernameOrEmail);
+            editor.putBoolean(PublicStatic.SHAREDPREFERENCES_EMAIL_OR_USERNAME, true);
+        } else {
+            userBean.setUsername(mUsernameOrEmail);
+            userbean_list = userdbOperator.queryUser(2, userBean);
+
+            editor.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, mUsernameOrEmail);
+            editor.putBoolean(PublicStatic.SHAREDPREFERENCES_EMAIL_OR_USERNAME, false);
+        }
+        editor.commit();
 
         if (!userbean_list.isEmpty()) {
             if (userbean_list.get(0).getPic_url().equals("default")) {
@@ -168,8 +184,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 {
-                    SharedPreferences.Editor editor = getSharedPreferences(
-                            PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
+
                     if (mCheck.isChecked()) {
                         Log.e(TAG, "isChecked");
                         isRemeber = true;
@@ -199,30 +214,34 @@ public class LoginActivity extends BaseActivity {
      */
     private void login() {
         input_password = login_et_password.getText().toString();
-        mloginusername = login_et_username.getText().toString();
+        mUsernameOrEmail = login_et_username.getText().toString();
 
-        UserBean userbean = new UserBean();
-        userbean.setUsername(mloginusername);
+//        UserBean userbean = new UserBean();
+//        if (mUsernameOrEmail.contains("@")) {
+//            userbean.setEmail(mUsernameOrEmail);
+//        } else {
+//            userbean.setUsername(mUsernameOrEmail);
+//        }
 
 /*
     save the username which input
  */
-        SharedPreferences.Editor edit = getSharedPreferences(
-                PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
-        edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, mloginusername);
-//        edit.putString(PublicStatic.SHAREDPREFERENCES_EMAIL,userbean_list.get(0).getEmail());
-        edit.commit();
+//        SharedPreferences.Editor edit = getSharedPreferences(
+//                PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
+//        edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, mUsernameOrEmail);
+////        edit.putString(PublicStatic.SHAREDPREFERENCES_EMAIL,userbean_list.get(0).getEmail());
+//        edit.commit();
 
-        if (mloginusername.equals("")) {
-            toastSomething(LoginActivity.this, "Your username is null!");
-        } else if (!userdbOperator.isExist(2, userbean)) {
-            toastSomething(LoginActivity.this, "The username  is not exist!");
+        if (mUsernameOrEmail.equals("")) {
+            toastSomething(LoginActivity.this, "Your username or email is null!");
+        } else if (!userdbOperator.isExist(2, userBean) && !userdbOperator.isExist(1, userBean)) {
+            toastSomething(LoginActivity.this, "The username or email is not exist!");
         } else if (input_password.equals("")) {
             toastSomething(LoginActivity.this, "Please input your password!");
         } else if (input_password.equals(db_password)) {
 
             // static
-            BaseActivity.mUsername = mloginusername;
+            BaseActivity.mUsername = userbean_list.get(0).getUsername();
             BaseActivity.mHeadUrl = userbean_list.get(0).getPic_url();
             BaseActivity.mEmail = userbean_list.get(0).getEmail();
             BaseActivity.mPassword = userbean_list.get(0).getPassword();
@@ -250,4 +269,5 @@ public class LoginActivity extends BaseActivity {
                 break;
         }
     }
+
 }

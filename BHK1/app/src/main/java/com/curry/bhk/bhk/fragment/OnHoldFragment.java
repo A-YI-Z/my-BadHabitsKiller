@@ -41,7 +41,7 @@ public class OnHoldFragment extends Fragment {
 
         EventBean eventBean = new EventBean();
         eventBean.setStatus(2);
-        eventBean.setResolvedby(BaseActivity.mUsername);
+        eventBean.setResolvedby(BaseActivity.mEmail);
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);

@@ -40,7 +40,7 @@ public class ResolvedFragment extends Fragment {
 
         EventBean eventBean = new EventBean();
         eventBean.setStatus(3);
-        eventBean.setResolvedby(BaseActivity.mUsername);
+        eventBean.setResolvedby(BaseActivity.mEmail);
 
         eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
