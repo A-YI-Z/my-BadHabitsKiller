@@ -102,7 +102,8 @@ public class DetailActivity extends BaseActivity {
     public void detailAcitvityOnclick() {
         mDetailBack.setOnClickListener(new OnclickEvent());
         if (status != 0) {
-            mDetailResolveBtn.setAlpha(0.5f);
+//            mDetailResolveBtn.setAlpha(0.5f);
+            mDetailResolveBtn.setVisibility(View.GONE);
         } else {
             mDetailResolveBtn.setOnClickListener(new OnclickEvent());
         }

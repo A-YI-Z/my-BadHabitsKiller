@@ -53,7 +53,6 @@ public class ProfiledFragment extends Fragment {
     private boolean mIsVisible = true;
 
     private UserdbOperator userdbOperator;
-    private UserBean userBean;
     private SharedPreferences.Editor edit;
 
     private boolean usernameIsChanged = false;
@@ -103,8 +102,6 @@ public class ProfiledFragment extends Fragment {
         edit = getActivity().getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
 
         userdbOperator = new UserdbOperator(getActivity());
-        userBean = new UserBean();
-        userBean.setEmail(BaseActivity.mEmail);
     }
 
     private class ProfiledOnClick implements View.OnClickListener {
@@ -172,7 +169,7 @@ public class ProfiledFragment extends Fragment {
             }
         });
         builder.create().show();
-        
+
         mUsernameEt.setClearIconVisible(false);
         mUsernameEt.setCursorVisible(false);
     }
@@ -192,7 +189,8 @@ public class ProfiledFragment extends Fragment {
      */
     private void saveUserName() {
         String newUsername = mUsernameEt.getText().toString();
-
+        UserBean userBean = new UserBean();
+        userBean.setEmail(BaseActivity.mEmail);
         userBean.setUsername(newUsername);
         userdbOperator.updateUser(userBean, 0);
 
@@ -203,6 +201,8 @@ public class ProfiledFragment extends Fragment {
     }
 
     private void passwordIsRight() {
+        UserBean userBean = new UserBean();
+        userBean.setEmail(BaseActivity.mEmail);
         mSqlPassword = userdbOperator.qureyPassword(userBean);
 
         mInputPassword = mNewPasswordEt.getText().toString();
@@ -218,7 +218,9 @@ public class ProfiledFragment extends Fragment {
                 Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
             } else {
                 String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
-                if (!mInputPassword.equals(mSqlPassword)) {
+                if (!mInputPassword.equals(BaseActivity.mPassword)) {
+                    Log.e("curry", mInputPassword);
+                    Log.e("curry", BaseActivity.mPassword);
                     Toast.makeText(getActivity(), "The original password is wrong.", Toast.LENGTH_LONG).show();
                 } else if (!mNewPassword.matches(regex)) {
                     Toast.makeText(getActivity(), "The password type is wrong.", Toast.LENGTH_LONG).show();
@@ -235,26 +237,25 @@ public class ProfiledFragment extends Fragment {
     }
 
     private void updatePassword() {
-
+        UserBean userBean = new UserBean();
         saveUserName();
-
         saveHeadUrl();
 
         userBean.setEmail(BaseActivity.mEmail);
         userBean.setPassword(mConfirmPassword);
         userdbOperator.updateUser(userBean, 1);
 
+        BaseActivity.mPassword = mConfirmPassword;
         edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
         edit.commit();
 
         startActivity(new Intent(getActivity(), LoginActivity.class));
         getActivity().finish();
-//        } else {
-//            Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
-//        }
+
     }
 
     private void saveHeadUrl() {
+        UserBean userBean = new UserBean();
 
         BaseActivity.mHeadUrl = mProfiledHeadUrl;
 

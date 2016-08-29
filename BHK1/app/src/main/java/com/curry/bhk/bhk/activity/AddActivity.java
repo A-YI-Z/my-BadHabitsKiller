@@ -53,7 +53,7 @@ public class AddActivity extends BaseActivity {
     private String mDescriptionStr = "";
     private StringBuffer mImageUrl = new StringBuffer();
 
-    public static List<ImageItem> mDataList = new ArrayList<>();
+    public  List<ImageItem> mDataList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
 
     private static final int TAKE_PICTURE = 0;
@@ -107,11 +107,11 @@ public class AddActivity extends BaseActivity {
 //                    ImageItem.class);
 //            mDataList = tempImages;
 //        }
-//        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
-//        if (incomingDataList != null) {
-//            Log.e(TAG, "!!!!!!");
-//            mDataList.addAll(incomingDataList);
-//        }
+        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
+        if (incomingDataList != null) {
+
+            mDataList.addAll(incomingDataList);
+        }
     }
 
     private void viewInit() {
@@ -306,10 +306,13 @@ public class AddActivity extends BaseActivity {
     }
 
     private int getAvailableSize() {
-        int availSize = PublicStatic.MAX_IMAGE_SIZE - mDataList.size();
-        if (availSize >= 0) {
-            return availSize;
+        if(mDataList!=null){
+            int availSize = PublicStatic.MAX_IMAGE_SIZE - mDataList.size();
+            if (availSize >= 0) {
+                return availSize;
+            }
         }
+
         return 0;
     }
 
@@ -352,7 +355,7 @@ public class AddActivity extends BaseActivity {
                     Bundle bundle = data.getExtras();
                     List<ImageItem> incomingDataList = (ArrayList<ImageItem>) bundle.getSerializable(PublicStatic.EXTRA_IMAGE_LIST);
                     if (incomingDataList != null) {
-//                        Log.e(TAG, "!!!!!!");
+
                         mDataList.addAll(incomingDataList);
                     }
 //                    Log.e(TAG, "back");
@@ -451,10 +454,10 @@ public class AddActivity extends BaseActivity {
         mImageChooseAdapter.notifyDataSetChanged();//when delete picture  , should notify data.
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        mDataList = null;
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        mDataList = null;
+//    }
 }
