@@ -1,6 +1,7 @@
 package com.curry.bhk.bhk.fragment;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
+import com.curry.bhk.bhk.activity.MainActivity;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
@@ -47,12 +49,14 @@ public class OnHoldFragment extends Fragment {
         mEventBeanList = eventdbOperator.queryEvent(4, eventBean);
         if (mEventBeanList.size() == 0) {
             mNullTextView.setVisibility(View.VISIBLE);
-        }
-        NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
-        mListView.setAdapter(newListitemAdapter);
+        } else {
+            NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
+            mListView.setAdapter(newListitemAdapter);
 
-        newListitemAdapter.notifyDataSetChanged();
+            newListitemAdapter.notifyDataSetChanged();
+        }
 
     }
+
 
 }

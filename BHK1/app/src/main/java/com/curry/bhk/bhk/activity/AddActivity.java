@@ -107,11 +107,11 @@ public class AddActivity extends BaseActivity {
 //                    ImageItem.class);
 //            mDataList = tempImages;
 //        }
-        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
-        if (incomingDataList != null) {
-
-            mDataList.addAll(incomingDataList);
-        }
+//        List<ImageItem> incomingDataList = (List<ImageItem>) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
+//        if (incomingDataList != null) {
+//
+//            mDataList.addAll(incomingDataList);
+//        }
     }
 
     private void viewInit() {
@@ -121,7 +121,6 @@ public class AddActivity extends BaseActivity {
 
         mAddComplete = (ButtonRectangle) findViewById(R.id.add_complete_btn);
         mAddBack = (ImageView) findViewById(R.id.back_img);
-
 
         mPhotoGridView = (GridView) findViewById(R.id.gridview);
     }
@@ -216,9 +215,7 @@ public class AddActivity extends BaseActivity {
             toastSomething(AddActivity.this, "The description can't be null.");
         } else {
 
-
             popUpDialog();
-
 
         }
     }
@@ -240,9 +237,8 @@ public class AddActivity extends BaseActivity {
             mImageUrl.substring(0, mImageUrl.length() - 1);
         }
 
-
         eventBean.setDescription(mDescriptionStr);
-        eventBean.setAuthor(BaseActivity.mUsername);
+        eventBean.setAuthor(BaseActivity.mEmail);
         eventBean.setPhotos_url(mImageUrl.toString());
         eventBean.setTitle(mTitleStr);
         eventBean.setEmail(BaseActivity.mEmail);

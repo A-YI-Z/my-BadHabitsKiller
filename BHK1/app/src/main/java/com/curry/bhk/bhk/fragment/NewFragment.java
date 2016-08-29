@@ -47,15 +47,17 @@ public class NewFragment extends Fragment {
     }
 
     private void dataInit() {
+
         EventdbOperator eventdbOperator = new EventdbOperator(getActivity());
         mEventBeanList = eventdbOperator.queryEvent(0, null);
         if (mEventBeanList.size() == 0) {
             mNullTextView.setVisibility(View.VISIBLE);
-        }
-        NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
-        mListView.setAdapter(newListitemAdapter);
+        } else {
+            NewListitemAdapter newListitemAdapter = new NewListitemAdapter(getActivity(), mEventBeanList);
+            mListView.setAdapter(newListitemAdapter);
 
-        newListitemAdapter.notifyDataSetChanged();
+            newListitemAdapter.notifyDataSetChanged();
+        }
     }
 
     private void itemOnclick() {
@@ -142,4 +144,5 @@ public class NewFragment extends Fragment {
         Intent.createChooser(intent, "Choose Email Client.");
         startActivity(intent);
     }
+
 }

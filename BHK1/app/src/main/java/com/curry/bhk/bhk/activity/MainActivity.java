@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
@@ -44,7 +43,7 @@ public class MainActivity extends BaseActivity {
     private CircleImageView mHeadImageView;
     private TextView mUserNameTV;
     private TextView mTitlebarName;
-    private ListView mMenuList;
+    public static ListView mMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +112,6 @@ public class MainActivity extends BaseActivity {
             alphaAnimation.setDuration(500);
             alphaAnimation.setFillAfter(true);
             mTitleBarBotton.startAnimation(alphaAnimation);
-//            ViewHelper.setAlpha(mTitleBarBotton, 0);
         }
 
         @Override
@@ -135,6 +133,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                int menuNum = parent.getCount();
+                for (int i = 0; i < menuNum; i++) {
+                    View v = parent.getChildAt(i);
+                    if (position == i) {
+                        v.setBackgroundResource(R.color.colorPrimaryDark);
+                    } else {
+                        v.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
                 // login out
                 if (position == 6) {
 
@@ -200,10 +207,8 @@ public class MainActivity extends BaseActivity {
                 break;
             case 4:
                 mTitlebarName.setText("Profiled");
-//
                 ProfiledFragment profiledFragment = new ProfiledFragment();
                 fragmentTransaction.replace(R.id.fragment, profiledFragment);
-//                startActivity(new Intent(MainActivity.this, ProfiledActivity.class));
                 break;
             case 5:
                 mTitlebarName.setText("About");

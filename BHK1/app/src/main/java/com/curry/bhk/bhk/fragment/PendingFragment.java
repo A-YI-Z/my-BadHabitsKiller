@@ -18,6 +18,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
+import com.curry.bhk.bhk.activity.MainActivity;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
@@ -156,4 +157,6 @@ public class PendingFragment extends Fragment {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
     }
+
+
 }

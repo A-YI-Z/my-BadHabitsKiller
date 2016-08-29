@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.curry.bhk.bhk.R;
@@ -42,10 +45,9 @@ public class ProfiledFragment extends Fragment {
     private EditText mConPasswordEt;
     private CircleImageView mProfiledHeadView;
     private ButtonRectangle saveProfiledBtn;
-    private TextView mChangePasswordTv;
     private RelativeLayout mRelativeLayout;
+    private ImageView mOpenPassword;
 
-    private String mSqlPassword = "";
     private String mInputPassword = "";
     private String mNewPassword = "";
     private String mConfirmPassword = "";
@@ -56,37 +58,39 @@ public class ProfiledFragment extends Fragment {
     private SharedPreferences.Editor edit;
 
     private boolean usernameIsChanged = false;
-    private boolean passwordIsChanged = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.profiled_fragment, null);
         viewInit();
         dataInit();
-        return mView;
+        return inflater.inflate(R.layout.profiled_fragment, null);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mProfiledHeadView.setOnClickListener(new ProfiledOnClick());
-        mChangePasswordTv.setOnClickListener(new ProfiledOnClick());
+        mOpenPassword.setOnClickListener(new ProfiledOnClick());
         saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
         mUsernameEt.setOnClickListener(new ProfiledOnClick());
     }
 
     private void viewInit() {
         mUsernameEt = (DeleteEditText) mView.findViewById(R.id.profile_et_username);
+
+        mProfiledHeadView = (CircleImageView) mView.findViewById(R.id.profile_img_head);
+        saveProfiledBtn = (ButtonRectangle) mView.findViewById(R.id.profile_btn_finish);
+        mOpenPassword = (ImageView) mView.findViewById(R.id.open_password);
+        mRelativeLayout = (RelativeLayout) mView.findViewById(R.id.relativeLayout);
+
         mOldPasswordEt = (EditText) mView.findViewById(R.id.profile_et_old_password);
         mNewPasswordEt = (EditText) mView.findViewById(R.id.profile_et_new_password);
         mConPasswordEt = (EditText) mView.findViewById(R.id.profile_et_again_password);
-        mProfiledHeadView = (CircleImageView) mView.findViewById(R.id.profile_img_head);
-        saveProfiledBtn = (ButtonRectangle) mView.findViewById(R.id.profile_btn_finish);
-        mChangePasswordTv = (TextView) mView.findViewById(R.id.profile_tv);
-        mRelativeLayout = (RelativeLayout) mView.findViewById(R.id.relativeLayout);
     }
 
     private void dataInit() {
+
         if (!BaseActivity.mHeadUrl.equals("")) {
             if (BaseActivity.mHeadUrl.equals("default")) {
                 mProfiledHeadView.setImageResource(R.drawable.defult_img);
@@ -99,9 +103,7 @@ public class ProfiledFragment extends Fragment {
         mUsernameEt.setText(BaseActivity.mUsername);
         mProfiledHeadUrl = BaseActivity.mHeadUrl;
 
-        edit = getActivity().getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
 
-        userdbOperator = new UserdbOperator(getActivity());
     }
 
     private class ProfiledOnClick implements View.OnClickListener {
@@ -122,12 +124,24 @@ public class ProfiledFragment extends Fragment {
                 case R.id.profile_img_head:
                     choose_head_img();
                     break;
-                case R.id.profile_tv:
+                case R.id.open_password:
                     if (mIsVisible) {
+                        Animation operatingAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                        LinearInterpolator linearInterpolator = new LinearInterpolator();
+                        operatingAnim.setInterpolator(linearInterpolator);
+                        operatingAnim.setFillAfter(true);
+                        mOpenPassword.startAnimation(operatingAnim);
+
                         mRelativeLayout.setVisibility(View.VISIBLE);
                         mIsVisible = false;
                     } else {
-                        mRelativeLayout.setVisibility(View.INVISIBLE);
+                        Animation operatingAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.finsih_rotate);
+                        LinearInterpolator linearInterpolator = new LinearInterpolator();
+                        operatingAnim.setInterpolator(linearInterpolator);
+                        operatingAnim.setFillAfter(true);
+                        mOpenPassword.startAnimation(operatingAnim);
+
+                        mRelativeLayout.setVisibility(View.GONE);
                         mIsVisible = true;
                     }
 
@@ -158,6 +172,9 @@ public class ProfiledFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                edit = getActivity().getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
+
+                userdbOperator = new UserdbOperator(getActivity());
 
                 if (mRelativeLayout.getVisibility() == View.VISIBLE) {
                     updatePassword();
@@ -203,9 +220,8 @@ public class ProfiledFragment extends Fragment {
     private void passwordIsRight() {
         UserBean userBean = new UserBean();
         userBean.setEmail(BaseActivity.mEmail);
-        mSqlPassword = userdbOperator.qureyPassword(userBean);
 
-        mInputPassword = mNewPasswordEt.getText().toString();
+        mInputPassword = mOldPasswordEt.getText().toString();
         mConfirmPassword = mConPasswordEt.getText().toString();
         mNewPassword = mNewPasswordEt.getText().toString();
 
@@ -213,7 +229,6 @@ public class ProfiledFragment extends Fragment {
             if (mInputPassword.equals("") || mInputPassword == null
                     || mConfirmPassword.equals("") || mConfirmPassword == null
                     || mNewPassword.equals("") || mNewPassword == null) {
-//                passwordIsChanged = false;
 
                 Toast.makeText(getActivity(), "Please fill out completely.", Toast.LENGTH_LONG).show();
             } else {
@@ -223,7 +238,9 @@ public class ProfiledFragment extends Fragment {
                     Log.e("curry", BaseActivity.mPassword);
                     Toast.makeText(getActivity(), "The original password is wrong.", Toast.LENGTH_LONG).show();
                 } else if (!mNewPassword.matches(regex)) {
-                    Toast.makeText(getActivity(), "The password type is wrong.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "The password must be made of letters and number more than eight.", Toast.LENGTH_LONG).show();
+                } else if (mInputPassword.equals(mNewPassword)) {
+                    Toast.makeText(getActivity(), "The new password is the same as the old password.", Toast.LENGTH_LONG).show();
                 } else if (!mConfirmPassword.equals(mNewPassword)) {
                     Toast.makeText(getActivity(), "Confirm password is wrong!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -299,9 +316,6 @@ public class ProfiledFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mProfiledHeadUrl = new SavePicture(getActivity()).pictureResult(requestCode, resultCode, data, mProfiledHeadView);
 
-        if (!mProfiledHeadUrl.equals(BaseActivity.mHeadUrl) && !mProfiledHeadUrl.equals("")) {
-//            saveProfiledBtn.setOnClickListener(new ProfiledOnClick());
-        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -313,4 +327,5 @@ public class ProfiledFragment extends Fragment {
         getActivity().sendBroadcast(intent);
 
     }
+
 }

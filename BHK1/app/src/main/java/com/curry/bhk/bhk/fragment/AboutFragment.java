@@ -2,6 +2,7 @@ package com.curry.bhk.bhk.fragment;
 
 import android.app.Fragment;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.activity.MainActivity;
 
 /**
  * Created by Curry on 2016/8/19.
@@ -32,4 +34,5 @@ public class AboutFragment extends Fragment {
         mVersionTv.setText(getResources().getString(R.string.version_code) + versionCode);
         return view;
     }
+
 }
