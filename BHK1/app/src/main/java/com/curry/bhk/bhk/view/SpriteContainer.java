@@ -30,10 +30,6 @@ public abstract class SpriteContainer extends Sprite {
         }
     }
 
-//    public void onChildCreated(Sprite... sprites) {
-//
-//    }
-
     public int getChildCount() {
         return sprites == null ? 0 : sprites.length;
     }

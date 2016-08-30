@@ -25,6 +25,6 @@ dependencies {
     compile project(':MaterialDesign')
     compile 'com.alibaba:fastjson:1.2.16'
     compile project(':SwipeMenuListView')
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile ('com.android.support:appcompat-v7:24.2.0')
 
 }

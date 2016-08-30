@@ -14,7 +14,7 @@ public class KeyFrameInterpolator implements Interpolator {
 
 
     public static KeyFrameInterpolator easeInOut(float... fractions) {
-        KeyFrameInterpolator interpolator = new KeyFrameInterpolator(Ease.inOut());
+        KeyFrameInterpolator interpolator = new KeyFrameInterpolator(PathInterpolatorCompat.create(0.42f, 0f, 0.58f, 1f));
         interpolator.setFractions(fractions);
         return interpolator;
     }

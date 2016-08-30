@@ -1,6 +1,8 @@
 package com.curry.bhk.bhk.view;
 
 import android.animation.ValueAnimator;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
@@ -32,7 +34,7 @@ public class Wave extends SpriteContainer {
         }
     }
 
-    private class WaveItem extends RectSprite {
+    private class WaveItem extends ShapeSprite {
 
         WaveItem() {
             setScaleY(0.4f);
@@ -46,5 +48,14 @@ public class Wave extends SpriteContainer {
                     easeInOut(fractions)
                     .build();
         }
+
+
+        @Override
+        public void drawShape(Canvas canvas, Paint paint) {
+            if (getDrawBounds() != null) {
+                canvas.drawRect(getDrawBounds(), paint);
+            }
+        }
     }
+
 }
