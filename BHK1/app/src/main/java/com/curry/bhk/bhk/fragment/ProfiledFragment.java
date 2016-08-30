@@ -64,7 +64,7 @@ public class ProfiledFragment extends Fragment {
         mView = inflater.inflate(R.layout.profiled_fragment, null);
         viewInit();
         dataInit();
-        return inflater.inflate(R.layout.profiled_fragment, null);
+        return mView;
     }
 
     @Override
@@ -102,7 +102,6 @@ public class ProfiledFragment extends Fragment {
         }
         mUsernameEt.setText(BaseActivity.mUsername);
         mProfiledHeadUrl = BaseActivity.mHeadUrl;
-
 
     }
 

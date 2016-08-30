@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -150,6 +151,7 @@ public class RegistActivity extends BaseActivity {
                 PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
         edit.putString(PublicStatic.SHAREDPREFERENCES_USERNAME, username);
         edit.putString(PublicStatic.SHAREDPREFERENCES_EMAIL, email);
+        edit.putBoolean(PublicStatic.SHAREDPREFERENCES_EMAIL_OR_USERNAME, true);
         edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
         edit.commit();
 
@@ -201,6 +203,7 @@ public class RegistActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mHeadImageUrl = new SavePicture(RegistActivity.this).pictureResult(requestCode, resultCode, data, regist_head_img);
+        Log.e(TAG, mHeadImageUrl);
         super.onActivityResult(requestCode, resultCode, data);
     }
 

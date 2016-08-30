@@ -56,6 +56,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/et_change"
         android:hint="email"
+        android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
         android:maxLength="20" />
 
@@ -68,6 +69,7 @@
         android:background="@drawable/et_change"
         android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM"
         android:hint="nickname"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="10" />
 

@@ -122,7 +122,6 @@ public class ImageChooseActivity extends BaseActivity {
         mBackIv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ImageChooseActivity.this, ImageBucketChooseActivity.class));
                 finishActivity();
             }
         });
@@ -131,7 +130,6 @@ public class ImageChooseActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ImageChooseActivity.this, ImageBucketChooseActivity.class));
         finishActivity();
     }
 }

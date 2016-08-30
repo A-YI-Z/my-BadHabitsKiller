@@ -34,6 +34,7 @@ public class SavePicture {
      * save picture
      */
     public String saveFile(Bitmap bmp) {
+
         String sdStatue = Environment.getExternalStorageState();
         if (!sdStatue.endsWith(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(mContext, "No SD card.", Toast.LENGTH_LONG).show();
@@ -50,7 +51,6 @@ public class SavePicture {
         String data = sDattFormat.format(new Date());
         String pictureName = sd_root_path + "/BHK/" + data + ".jpg";
 
-//        String pictureName = sd_root_path + "/myImage/" + email + ".jpg";
         try {
             fileOutputStream = new FileOutputStream(pictureName);
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
@@ -64,7 +64,7 @@ public class SavePicture {
                 e.printStackTrace();
             }
         }
-        return sd_root_path;
+        return pictureName;
     }
 
     public String pictureResult(int requestCode, int resultCode, Intent data, ImageView head_img) {
@@ -89,7 +89,7 @@ public class SavePicture {
                     Bundle bundle = data.getExtras();
                     Bitmap mybitmap = (Bitmap) bundle.get("data");
 
-                    headUrl = new SavePicture(mContext).saveFile(mybitmap);
+                    headUrl = saveFile(mybitmap);
 
                     mybitmap = CheckBitmapDegree.rotateBitmapByDegree(mybitmap, CheckBitmapDegree.getBitmapDegree(headUrl));
 

@@ -60,8 +60,10 @@
             android:layout_below="@id/add_tv_description"
             android:background="@drawable/et_change"
             android:gravity="top"
+            android:inputType="text"
             android:maxLength="200"
             android:maxLines="10"
+            android:imeOptions="actionDone"
             android:padding="6dp" />
 
         <TextView
@@ -80,8 +82,7 @@
             android:layout_below="@id/tv_picture"
             android:numColumns="4"
             android:scrollbars="none"
-            android:verticalSpacing="3dp">
-        </GridView>
+            android:verticalSpacing="3dp"></GridView>
 
 
     </RelativeLayout>

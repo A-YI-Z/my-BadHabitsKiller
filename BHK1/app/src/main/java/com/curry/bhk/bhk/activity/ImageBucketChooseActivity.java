@@ -85,7 +85,7 @@ public class ImageBucketChooseActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
+//                startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
                 finishActivity();
             }
         });
@@ -119,7 +119,7 @@ public class ImageBucketChooseActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
+//        startActivity(new Intent().setClass(ImageBucketChooseActivity.this, AddActivity.class));
         finishActivity();
     }
 }
