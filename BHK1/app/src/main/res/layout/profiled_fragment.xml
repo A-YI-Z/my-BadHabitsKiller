@@ -5,7 +5,7 @@
     android:background="#ededed"
     android:orientation="vertical">
 
-    <com.curry.bhk.bhk.view.CircleImageView
+    <com.curry.bhk.bhk.view.CircularImageView
         android:id="@+id/profile_img_head"
         android:layout_width="100dp"
         android:layout_height="100dp"

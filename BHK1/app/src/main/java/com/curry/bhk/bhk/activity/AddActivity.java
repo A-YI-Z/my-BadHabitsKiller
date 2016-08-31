@@ -53,7 +53,7 @@ public class AddActivity extends BaseActivity {
     private String mDescriptionStr = "";
     private StringBuffer mImageUrl = new StringBuffer();
 
-    public  List<ImageItem> mDataList = new ArrayList<>();
+    public  static List<ImageItem> mDataList = new ArrayList<>();
     private ImageChooseAdapter mImageChooseAdapter;
 
     private static final int TAKE_PICTURE = 0;
@@ -66,7 +66,7 @@ public class AddActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        dataInit();
+//        dataInit();
 
         viewInit();
 
@@ -354,8 +354,8 @@ public class AddActivity extends BaseActivity {
 
                         mDataList.addAll(incomingDataList);
                     }
-//                    Log.e(TAG, "back");
-                    getPhotoOnItemClick();
+
+//                    getPhotoOnItemClick();
                 }
 
                 break;
@@ -450,10 +450,10 @@ public class AddActivity extends BaseActivity {
         mImageChooseAdapter.notifyDataSetChanged();//when delete picture  , should notify data.
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//
-//        mDataList = null;
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mDataList.clear();
+    }
 }

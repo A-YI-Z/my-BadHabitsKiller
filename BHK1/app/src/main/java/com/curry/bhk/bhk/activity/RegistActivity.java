@@ -9,13 +9,13 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.utils.SavePicture;
+import com.curry.bhk.bhk.view.CircularImageView;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.regex.Matcher;
@@ -29,7 +29,7 @@ public class RegistActivity extends BaseActivity {
     private EditText regist_et_email;
     private EditText regist_et_password;
     private EditText regist_et_confirm_password;
-    private ImageView regist_head_img;
+    private CircularImageView regist_head_img;
     private ButtonRectangle regist_complete;
 
     private String email;
@@ -55,7 +55,7 @@ public class RegistActivity extends BaseActivity {
         regist_et_email = (EditText) findViewById(R.id.regist_et_email);
         regist_et_password = (EditText) findViewById(R.id.regist_et_password);
         regist_et_confirm_password = (EditText) findViewById(R.id.regist_et_confirm_password);
-        regist_head_img = (ImageView) findViewById(R.id.regist_img_choose);
+        regist_head_img = (CircularImageView) findViewById(R.id.regist_img_choose);
 
         regist_complete = (ButtonRectangle) findViewById(R.id.regist_btn_complete);
     }
@@ -96,6 +96,7 @@ public class RegistActivity extends BaseActivity {
         UserdbOperator userdbOperator = new UserdbOperator(RegistActivity.this);
         UserBean userBean = new UserBean();
         userBean.setEmail(email);
+        userBean.setUsername(username);
 
         //password is num and English letters and length more than 8 while less than 16.
         String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
@@ -107,7 +108,9 @@ public class RegistActivity extends BaseActivity {
             toastSomething(RegistActivity.this, "Is not a true email address.");
         } else if (userdbOperator.isExist(1, userBean)) {
             toastSomething(RegistActivity.this, "The email is exists .");
-        } else if (username.length() > 10) {// judge strings is  all English letters
+        } else if (userdbOperator.isExist(2, userBean)){
+            toastSomething(RegistActivity.this, "Nickname is exist.");
+        }else if (username.length() > 10) {// judge strings is  all English letters
             toastSomething(RegistActivity.this, "Nickname is too long.");
         } else if (!password.matches(regex)) {
             toastSomething(RegistActivity.this, "The password is wrong.");
@@ -141,7 +144,7 @@ public class RegistActivity extends BaseActivity {
         userBean.setUsername(username);
         userBean.setEmail(email);
         userBean.setPassword(password);
-        userBean.setStatus(1);
+        userBean.setStatus(0);
         userBean.setPic_url(mHeadImageUrl);
 
         UserdbOperator userdbOperator = new UserdbOperator(this);

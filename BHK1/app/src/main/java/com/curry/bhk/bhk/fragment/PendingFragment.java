@@ -19,6 +19,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.MainActivity;
+import com.curry.bhk.bhk.adapter.MenuAdapter;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
@@ -49,6 +50,9 @@ public class PendingFragment extends Fragment {
     }
 
     public void dataInit() {
+        //notify the menu refresh if replace this fragment
+        MenuAdapter.defItem=1;
+        MainActivity.myMenuAdapter.notifyDataSetChanged();
 
         EventBean eventBean = new EventBean();
         eventBean.setResolvedby(BaseActivity.mEmail);

@@ -14,6 +14,13 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/default_head" />
 
+    <!--<FrameLayout-->
+    <!--android:id="@+id/username_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_below="@id/login_img_head"-->
+    <!--android:layout_marginTop="30dp">-->
+
     <EditText
         android:id="@+id/login_et_username"
         android:layout_width="match_parent"
@@ -26,6 +33,17 @@
         android:imeOptions="actionNext"
         android:inputType="text"
         android:lines="1" />
+
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/dropdown_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="right|center_vertical"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:background="@drawable/login_input_arrow"-->
+    <!--android:onClick="clickInLoginActivity" />-->
+    <!--</FrameLayout>-->
 
 
     <!--<Spinner-->
@@ -57,8 +75,7 @@
 
         <!--<com.gc.materialdesign.views.CheckBox-->
         <!--android:id="@+id/login_checkBox"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
+         <!--android:layout_height="wrap_content"-->
         <!--android:background="#1E88E5" />-->
 
         <CheckBox

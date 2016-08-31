@@ -1,8 +1,6 @@
 package com.curry.bhk.bhk.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,7 +8,6 @@ import android.widget.ImageView;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.bean.ImageItem;
-import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.ImageDisplayer;
 
 import java.util.ArrayList;

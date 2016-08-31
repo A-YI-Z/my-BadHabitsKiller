@@ -38,7 +38,7 @@
         android:layout_below="@id/title_layout"
         android:background="#0000ff" />
 
-    <com.curry.bhk.bhk.view.CircleImageView
+    <com.curry.bhk.bhk.view.CircularImageView
         android:id="@+id/regist_img_choose"
         android:layout_width="60dp"
         android:layout_height="60dp"

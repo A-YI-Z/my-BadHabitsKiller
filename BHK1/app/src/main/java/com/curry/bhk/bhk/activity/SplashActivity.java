@@ -45,7 +45,7 @@ public class SplashActivity extends BaseActivity {
     private Wave mWaveDrawable;
 
     private void loading() {
-        TextView textView = (TextView) findViewById(R.id.text);
+        TextView textView = (TextView) findViewById(R.id.text_splash);
         mWaveDrawable = new Wave();
         mWaveDrawable.setBounds(0, 0, 100, 100);
         //noinspection deprecation

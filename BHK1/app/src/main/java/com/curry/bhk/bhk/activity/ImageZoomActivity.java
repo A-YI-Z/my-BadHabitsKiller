@@ -1,6 +1,5 @@
 package com.curry.bhk.bhk.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -74,10 +73,11 @@ public class ImageZoomActivity extends BaseActivity {
         mCurrentPosition = getIntent().getIntExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, 0);
 
         mFromDetail = getIntent().getBooleanExtra("FROM_DETAIL_ACTIVITY", false);
-        mZoomDataList = (ArrayList) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
         if (mFromDetail) {
+            mZoomDataList = (ArrayList) getIntent().getSerializableExtra(PublicStatic.EXTRA_IMAGE_LIST);
             mPhotoDel.setVisibility(View.GONE);
         } else {
+            mZoomDataList = AddActivity.mDataList;
             mPhotoDel.setVisibility(View.VISIBLE);
         }
 

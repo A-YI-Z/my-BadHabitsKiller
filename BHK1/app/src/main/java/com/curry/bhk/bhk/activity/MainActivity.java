@@ -9,17 +9,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.adapter.MenuAdapter;
 import com.curry.bhk.bhk.fragment.AboutFragment;
 import com.curry.bhk.bhk.fragment.NewFragment;
 import com.curry.bhk.bhk.fragment.OnHoldFragment;
@@ -33,6 +32,9 @@ import com.curry.bhk.bhk.view.DragLayout;
 import com.curry.bhk.bhk.view.MyRelativeLayout;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Curry on 2016/8/9.
  */
@@ -43,7 +45,8 @@ public class MainActivity extends BaseActivity {
     private CircleImageView mHeadImageView;
     private TextView mUserNameTV;
     private TextView mTitlebarName;
-    public static ListView mMenuList;
+    private  ListView mMenuList;
+    public static MenuAdapter myMenuAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +81,10 @@ public class MainActivity extends BaseActivity {
 
     public void dataInit() {
         String menuName[] = {"New", "Pending", "On Hold", "Resolved", "Profiled", "About", "Sign Out"};
-        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<>(this, R.layout.menu_list_item, menuName);
-        mMenuList.setAdapter(myArrayAdapter);
-        myArrayAdapter.notifyDataSetChanged();
+        final List<String> mList = Arrays.asList(menuName);
+        myMenuAdapter = new MenuAdapter(MainActivity.this, mList);
+        mMenuList.setAdapter(myMenuAdapter);
+        myMenuAdapter.notifyDataSetChanged();
 
         mUserNameTV.setText(BaseActivity.mUsername);
 
@@ -132,16 +136,8 @@ public class MainActivity extends BaseActivity {
         mMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                myMenuAdapter.setDefSelect(position);
 
-                int menuNum = parent.getCount();
-                for (int i = 0; i < menuNum; i++) {
-                    View v = parent.getChildAt(i);
-                    if (position == i) {
-                        v.setBackgroundResource(R.color.colorPrimaryDark);
-                    } else {
-                        v.setBackgroundColor(Color.TRANSPARENT);
-                    }
-                }
                 // login out
                 if (position == 6) {
 

@@ -8,11 +8,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.adapter.UserNameAdapter;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.CheckBitmapDegree;
@@ -31,20 +38,21 @@ public class LoginActivity extends BaseActivity {
     private EditText login_et_password;
     private android.widget.CheckBox mCheck;
     private TextView mVersionName;
+    private PopupWindow mPopView;
 
     private String mUsernameOrEmail = "";
     private String ago_username = "";
-    private String input_email = "";// email now
     private String db_password = "";// sqlite
     private String input_password = "";// password now
-
     private boolean isRemeber;
 
+    private List<String> myUsersList;
     private List<UserBean> userbean_list;
-
-    private UserdbOperator userdbOperator = new UserdbOperator(this);
+    private UserNameAdapter userNameAdapter;
+    private UserdbOperator userdbOperator;
     private UserBean userBean = new UserBean();
     private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,13 +74,13 @@ public class LoginActivity extends BaseActivity {
         login_head_img_view = (CircleImageView) findViewById(R.id.login_img_head);
         login_et_username = (EditText) findViewById(R.id.login_et_username);
         login_et_password = (EditText) findViewById(R.id.login_et_password);
-//        mLoginCheckBoxView = (CheckBox) findViewById(R.id.login_checkBox);
-        mCheck = (android.widget.CheckBox) findViewById(R.id.login_checkBox);
+        mCheck = (CheckBox) findViewById(R.id.login_checkBox);
         mVersionName = (TextView) findViewById(R.id.tv_login_versionName);
 
     }
 
     private void dataInit() {
+        userdbOperator = new UserdbOperator(this);
         editor = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
         /*
             get  username  from RegistActivity
@@ -237,6 +245,9 @@ public class LoginActivity extends BaseActivity {
 
             startActivity(new Intent().setClass(LoginActivity.this, MainActivity.class));
             finish();
+
+            userBean.setStatus(1);
+            userdbOperator.updateUser(userBean, 3);
         } else {
             toastSomething(LoginActivity.this, "Your password is wrong.");
         }
@@ -254,11 +265,65 @@ public class LoginActivity extends BaseActivity {
                 startActivity(new Intent().setClass(LoginActivity.this, RegistActivity.class));
                 finish();
                 break;
+//            case R.id.dropdown_button:
+//                Log.e(TAG, "clickInLoginActivity: ");
+//                showPopWindow();
+//                break;
             default:
                 break;
         }
     }
 
+    private void showPopWindow() {
+        UserdbOperator userdbOperator = new UserdbOperator(LoginActivity.this);
+        myUsersList = userdbOperator.getUserNameByStatus(LoginActivity.this);
+        Log.e(TAG, "showPopWindow: ~~~~~~~~~~~~~~~~~~~");
+        if (!myUsersList.isEmpty()) {
+            Log.e(TAG, "showPopWindow: ");
+            userNameAdapter = new UserNameAdapter(this, myUsersList);
+            ListView mUsersListView = new ListView(LoginActivity.this);
+            mUsersListView.setBackgroundResource(R.drawable.et_unfouce);
+            mUsersListView.setAdapter(userNameAdapter);
 
+            mPopView = new PopupWindow(mUsersListView, login_et_username.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            mPopView.setFocusable(true);
+            mPopView.setOutsideTouchable(true);
+            mPopView.setBackgroundDrawable(getResources().getDrawable(R.color.white));
+            mPopView.showAsDropDown(login_et_username);
+
+        }
+        deleteOrChooseUser();
+
+    }
+
+    private void deleteOrChooseUser() {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.popwindow_item, null);
+        final ImageButton mDeleteUserBtn = (ImageButton) view.findViewById(R.id.pop_delete);
+        final TextView mUsersTv = (TextView) view.findViewById(R.id.pop_username);
+
+        mUsersTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mUsersName = mUsersTv.getText().toString();
+                login_et_username.setText(mUsersName);
+                mPopView.dismiss();
+                matchHead();
+            }
+        });
+        mDeleteUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userBean.setEmail(mUsersTv.getText().toString());
+                userBean.setStatus(0);
+                userdbOperator.updateUser(userBean, 3);
+
+                userNameAdapter.notifyDataSetChanged();
+                if (myUsersList.isEmpty()) {
+                    mPopView.dismiss();
+                }
+            }
+        });
+    }
 
 }

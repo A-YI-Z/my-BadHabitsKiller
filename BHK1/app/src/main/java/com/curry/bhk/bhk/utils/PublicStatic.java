@@ -11,7 +11,6 @@ public class PublicStatic {
     public static final String SHAREDPREFERENCES_EMAIL = "email";
     public static final String SHAREDPREFERENCES_EMAIL_OR_USERNAME = "emailorusername";
 
-
     public static final String EXTRA_IMAGE_LIST = "image_list";
 
     public static final String EXTRA_BUCKET_NAME = "buck_name";

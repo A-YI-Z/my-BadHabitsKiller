@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <ImageButton
+        android:id="@+id/pop_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/delete_change"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/pop_username"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/pop_delete"
+        android:clickable="true"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+</RelativeLayout>

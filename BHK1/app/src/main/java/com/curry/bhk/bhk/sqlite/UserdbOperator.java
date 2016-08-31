@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.curry.bhk.bhk.bean.UserBean;
 
@@ -42,6 +43,10 @@ public class UserdbOperator {
                     break;
                 case 3: //query the password according to username;
                     cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "username=?", new String[]{outbean.getUsername()}, null,
+                            null, null, null);
+                    break;
+                case 4: //query the username according to status;
+                    cursor = db.query(TABLE_USER_BHK, new String[]{"username"}, "status=?", new String[]{String.valueOf(outbean.getStatus())}, null,
                             null, null, null);
                     break;
                 default:
@@ -83,9 +88,7 @@ public class UserdbOperator {
         try {
             cursor = db.query(TABLE_USER_BHK, new String[]{"email"}, null, null, null, null, null);
             if (cursor != null) {
-                int i = 0;
                 while (cursor.moveToNext()) {
-
                     String email = cursor.getString(cursor.getColumnIndex("email"));
                     arrayList.add(email);
                 }
@@ -99,38 +102,22 @@ public class UserdbOperator {
         return arrayList;
     }
 
-    public String qureyPassword(UserBean outBean) {
-        String password = "";
+    public ArrayList<String> getUserNameByStatus(Context context) {
         db = dBhelper.getWritableDatabase();
-        Cursor cursor = null;
-        try {
-            cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "email = ?", new String[]{outBean.getEmail()}, null,
-                    null, null, null);
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    password = cursor.getString(cursor.getColumnIndex("password"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-            closeAll();
-        }
-        return password;
-    }
 
-    public String qureyPicture(UserBean outBean) {
-        String pictureUrl = "";
-        db = dBhelper.getWritableDatabase();
+        ArrayList<String> arrayList = new ArrayList();
         Cursor cursor = null;
         try {
-            cursor = db.query(TABLE_USER_BHK, new String[]{"pic_url"}, "username=?", new String[]{outBean.getUsername()}, null,
+            cursor = db.query(TABLE_USER_BHK, new String[]{"email"}, "status=?", new String[]{"1"}, null,
                     null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    pictureUrl = cursor.getString(cursor.getColumnIndex("pic_url"));
+                    String email = cursor.getString(cursor.getColumnIndex("email"));
+                    arrayList.add(email);
+                    Toast.makeText(context,"isnotnull",Toast.LENGTH_LONG).show();
                 }
+            }else{
+                Toast.makeText(context,"null",Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,8 +125,49 @@ public class UserdbOperator {
             cursor.close();
             closeAll();
         }
-        return pictureUrl;
+        return arrayList;
     }
+//    public String qureyPassword(UserBean outBean) {
+//        String password = "";
+//        db = dBhelper.getWritableDatabase();
+//        Cursor cursor = null;
+//        try {
+//            cursor = db.query(TABLE_USER_BHK, new String[]{"password"}, "email = ?", new String[]{outBean.getEmail()}, null,
+//                    null, null, null);
+//            if (cursor != null) {
+//                while (cursor.moveToNext()) {
+//                    password = cursor.getString(cursor.getColumnIndex("password"));
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            cursor.close();
+//            closeAll();
+//        }
+//        return password;
+//    }
+
+//    public String qureyPicture(UserBean outBean) {
+//        String pictureUrl = "";
+//        db = dBhelper.getWritableDatabase();
+//        Cursor cursor = null;
+//        try {
+//            cursor = db.query(TABLE_USER_BHK, new String[]{"pic_url"}, "username=?", new String[]{outBean.getUsername()}, null,
+//                    null, null, null);
+//            if (cursor != null) {
+//                while (cursor.moveToNext()) {
+//                    pictureUrl = cursor.getString(cursor.getColumnIndex("pic_url"));
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            cursor.close();
+//            closeAll();
+//        }
+//        return pictureUrl;
+//    }
 
     /**
      * judge data is exist or not
@@ -232,6 +260,9 @@ public class UserdbOperator {
                     break;
                 case 2:
                     contentValues.put("pic_url", outBean.getPic_url());
+                    break;
+                case 3:
+                    contentValues.put("status", outBean.getPic_url());
                     break;
                 default:
                     break;
