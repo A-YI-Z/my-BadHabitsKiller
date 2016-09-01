@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,9 +79,10 @@ public class SavePicture {
                 if (mycursor != null) {
                     mycursor.moveToNext();
                     headUrl = mycursor.getString(mycursor.getColumnIndex("_data"));
-                    Bitmap bm = BitmapFactory.decodeFile(headUrl);
-                    bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(headUrl));
-                    head_img.setImageBitmap(bm);
+//                    Bitmap bm = BitmapFactory.decodeFile(headUrl);
+//                    bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(headUrl));
+//                    head_img.setImageBitmap(bm);
+
                 }
                 mycursor.close();
             }
@@ -89,14 +92,18 @@ public class SavePicture {
                     Bundle bundle = data.getExtras();
                     Bitmap mybitmap = (Bitmap) bundle.get("data");
 
-                    headUrl = saveFile(mybitmap);
-
                     mybitmap = CheckBitmapDegree.rotateBitmapByDegree(mybitmap, CheckBitmapDegree.getBitmapDegree(headUrl));
 
-                    head_img.setImageBitmap(mybitmap);
+                    headUrl = saveFile(mybitmap);
+
+//                    head_img.setImageBitmap(mybitmap);
+
+
                 }
             }
         }
+        String imageUrl = ImageDownloader.Scheme.FILE.wrap(headUrl);
+        ImageLoader.getInstance().displayImage(imageUrl, head_img);
         return headUrl;
     }
 }

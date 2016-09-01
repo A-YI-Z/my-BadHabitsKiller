@@ -1,14 +1,14 @@
 package com.curry.bhk.bhk.activity;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -25,12 +25,13 @@ import com.curry.bhk.bhk.fragment.OnHoldFragment;
 import com.curry.bhk.bhk.fragment.PendingFragment;
 import com.curry.bhk.bhk.fragment.ProfiledFragment;
 import com.curry.bhk.bhk.fragment.ResolvedFragment;
-import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.view.CircleImageView;
 import com.curry.bhk.bhk.view.DragLayout;
 import com.curry.bhk.bhk.view.MyRelativeLayout;
 import com.nineoldandroids.view.ViewHelper;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class MainActivity extends BaseActivity {
     private CircleImageView mHeadImageView;
     private TextView mUserNameTV;
     private TextView mTitlebarName;
-    private  ListView mMenuList;
+    private ListView mMenuList;
     public static MenuAdapter myMenuAdapter;
 
     @Override
@@ -92,9 +93,13 @@ public class MainActivity extends BaseActivity {
             if (BaseActivity.mHeadUrl.equals("default")) {
                 mHeadImageView.setImageResource(R.drawable.defult_img);
             } else {
-                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
-                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
-                mHeadImageView.setImageBitmap(bitmap);
+//                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.mHeadUrl);
+//                bitmap = CheckBitmapDegree.rotateBitmapByDegree(bitmap, CheckBitmapDegree.getBitmapDegree(BaseActivity.mHeadUrl));
+//                mHeadImageView.setImageBitmap(bitmap);
+
+                String imageUrl = ImageDownloader.Scheme.FILE.wrap(BaseActivity.mHeadUrl);
+                ImageLoader.getInstance().displayImage(imageUrl, mHeadImageView);
+
             }
         }
     }
@@ -144,9 +149,24 @@ public class MainActivity extends BaseActivity {
                     SharedPreferences.Editor edit = getSharedPreferences(PublicStatic.SHAREDPREFERENCES_USER_BHK, 0).edit();
                     edit.putBoolean(PublicStatic.SHAREDPREFERENCES_CHECKBOX, false);
                     edit.commit();
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Do you want to sign out?");
+                    builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finishActivity();
+                        }
+                    });
+                    builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.create().show();
 
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finishActivity();
+
                 } else {
                     addFragment(position);
                 }

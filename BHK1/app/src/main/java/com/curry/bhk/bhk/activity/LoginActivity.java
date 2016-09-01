@@ -2,8 +2,6 @@ package com.curry.bhk.bhk.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,9 +20,10 @@ import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.adapter.UserNameAdapter;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
-import com.curry.bhk.bhk.utils.CheckBitmapDegree;
 import com.curry.bhk.bhk.utils.PublicStatic;
 import com.curry.bhk.bhk.view.CircleImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
 import java.util.List;
 
@@ -170,10 +169,14 @@ public class LoginActivity extends BaseActivity {
             if (headUrl.equals("default")) {
                 login_head_img_view.setImageResource(R.drawable.defult_img);
             } else {
-                Log.e(TAG, headUrl);
-                Bitmap bm = BitmapFactory.decodeFile(headUrl);
-                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(headUrl));
-                login_head_img_view.setImageBitmap(bm);
+//                Log.e(TAG, headUrl);
+//                Bitmap bm = BitmapFactory.decodeFile(headUrl);
+//                bm = CheckBitmapDegree.rotateBitmapByDegree(bm, CheckBitmapDegree.getBitmapDegree(headUrl));
+//                login_head_img_view.setImageBitmap(bm);
+
+                String imageUrl = ImageDownloader.Scheme.FILE.wrap(headUrl);
+
+                ImageLoader.getInstance().displayImage(imageUrl, login_head_img_view);
             }
 
             //get the password according to the username

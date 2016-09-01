@@ -1,7 +1,6 @@
 package com.curry.bhk.bhk.view;
 
 import android.animation.TimeInterpolator;
-import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.view.animation.Interpolator;
 
 /**

@@ -12,10 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.MainActivity;
@@ -23,6 +19,10 @@ import com.curry.bhk.bhk.adapter.MenuAdapter;
 import com.curry.bhk.bhk.adapter.NewListitemAdapter;
 import com.curry.bhk.bhk.bean.EventBean;
 import com.curry.bhk.bhk.sqlite.EventdbOperator;
+import com.curry.bhk.bhk.swipemenu.SwipeMenu;
+import com.curry.bhk.bhk.swipemenu.SwipeMenuCreator;
+import com.curry.bhk.bhk.swipemenu.SwipeMenuItem;
+import com.curry.bhk.bhk.swipemenu.SwipeMenuListView;
 
 import java.util.List;
 

@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+//    dexOptions {
+//        preDexLibraries = false
+//    }
 }
 
 dependencies {
@@ -24,7 +27,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':MaterialDesign')
     compile 'com.alibaba:fastjson:1.2.16'
-    compile project(':SwipeMenuListView')
-    compile ('com.android.support:appcompat-v7:24.2.0')
-
+    compile project(':library')
+    compile 'com.android.support:appcompat-v7:24.2.0'
 }

@@ -58,7 +58,7 @@
         android:hint="email"
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
-        android:maxLength="20" />
+        android:maxLength="40" />
 
     <EditText
         android:id="@+id/regist_et_nickname"
