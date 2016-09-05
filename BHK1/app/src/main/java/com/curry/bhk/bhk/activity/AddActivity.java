@@ -32,7 +32,6 @@ import com.curry.bhk.bhk.utils.PublicStatic;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.io.File;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,10 +188,11 @@ public class AddActivity extends BaseActivity {
                 if (i == getDataSize()) {
                     choosePhoto();
                 } else {
-                    Intent intent = new Intent(AddActivity.this, ImageZoomActivity.class);
-                    intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) mDataList);
-                    intent.putExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, i);
-                    startActivity(intent);
+//                    Intent intent = new Intent(AddActivity.this, ImageZoomActivity.class);
+//                    intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) mDataList);
+//                    intent.putExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, i);
+//                    startActivity(intent);
+                    ImageZoomActivity.actionStart(AddActivity.this,mDataList, i);
                 }
             }
         });

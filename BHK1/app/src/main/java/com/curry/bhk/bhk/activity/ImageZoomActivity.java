@@ -1,5 +1,7 @@
 package com.curry.bhk.bhk.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,6 +17,7 @@ import com.curry.bhk.bhk.bean.ImageItem;
 import com.curry.bhk.bhk.utils.ImageDisplayer;
 import com.curry.bhk.bhk.utils.PublicStatic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +70,13 @@ public class ImageZoomActivity extends BaseActivity {
         mPageAdapter = new MyPageAdapter(mZoomDataList);
         mViewPager.setAdapter(mPageAdapter);
         mViewPager.setCurrentItem(mCurrentPosition);
+    }
+
+    public static void actionStart(Context context, List<ImageItem> mDataList, int i) {
+        Intent intent = new Intent(context, ImageZoomActivity.class);
+        intent.putExtra(PublicStatic.EXTRA_IMAGE_LIST, (Serializable) mDataList);
+        intent.putExtra(PublicStatic.EXTRA_CURRENT_IMG_POSITION, i);
+        context.startActivity(intent);
     }
 
     private void dataInit() {

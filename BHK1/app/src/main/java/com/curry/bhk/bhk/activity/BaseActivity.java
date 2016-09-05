@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.curry.bhk.bhk.R;
+import com.curry.bhk.bhk.utils.ActivityCollector;
 
 public class BaseActivity extends Activity {
     String TAG = "curry";
@@ -26,6 +28,9 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, getClass().getSimpleName());
+
+        ActivityCollector.addActivity(this);
     }
 
 
@@ -42,7 +47,7 @@ public class BaseActivity extends Activity {
             delayHandler.sendEmptyMessageDelayed(0, 2000);
             exit_flag = true;
         } else {
-            System.exit(0);
+            ActivityCollector.finishAll();
         }
     }
 
@@ -61,6 +66,12 @@ public class BaseActivity extends Activity {
         Toast.makeText(context, content, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * hide the softkeyboard
+     *
+     * @param ev
+     * @return
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -96,5 +107,11 @@ public class BaseActivity extends Activity {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }
