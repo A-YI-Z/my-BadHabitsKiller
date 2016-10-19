@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity {
     private TextView mTitlebarName;
     private ListView mMenuList;
     public static MenuAdapter myMenuAdapter;
+    public static LocalBroadcastManager mLocalBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,10 @@ public class MainActivity extends BaseActivity {
 
         menuOnClick();
 
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction("CHANGE");
-        registerReceiver(receiver, filter);
+        mLocalBroadcastManager.registerReceiver(receiver, filter);
     }
 
     public void viewInit() {
@@ -252,7 +255,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (receiver != null) {
-            unregisterReceiver(receiver);
+            mLocalBroadcastManager.unregisterReceiver(receiver);
         }
     }
 }

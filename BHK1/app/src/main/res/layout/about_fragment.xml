@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <ImageView
         android:id="@+id/img_bhkIcon"
@@ -10,7 +10,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bhkicon" />
+        android:src="@drawable/bhkicon"/>
 
     <TextView
         android:id="@+id/tv_appName"
@@ -19,16 +19,16 @@
         android:layout_below="@id/img_bhkIcon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:text="Bad Habits Killer"
-        android:textColor="#000000"
-        android:textSize="20sp" />
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_appName"
         android:layout_margin="20dp"
-        android:text="   This application is useful for raising a question and then solve the question by others." />
+        android:text="@string/about_app"/>
 
     <TextView
         android:id="@+id/tv_about_version"
@@ -36,5 +36,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"/>
 </RelativeLayout>

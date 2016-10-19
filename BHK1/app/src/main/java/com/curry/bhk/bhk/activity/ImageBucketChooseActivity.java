@@ -2,7 +2,6 @@ package com.curry.bhk.bhk.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -15,6 +14,7 @@ import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.adapter.ImageBucketAdapter;
 import com.curry.bhk.bhk.bean.ImageBucket;
 import com.curry.bhk.bhk.utils.ImageFetcher;
+import com.curry.bhk.bhk.utils.LogUtil;
 import com.curry.bhk.bhk.utils.PublicStatic;
 
 import java.io.Serializable;
@@ -97,7 +97,7 @@ public class ImageBucketChooseActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 data.setClass(ImageBucketChooseActivity.this, AddActivity.class);
                 this.setResult(RESULT_OK, data);
-                Log.e(TAG, "ImageBucketChooseActivity");
+                LogUtil.e(TAG, "ImageBucketChooseActivity");
             }
         }
 //        super.onActivityResult(requestCode, resultCode, data);

@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="--- change password ---"
+            android:text="@string/change_password"
             android:textColor="#3875c6"
             android:textSize="18sp" />
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
-            android:hint="Old password"
+            android:hint="@string/old_password"
             android:imeOptions="actionNext"
             android:inputType="textPassword"
             android:lines="1"
@@ -83,7 +83,7 @@
             android:layout_below="@id/profile_et_old_password"
             android:layout_marginTop="6dp"
             android:background="#FFFFFF"
-            android:hint="New password"
+            android:hint="@string/new_password"
             android:imeOptions="actionNext"
             android:inputType="textPassword"
             android:lines="1"
@@ -96,7 +96,7 @@
             android:layout_below="@id/profile_et_new_password"
             android:layout_marginTop="6dp"
             android:background="#FFFFFF"
-            android:hint="Confirm password "
+            android:hint="@string/confirm_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:lines="1"
@@ -114,7 +114,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="#1E88E5"
-        android:text="Save" />
+        android:text="@string/save" />
 
     <!--android:alpha="0.5"-->
     <!--android:clickable="false"-->

@@ -1,4 +1,22 @@
 <resources>
-    <string name="app_name">BHK</string>
+    <string name="app_name">Bad Habits Killer</string>
     <string name="version_code">VersionCode </string>
+    <string name="about_app">This application is useful for raising a question and then solve the question by others.</string>
+    <string name="finish">Finish</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="text_num">0/200</string>
+    <string name="picture">Picture</string>
+    <string name="add">Add</string>
+    <string name="author">tv_author</string>
+    <string name="by">by :</string>
+    <string name="data">data</string>
+    <string name="tv_description">tv_description</string>
+    <string name="no_data">No Data !</string>
+    <string name="change_password">--- change password ---</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="save">Save</string>
+    <string name="menu_new">New</string>
 </resources>

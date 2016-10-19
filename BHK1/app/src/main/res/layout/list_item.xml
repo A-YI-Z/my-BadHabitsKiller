@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:ellipsize="end"
         android:maxLength="12"
-        android:text="tv_author"
+        android:text="@string/author"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_alignBaseline="@id/tv_author"
         android:layout_marginLeft="10dp"
         android:layout_toLeftOf="@id/tv_author"
-        android:text="by : "
+        android:text="@string/by"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_below="@id/tv_author"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="6dp"
-        android:text="data"
+        android:text="@string/data"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -48,7 +48,7 @@
         android:layout_toLeftOf="@id/tv_time"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="tv_description"
+        android:text="@string/tv_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -60,8 +60,8 @@
         android:layout_toLeftOf="@id/text_by"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Title"
+        android:text="@string/title"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#000000" />
+        android:textColor="@color/black" />
 
 </RelativeLayout>

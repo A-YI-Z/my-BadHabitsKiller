@@ -60,10 +60,10 @@ public class NewListitemAdapter extends BaseAdapter {
         return view;
     }
 
-    static class ViewHolder {
-        public TextView tv_title;
-        public TextView tv_author;
-        public TextView tv_time;
-        public TextView tv_description;
+    class ViewHolder {
+        private TextView tv_title;
+        private TextView tv_author;
+        private TextView tv_time;
+        private TextView tv_description;
     }
 }

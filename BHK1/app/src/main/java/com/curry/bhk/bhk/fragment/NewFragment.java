@@ -144,5 +144,4 @@ public class NewFragment extends Fragment {
         Intent.createChooser(intent, "Choose Email Client.");
         startActivity(intent);
     }
-
 }

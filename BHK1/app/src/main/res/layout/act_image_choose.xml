@@ -14,7 +14,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/btn"
-        android:text="Finish"
+        android:text="@string/finish"
         android:textColor="@color/deep_gray"
         android:textSize="20sp" />
 

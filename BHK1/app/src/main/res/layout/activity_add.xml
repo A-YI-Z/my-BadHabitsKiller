@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.curry.bhk.bhk.activity.AddActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.curry.bhk.bhk.activity.AddActivity">
 
     <include
         android:id="@+id/title_bar"
-        layout="@layout/layout_title_bar" />
+        layout="@layout/layout_title_bar"/>
 
 
     <RelativeLayout
@@ -22,8 +22,8 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="18sp" />
+            android:text="@string/title"
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/add_et_title"
@@ -34,7 +34,7 @@
             android:imeOptions="actionDone"
             android:maxLength="30"
             android:padding="10dp"
-            android:singleLine="true" />
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/add_tv_description"
@@ -42,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/add_et_title"
             android:layout_marginTop="8dp"
-            android:text="Description"
-            android:textSize="18sp" />
+            android:text="@string/description"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/add_tv_description_num"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/add_tv_description"
             android:layout_alignParentRight="true"
-            android:text="0/200" />
+            android:text="@string/text_num"/>
 
         <EditText
             android:id="@+id/add_et_description"
@@ -64,7 +64,7 @@
             android:inputType="textMultiLine"
             android:maxLength="200"
             android:maxLines="10"
-            android:padding="6dp" />
+            android:padding="6dp"/>
 
         <TextView
             android:id="@+id/tv_picture"
@@ -72,8 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/add_et_description"
             android:layout_marginTop="8dp"
-            android:text="Picture"
-            android:textSize="18sp" />
+            android:text="@string/picture"
+            android:textSize="18sp"/>
 
         <GridView
             android:id="@+id/gridview"
@@ -82,7 +82,9 @@
             android:layout_below="@id/tv_picture"
             android:numColumns="4"
             android:scrollbars="none"
-            android:verticalSpacing="3dp"></GridView>
+            android:verticalSpacing="3dp">
+
+        </GridView>
 
 
     </RelativeLayout>
@@ -95,8 +97,8 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="34dp"
         android:layout_marginRight="34dp"
-        android:background="#1E88E5"
-        android:text="Add" />
+        android:background="@color/blue"
+        android:text="@string/add"/>
 
 
 </RelativeLayout>

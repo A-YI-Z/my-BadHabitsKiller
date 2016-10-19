@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.activity.BaseActivity;
 import com.curry.bhk.bhk.activity.LoginActivity;
+import com.curry.bhk.bhk.activity.MainActivity;
 import com.curry.bhk.bhk.bean.UserBean;
 import com.curry.bhk.bhk.sqlite.UserdbOperator;
 import com.curry.bhk.bhk.utils.PublicStatic;
@@ -334,7 +335,7 @@ public class ProfiledFragment extends Fragment {
         Intent intent = new Intent();
 
         intent.setAction("CHANGE");
-        getActivity().sendBroadcast(intent);
+        MainActivity.mLocalBroadcastManager.sendBroadcast(intent);
 
     }
 

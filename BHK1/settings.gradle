@@ -1,1 +1,1 @@
-include ':app', ':MaterialDesign', ':SwipeMenuListView', ':library'
+include ':app', ':MaterialDesign', ':library'

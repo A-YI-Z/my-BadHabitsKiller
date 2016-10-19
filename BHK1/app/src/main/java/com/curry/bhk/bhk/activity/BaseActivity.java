@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.curry.bhk.bhk.R;
 import com.curry.bhk.bhk.utils.ActivityCollector;
+import com.curry.bhk.bhk.utils.LogUtil;
 
 public class BaseActivity extends Activity {
     String TAG = "curry";
@@ -28,7 +28,7 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, getClass().getSimpleName());
+        LogUtil.e(TAG, getClass().getSimpleName());
 
         ActivityCollector.addActivity(this);
     }

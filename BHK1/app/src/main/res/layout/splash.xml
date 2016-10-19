@@ -13,7 +13,7 @@
         android:shadowDx="3.0"
         android:shadowDy="3.0"
         android:shadowRadius="3.0"
-        android:text="Bad Habits Killer"
+        android:text="@string/app_name"
         android:textSize="22sp" />
 
     <!--<com.gc.materialdesign.views.ProgressBarCircularIndeterminate-->

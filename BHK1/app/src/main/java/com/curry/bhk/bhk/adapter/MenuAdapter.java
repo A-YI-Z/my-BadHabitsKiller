@@ -17,7 +17,7 @@ import java.util.List;
 public class MenuAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private List<String> myList;
-    public static  int defItem;
+    public static int defItem;
 
     public MenuAdapter(Context context, List<String> outList) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -46,18 +46,28 @@ public class MenuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        ViewHolder viewHolder;
 
-        view = mLayoutInflater.inflate(R.layout.menu_list_item, null);
-        TextView mMenuNameItem = (TextView) view.findViewById(R.id.menu_new);
-        mMenuNameItem.setText(myList.get(position).toString());
+        if (view == null) {
+            view = mLayoutInflater.inflate(R.layout.menu_list_item, null);
+            viewHolder = new ViewHolder();
+            viewHolder.mMenuNameItem = (TextView) view.findViewById(R.id.menu_new);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
 
-
+        viewHolder.mMenuNameItem.setText(myList.get(position).toString());
         if (defItem == position) {
             view.setBackgroundResource(R.color.colorPrimaryDark);
         } else {
             view.setBackgroundResource(android.R.color.transparent);
         }
         return view;
+    }
+
+    class ViewHolder {
+        TextView mMenuNameItem;
     }
 
 }
